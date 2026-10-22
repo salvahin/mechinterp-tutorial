@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colab Troubleshooting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: Letter portrait; margin: 0; }
+  :root {
+    --ink: #0C198D; --ink-2: #3A4170; --muted: #6B7090; --rule: #C9C3B5; --code-bg: #F2F0EC;
+    --resid: #0E7C74; --attn: #D9480F; --mlp: #5F3DC4;
+    --sans: "Inter", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    --cond: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { font-family: var(--sans); color: var(--ink); font-size: 7.2pt; line-height: 1.24; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 8.5in; height: 11in; padding: 0.36in 0.4in 0.3in; overflow: hidden; display: flex; flex-direction: column; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.4px solid var(--ink); padding-bottom: 5px; }
+  .kicker { font-size: 8pt; letter-spacing: .08em; text-transform: uppercase; color: var(--resid); font-weight: 600; margin: 0 0 2px; }
+  h1 { margin: 0; font-size: 17pt; line-height: 1.05; letter-spacing: -.01em; }
+  .meta { text-align: right; font-size: 7.6pt; color: var(--ink-2); line-height: 1.4; }
+  .meta b { color: var(--ink); }
+
+  .first { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10px; margin: 6px 0 5px; }
+  .box { border: 1.2px solid var(--ink); border-radius: 5px; padding: 5px 8px; }
+  .box h2 { font-family: var(--cond); font-size: 9.2pt; margin: 0 0 2px; }
+  .box ol, .box ul { margin: 0; padding-left: 15px; }
+  .box li { margin: 0 0 1px; }
+  .box.resid { border-left: 5px solid var(--resid); }
+  .box.attn { border-left: 5px solid var(--attn); }
+
+  table { border-collapse: collapse; width: 100%; }
+  thead th { font-family: var(--cond); font-weight: 700; font-size: 8.6pt; text-align: left; padding: 3px 5px; border-bottom: 1.6px solid var(--ink); }
+  td { padding: 2px 5px; vertical-align: top; border-bottom: 0.7px solid var(--rule); }
+  td.sym { width: 26%; font-weight: 600; }
+  td.sym small { display: block; font-weight: 400; color: var(--ink-2); font-family: var(--mono); font-size: 6.9pt; margin-top: 1px; }
+  td.cause { width: 22%; color: var(--ink-2); }
+  td.fix { width: 52%; }
+  tr.group td { background: #EFEDE6; font-family: var(--cond); font-weight: 700; font-size: 8pt; letter-spacing: .05em; text-transform: uppercase; padding: 2px 5px; border-bottom: 1px solid var(--ink); }
+  tr.group.r td { box-shadow: inset 4px 0 0 var(--resid); }
+  tr.group.a td { box-shadow: inset 4px 0 0 var(--attn); }
+  tr.group.m td { box-shadow: inset 4px 0 0 var(--mlp); }
+  code { font-family: var(--mono); font-size: 7pt; background: var(--code-bg); padding: 0 2px; border-radius: 2px; }
+  .path { font-family: var(--cond); font-weight: 600; }
+  footer { margin-top: auto; font-size: 7pt; color: var(--muted); display: flex; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 3px; }
+
+  /* MICAI 2026 brand */
+  :root { --micai-navy: #0C198D; --micai-blue: #3339D4; --micai-pink: #F757BC; --micai-paper: #F2F0EC; }
+  h1, h2, .display { font-family: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif; letter-spacing: -0.015em; }
+  .brandbar { height: 4px; background: linear-gradient(to right, var(--micai-navy) 0 55%, var(--micai-blue) 55% 85%, var(--micai-pink) 85% 100%); margin: 0 0 6px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="brandbar" style="margin-bottom:5px"></div>
+  <header>
+    <div>
+      <p class="kicker">For the student assistant · symptom &rarr; cause &rarr; fix</p>
+      <h1>Colab troubleshooting</h1>
+    </div>
+    <div class="meta">NB0 setup · NB1&ndash;2 GPT-2, CPU ok · NB3 T4 (GPT-2 on CPU)<br>NB4 fresh runtime, Neuronpedia path · NB5 cache, CPU</div>
+  </header>
+
+  <div class="first">
+    <div class="box resid">
+      <h2>First 60 seconds with any problem</h2>
+      <ol>
+        <li>Read the <b>last line</b> of the red error. Find it in the table below.</li>
+        <li>Is the participant on <b>their own copy</b>? (<span class="path">File &rsaquo; Save a copy in Drive</span>.)</li>
+        <li>Check runtime type: <span class="path">Runtime &rsaquo; Change runtime type</span>. NB1&ndash;2 and NB5 run on CPU. NB4 always in a <b>fresh runtime</b>.</li>
+        <li>Still stuck after 3 minutes: <b>pair them with a neighbour</b> and follow along on one screen. Come back at the break.</li>
+      </ol>
+    </div>
+    <div class="box attn">
+      <h2>Fallbacks that always work</h2>
+      <ul>
+        <li><b>No GPU:</b> NB1, NB2, NB5 run on CPU. NB3 falls back to GPT-2 automatically. NB4's default path is Neuronpedia (no model).</li>
+        <li><b>No Hugging Face access:</b> watch the projector demo; open the Neuronpedia graph in a browser.</li>
+        <li><b>Laptop dead:</b> Colab works in a phone browser for read-along.</li>
+
+      </ul>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Symptom (what they see)</th><th>Likely cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr class="group r"><td colspan="3">Runtime and GPU</td></tr>
+      <tr><td class="sym">"Cannot connect to GPU backend" / no T4 offered<small>GPU usage limit reached</small></td>
+          <td class="cause">Free-tier GPU quota used up, or no GPUs free in the region right now.</td>
+          <td class="fix">Switch to CPU and continue. NB1, NB2 and NB5 are CPU-ready. NB3 switches to GPT-2 by itself. NB4 falls back to <code>PATH = "neuronpedia"</code>. Try a different Google account if they have one. Do not wait in a retry loop.</td></tr>
+      <tr><td class="sym">How do I get a GPU?</td>
+          <td class="cause">Runtime is CPU by default.</td>
+          <td class="fix"><span class="path">Runtime &rsaquo; Change runtime type &rsaquo; Hardware accelerator: T4 GPU &rsaquo; Save</span>. This restarts the runtime: re-run the install and setup cells. Check with <code>!nvidia-smi</code>.</td></tr>
+      <tr><td class="sym">"Runtime disconnected" / cells stop with no output</td>
+          <td class="cause">Idle timeout, laptop slept, Wi-Fi dropped, or the session crashed (often RAM).</td>
+          <td class="fix">Click <b>Reconnect</b>, then <span class="path">Runtime &rsaquo; Run before</span> on the current cell. Variables are lost on disconnect; files in <code>/content</code> may also be gone. Keep the laptop plugged in and the tab visible.</td></tr>
+      <tr><td class="sym">"Your session crashed after using all available RAM"</td>
+          <td class="cause">System RAM full (12 GB): model loaded twice, or caching all activations.</td>
+          <td class="fix"><span class="path">Runtime &rsaquo; Restart session</span>, run cells once from the top. Do not re-run the model-loading cell repeatedly.</td></tr>
+
+      <tr class="group a"><td colspan="3">Installs and imports</td></tr>
+      <tr><td class="sym">pip shows red "dependency conflicts" text<small>ERROR: pip's dependency resolver ...</small></td>
+          <td class="cause">Colab's preinstalled packages disagree with our pinned versions. Usually harmless.</td>
+          <td class="fix">If the cell finishes, ignore the warning. If Colab shows a <b>Restart session</b> button, click it, then run from the cell after the install.</td></tr>
+      <tr><td class="sym"><code>ImportError</code> / <code>AttributeError</code> right after installing</td>
+          <td class="cause">Old version still loaded in memory (e.g. numpy, transformers).</td>
+          <td class="fix"><span class="path">Runtime &rsaquo; Restart session</span> (not "disconnect and delete"), then continue below the install cell. Do not re-run pip.</td></tr>
+      <tr><td class="sym">NB4: <code>ModuleNotFoundError: nnsight.intervention.tracing</code>, or version errors after the install cell</td>
+          <td class="cause">NB4 needs its own older stack; nnsight 0.8.x breaks circuit-tracer 0.5.0. Runtime still holds NB0&ndash;3 packages.</td>
+          <td class="fix"><span class="path">Runtime &rsaquo; Disconnect and delete runtime</span>, reconnect, and run NB4 from the top in this <b>fresh runtime</b>. The pins are <code>circuit-tracer==0.5.0 nnsight==0.7.0 transformers==4.57.3 huggingface_hub==0.36.2 transformer_lens==3.2.1</code>. Never run NB4 after NB3 in the same runtime.</td></tr>
+      <tr><td class="sym"><code>ModuleNotFoundError: transformer_lens</code> (or sae_lens)</td>
+          <td class="cause">Install cell skipped, or runtime was reset (e.g. after changing the runtime type).</td>
+          <td class="fix">Run the install cell again, wait for it to finish, then the setup cell.</td></tr>
+
+      <tr class="group m"><td colspan="3">Hugging Face and Gemma access</td></tr>
+      <tr><td class="sym">"Secret HF_TOKEN does not exist" / login prompt / <code>401</code></td>
+          <td class="cause">No token in Colab, notebook access not granted, or token mistyped / revoked.</td>
+          <td class="fix">Get a token at <code>huggingface.co/settings/tokens</code> (type <b>Read</b>). In Colab: key icon on the left &rsaquo; <b>Add new secret</b> &rsaquo; name <code>HF_TOKEN</code>, paste value &rsaquo; turn on <b>Notebook access</b>. Re-run the setup cell.</td></tr>
+      <tr><td class="sym"><code>403</code> / <code>GatedRepoError</code> / "Access to model google/gemma-... is restricted"</td>
+          <td class="cause">Gemma license not accepted on this Hugging Face account.</td>
+          <td class="fix">Open the model page while logged in and click <b>Acknowledge license</b>: <code>google/gemma-3-1b-it</code> (NB3), <code>google/gemma-3-4b-it</code> (NB5 live, optional), <code>google/gemma-2-2b</code> (NB4 opt-in). Approval is usually instant; re-run the cell. Token must belong to the same account. NB0 checks all three.</td></tr>
+
+      <tr class="group r"><td colspan="3">Memory, speed, network</td></tr>
+      <tr><td class="sym"><code>CUDA out of memory</code> on T4</td>
+          <td class="cause">15 GB GPU shared by model, SAE and caches; or a previous model still loaded.</td>
+          <td class="fix">Restart session and run once from the top. NB3 must stay in <b>float32</b> (T4 has no bf16; Gemma overflows fp16, giving NaNs/garbage); it needs only ~4 GB. NB4: use <code>PATH = "neuronpedia"</code>; the Gemma 2 2B path is opt-in. Use <code>names_filter</code>; lower batch size.</td></tr>
+      <tr><td class="sym">Model or SAE download crawls / times out</td>
+          <td class="cause">20 laptops on one Wi-Fi pulling GBs at once.</td>
+          <td class="fix">NB3 first run downloads ~2 GB: start it at the break. NB4's Gemma 2 2B path is ~18 GB; do not enable it in the room. NB5 needs only its small cache. If the venue Wi-Fi fails, tether to a phone hotspot for small files only.</td></tr>
+      <tr><td class="sym">Neuronpedia page blank or very slow</td>
+          <td class="cause">Site load, browser extensions, or blocked third-party scripts.</td>
+          <td class="fix">Reload; try a private window or another browser; disable ad-blockers for neuronpedia.org. Otherwise follow the projector.</td></tr>
+
+      <tr class="group a"><td colspan="3">Notebook handling</td></tr>
+      <tr><td class="sym">"You are viewing a read-only notebook" / changes not saved</td>
+          <td class="cause">Opened from the GitHub link without copying.</td>
+          <td class="fix"><span class="path">File &rsaquo; Save a copy in Drive</span>. Work in the copy (title starts with "Copy of").</td></tr>
+      <tr><td class="sym">Participant wants to share their notebook with a partner</td>
+          <td class="cause">&mdash;</td>
+          <td class="fix"><b>Share</b> (top right) &rsaquo; add the partner's email as Editor, or <span class="path">General access: Anyone with the link</span> &rsaquo; Copy link. Each person runs their own runtime; code is shared, variables are not.</td></tr>
+    </tbody>
+  </table>
+
+  <footer><span>MICAI 2026 · Opening the Black Box · Colab troubleshooting</span><span>Escalate to the presenter only if 3+ people hit the same error.</span></footer>
+</div>
+</body>
+</html>

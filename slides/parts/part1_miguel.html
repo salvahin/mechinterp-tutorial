@@ -1,0 +1,1297 @@
+<style>
+  /* ---- part 1 (Miguel) scoped styles ---- */
+  .p1-sub { font-size: 40px; color: var(--ink-2); font-weight: 500; letter-spacing: -.01em; }
+  .p1-meta { font-size: 28px; color: var(--ink-2); }
+  .p1-people { display: flex; gap: 44px; font-size: 28px; margin-top: 18px; }
+  .p1-people span { display: inline-flex; align-items: center; gap: 12px; font-weight: 600; }
+  .p1-people span::before { content: ""; width: 16px; height: 16px; border-radius: 50%; background: var(--c); }
+  .p1-rule { width: 120px; height: 6px; background: var(--resid); border-radius: 3px; }
+
+  .p1-goal .num { font-size: 64px; font-weight: 700; color: var(--resid); line-height: 1; }
+  .p1-goal p { font-size: 30px; line-height: 1.3; }
+
+  .p1-strip { display: flex; height: 18px; border-radius: 9px; overflow: hidden; }
+  .p1-strip i { display: block; height: 100%; }
+  #p1-agenda table.t td { padding: 9px 16px; font-size: 26px; vertical-align: middle; }
+  #p1-agenda table.t th { padding: 6px 16px; }
+  #p1-agenda .tm { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink-2); width: 110px; }
+  #p1-agenda .blk { font-weight: 600; width: 260px; }
+  #p1-agenda .who { white-space: nowrap; width: 300px; }
+  #p1-agenda .who::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--muted)); margin-right: 12px; }
+  #p1-agenda tr.brk td { color: var(--muted); }
+
+  .p1-steps { list-style: none; padding: 0 !important; counter-reset: s; gap: 22px !important; }
+  .p1-steps li { counter-increment: s; display: flex; gap: 24px; align-items: baseline; font-size: 32px; }
+  .p1-steps li::before { content: counter(s); flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--miguel); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 28px; transform: translateY(6px); }
+  .p1-link { font-family: var(--font-mono); font-size: 40px; font-weight: 600; color: var(--miguel); }
+  .p1-kbd { font-family: var(--font-mono); background: var(--card); border: 1.5px solid var(--rule); border-radius: 8px; padding: 0 10px; font-size: .9em; }
+
+  .p1-poll { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 32px; }
+  .p1-poll .card { flex-direction: row; align-items: center; gap: 26px; padding: 26px 30px; }
+  .p1-poll .card b { flex: none; width: 58px; height: 58px; border-radius: 12px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 32px; }
+  .p1-poll .card span { font-size: 32px; line-height: 1.25; }
+
+  .p1-why .card h3 { font-size: 30px; }
+  .p1-why .card p { font-size: 27px; line-height: 1.32; }
+  .p1-why .card .lbl { font-size: 22px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+
+  .p1-cap { font-size: 28px; color: var(--ink-2); min-height: 38px; transition: opacity .25s ease; }
+  .p1-cap b { color: var(--ink); }
+  .p1-fig { flex: none !important; width: 1408px; }
+  .p1-fig svg text { font-family: var(--font-sans); }
+  .p1-fig svg .mono { font-family: var(--font-mono); }
+  [id^="p1-"] .card h3, [id^="p1-"] .card p { margin: 0; }
+
+  .p1-two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .p1-two .callout { font-size: 30px; }
+
+  #p1-predict .predict { font-size: 34px; line-height: 1.35; }
+  #p1-predict .prompt { font-family: var(--font-mono); font-size: 34px; background: var(--card); border: 1.5px solid var(--rule); border-radius: 12px; padding: 18px 26px; }
+  #p1-predict .blank { display: inline-block; width: 220px; border-bottom: 3px solid var(--ink); margin-left: 12px; }
+
+  .p1-limits .card p { font-size: 28px; }
+  .p1-limits .card h3 { font-size: 30px; }
+
+  /* reduced motion (also forced by print mode): no fades anywhere on Part 1's animated slides */
+  .slide.p1-nomo, .slide.p1-nomo * { transition: none !important; }
+  @keyframes p1-dash { to { stroke-dashoffset: -40; } }
+  .p1-flow { stroke-dasharray: 12 8; animation: p1-dash 1s linear infinite; }
+  @media (prefers-reduced-motion: reduce) { .p1-flow { animation: none; } }
+</style>
+
+<!-- ======================================================= 1 · TITLE -->
+<section class="slide title-slide" id="p1-title">
+  <style>
+    #p1-title { padding-right: 0; justify-content: flex-start; gap: 0; }
+    #p1-title .t-logo { height: 76px; width: auto; align-self: flex-start; margin-bottom: 72px; }
+    #p1-title .t-left { max-width: 780px; display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 2; }
+    #p1-title .t-left > * { margin: 0; }
+    #p1-title .t-kicker { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--micai-blue); }
+    #p1-title h1 { font-size: 88px; line-height: 1.0; color: var(--micai-navy); }
+    #p1-title .t-sub { font-size: 32px; line-height: 1.3; color: var(--ink-2); max-width: 780px; }
+    #p1-title .t-bar { width: 120px; height: 8px; border-radius: 4px; background: var(--micai-pink); margin: 6px 0 2px; }
+    #p1-title .t-meta { font-size: 24px; color: var(--ink-2); }
+    #p1-title .t-people { display: flex; gap: 22px; flex-wrap: nowrap; white-space: nowrap; font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--micai-navy); }
+    #p1-title .t-people span { display: inline-flex; align-items: center; gap: 10px; }
+    #p1-title .t-people span::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--c); }
+    #p1-title .t-org { font-size: 22px; color: var(--muted); }
+    #p1-title .t-photo { position: absolute; right: 110px; top: 50%; transform: translateY(-46%); height: 500px; width: auto; z-index: 1; }
+  </style>
+  <img class="t-logo" src="assets/micai2026_navy.png" alt="MICAI 2026">
+  <div class="t-left">
+    <p class="t-kicker">Tutorial · MICAI 2026</p>
+    <h1>Opening the Black&nbsp;Box</h1>
+    <p class="t-sub">A Hands-On Introduction to Mechanistic Interpretability of Large Language Models</p>
+    <div class="t-bar"></div>
+    <p class="t-meta">Tec de Monterrey, Campus Chihuahua · Friday 6 November 2026</p>
+    <div class="t-people">
+      <span style="--c: var(--miguel)">Miguel González</span>
+      <span style="--c: var(--salvador)">Salvador Hinojosa</span>
+      <span style="--c: var(--victor)">Víctor Macías-Terrón</span>
+    </div>
+    <p class="t-org">Tecnológico de Monterrey</p>
+  </div>
+  <img class="t-photo" src="assets/presenters.webp" alt="Salvador Hinojosa, Miguel González and Víctor Macías-Terrón">
+  <aside class="notes">
+    <b>0:00 (1 min) · Miguel.</b> Welcome. Introduce the three of us in one sentence each: Miguel (first 30 min, then has to leave for another session), Salvador (methods, 0:30–2:10), Víctor (auditing LLM judges, 2:10–3:00). Mention the student assistant who will help with Colab. Ask people to open their laptops now — the next slides get NB0 running.
+  </aside>
+</section>
+
+<!-- ======================================================= 2 · GOALS -->
+<section class="slide" id="p1-goals" data-presenter="miguel" data-block="Introduction">
+  <p class="kicker">Introduction</p>
+  <h2>In three hours you will read a model's internals — and know the limits</h2>
+  <div class="grid-3" style="margin-top: 20px">
+    <div class="card p1-goal" data-step="1">
+      <span class="num">1</span>
+      <h3>What it is</h3>
+      <p>What mechanistic interpretability is, and what it can — and cannot — claim.</p>
+    </div>
+    <div class="card p1-goal" data-step="2">
+      <span class="num">2</span>
+      <h3>Why it matters</h3>
+      <p>Implications for safety, for auditing AI systems, and for science.</p>
+    </div>
+    <div class="card p1-goal" data-step="3">
+      <span class="num">3</span>
+      <h3>How to use it</h3>
+      <p>Transfer one method to your own research, with an honest sense of what it proves.</p>
+    </div>
+  </div>
+  <p class="small" data-step="3" style="margin-top: 12px">Format: every experiment starts with a prediction, then you run it in Colab.</p>
+  <aside class="notes">
+    <b>0:01 (1 min).</b> Three goals, click through them. Stress goal 1's second half: half of today is about what these methods do <i>not</i> show. Introduce the ritual: before every experiment you write down a prediction — being wrong is the point. Keep it brisk.
+  </aside>
+</section>
+
+<!-- ======================================================= 3 · AGENDA -->
+<section class="slide" id="p1-agenda" data-presenter="miguel" data-block="Introduction">
+  <p class="kicker">Introduction</p>
+  <h2>Five blocks: observe, intervene, decompose, trace, audit</h2>
+  <div class="p1-strip" aria-hidden="true">
+    <i style="width:4.44%; background: var(--miguel)"></i><i style="width:12.22%; background: var(--miguel); opacity:.75"></i>
+    <i style="width:16.67%; background: var(--salvador)"></i><i style="width:5.56%; background: var(--rule)"></i>
+    <i style="width:16.67%; background: var(--salvador); opacity:.8"></i><i style="width:16.67%; background: var(--salvador); opacity:.6"></i>
+    <i style="width:22.22%; background: var(--victor)"></i><i style="width:5.55%; background: var(--victor); opacity:.7"></i>
+  </div>
+  <table class="t">
+    <thead><tr><th>Time</th><th>Block</th><th>What we do</th><th>Presenter</th></tr></thead>
+    <tbody>
+      <tr><td class="tm">0:00</td><td class="blk">Hook</td><td>Why look inside? Live steering demo</td><td class="who" style="--c: var(--miguel)">Miguel González</td></tr>
+      <tr><td class="tm">0:08</td><td class="blk">1 · Observe</td><td>Residual stream, logit lens · NB1</td><td class="who" style="--c: var(--miguel)">Miguel González</td></tr>
+      <tr><td class="tm">0:30</td><td class="blk">2 · Intervene</td><td>Causality, activation patching · NB2</td><td class="who" style="--c: var(--salvador)">Salvador Hinojosa</td></tr>
+      <tr class="brk"><td class="tm">1:00</td><td class="blk">Break</td><td>Switch Colab to a T4 GPU</td><td class="who">—</td></tr>
+      <tr><td class="tm">1:10</td><td class="blk">3 · Decompose</td><td>Superposition, SAEs, steering · NB3</td><td class="who" style="--c: var(--salvador)">Salvador Hinojosa</td></tr>
+      <tr><td class="tm">1:40</td><td class="blk">4 · Trace</td><td>Attribution graphs, circuits · NB4</td><td class="who" style="--c: var(--salvador)">Salvador Hinojosa</td></tr>
+      <tr><td class="tm">2:10</td><td class="blk">5 · Audit</td><td>Can we trust an LLM judge? · NB5</td><td class="who" style="--c: var(--victor)">Víctor Macías-Terrón</td></tr>
+      <tr><td class="tm">2:50</td><td class="blk">Wrap</td><td>Implications, open problems, resources</td><td class="who" style="--c: var(--victor)">Víctor Macías-Terrón</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">
+    <b>0:02 (1 min).</b> The arc is one story: first we <i>observe</i> (correlation), then <i>intervene</i> (causation), then find the <i>units</i> (features), then <i>circuits</i>, then apply it to a real problem (auditing an LLM judge). Colours in the footer tell you who is presenting. I leave at 0:30 for another session — Salvador takes over mid-story. Break at 1:00: switch the runtime to T4 then.
+  </aside>
+</section>
+
+<!-- ======================================================= 4 · NB0 -->
+<section class="slide" id="p1-nb0" data-presenter="miguel" data-block="Introduction">
+  <p class="kicker">Setup · runs while we talk</p>
+  <h2>Open NB0 now — it installs while we talk</h2>
+  <div class="row" style="gap: 64px; align-items: center">
+    <ol class="p1-steps col" style="flex: 1.35">
+      <li><span>Open <span class="p1-link">bit.ly/micai-mi-nb0</span> in Colab</span></li>
+      <li><span>Add your Hugging Face token as Colab secret <span class="p1-kbd">HF_TOKEN</span></span></li>
+      <li><span>Accept the licence of <span class="p1-kbd">google/gemma-3-1b-it</span> on Hugging Face</span></li>
+      <li><span>Runtime → <span class="p1-kbd">Run all</span>. Look for the green check.</span></li>
+    </ol>
+    <div class="card resid col" style="flex: .65">
+      <h3>Stuck?</h3>
+      <p class="small">Raise your hand — our assistant will come to you. Keep listening; nothing in the next 8 minutes needs a laptop.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>0:03 (1 min, then leave it running).</b> TODO before the event: replace <code>bit.ly/micai-mi-nb0</code> with the real short link and test it. Walk through the 4 steps slowly. Token: huggingface.co → Settings → Access tokens → "Read" token; in Colab, the key icon in the left sidebar → add secret <code>HF_TOKEN</code>, enable notebook access. Licence: open <code>huggingface.co/google/gemma-3-1b-it</code> and click "Agree" (required for NB3). Optional, same click: <code>google/gemma-2-2b</code> (NB4 opt-in path) and <code>google/gemma-3-4b-it</code> (NB5 live path only; NB5 normally uses a cache) (it can take a minute to be granted — that is why we do it now; we need Gemma at 1:10). NB0 only checks the environment. The assistant circulates; move on to the hook while it runs.
+  </aside>
+</section>
+
+<!-- ======================================================= 5 · HOOK (A1) -->
+<section class="slide" id="p1-hook" data-presenter="miguel" data-block="Hook" data-steps="2">
+  <p class="kicker">Hook · Why look inside?</p>
+  <h2>Tests see outputs; interpretability reads the computation</h2>
+  <div class="figure p1-fig" style="height: 400px">
+    <svg id="p1-a1" viewBox="0 0 1408 482" role="img" aria-label="An LLM drawn as an opaque box becomes transparent, revealing layers of units; a feature lights up."></svg>
+  </div>
+  <div class="p1-two">
+    <p class="callout">Testing: inputs in, outputs out.</p>
+    <p class="callout resid" data-step="1">Interpretability: read the steps in between.</p>
+  </div>
+  <aside class="notes">
+    <b>0:04–0:06:30 (2 min 30 s).</b> Step 0: this is how we usually evaluate models — prompt in, answer out. Benchmarks, red-teaming, evals: all behavioural. Step 1 (→): the box is not magic, it is a computation we can record. Step 2 (→): some internal directions behave like <i>concepts</i> — a "feature" that is active when the text is about, say, Paris landmarks. (Label in the figure is illustrative.)<br>
+    <b>Live demo (no code, ~90 s):</b> open <a href="https://www.neuronpedia.org">neuronpedia.org</a>, pick a Gemma model, search a concept feature (e.g. "Eiffel Tower" / "Paris" or a "Golden Gate Bridge"-type feature), use the <i>steer</i> panel: same prompt, steering off vs on. Show that turning one internal feature up changes what the model writes. Message: we just changed behaviour by editing one internal variable — that only works if the variable means something.<br>
+    <b>Fallback if Wi-Fi fails:</b> describe Anthropic's "Golden Gate Claude" (May 2024): clamping one SAE feature made Claude bring up the Golden Gate Bridge in every answer. Keep a pre-recorded screen capture of the Neuronpedia steer on the laptop desktop (TODO: record it).
+  </aside>
+</section>
+
+<!-- ======================================================= 6 · POLL -->
+<section class="slide" id="p1-poll" data-presenter="miguel" data-block="Hook">
+  <p class="kicker">Show of hands</p>
+  <h2>Where does GPT-2 “know” that the Eiffel Tower is in Paris?</h2>
+  <div class="p1-poll" style="margin-top: 16px">
+    <div class="card"><b>A</b><span>In the input embedding of “Eiffel”</span></div>
+    <div class="card"><b>B</b><span>Spread evenly across all layers</span></div>
+    <div class="card"><b>C</b><span>In specific middle-to-late layers</span></div>
+    <div class="card"><b>D</b><span>Nowhere — it is just statistics</span></div>
+  </div>
+  <p class="small" style="margin-top: 8px">Remember your answer. You will check it yourself in NB1.</p>
+  <aside class="notes">
+    <b>0:06:30–0:07:15 (45 s).</b> Hands up for A, B, C, D — count roughly and say the split out loud. Do NOT reveal. (For you: the logit lens in NB1 shows " Paris" appearing only around blocks 8–9 of 12 — supports C as an <i>observation</i>; Block 2 tests whether those layers are causal. D is a trap worth discussing later: "statistics" and "a stored, localizable association" are not exclusive.)
+  </aside>
+</section>
+
+<!-- ======================================================= 7 · WHY NOW -->
+<section class="slide p1-why" id="p1-why-now" data-presenter="miguel" data-block="Hook">
+  <p class="kicker">Why now</p>
+  <h2>The tools are open now; the methods are still young</h2>
+  <div class="grid-3" style="margin-top: 10px">
+    <div class="card">
+      <span class="lbl c-muted">Recognised</span>
+      <h3>A 2026 breakthrough</h3>
+      <p>MIT Technology Review lists mechanistic interpretability among its 10 Breakthrough Technologies of 2026.</p>
+    </div>
+    <div class="card resid">
+      <span class="lbl c-resid">Open</span>
+      <h3>Runs on free Colab</h3>
+      <p>TransformerLens, SAELens, Neuronpedia, circuit-tracer, Gemma Scope 2 — everything we use today.</p>
+    </div>
+    <div class="card warn">
+      <span class="lbl c-warn">Young</span>
+      <h3>Many open problems</h3>
+      <p>Methods lack ground truth and validation standards; results often fail to generalise.</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <p class="tiny">MIT Technology Review, “10 Breakthrough Technologies 2026”. Gemma Scope 2: Google DeepMind (2025). Sharkey et al., “Open Problems in Mechanistic Interpretability”, TMLR 2025.</p>
+  <aside class="notes">
+    <b>0:07:15–0:08 (45 s).</b> No hype: three facts, one sentence each. (1) It is now mainstream enough to be on MIT TR's 2026 list. (2) Two years ago this tutorial needed private tooling; today it runs on free Colab with open SAEs/transcoders for Gemma 3 (Gemma Scope 2) and open circuit tracing (circuit-tracer + Neuronpedia). (3) The field's own review (Sharkey et al., 2025) lists dozens of open problems — we will meet several of them today (Block 3 shows SAEs not beating a plain probe). Transition: let's start by just <i>looking</i>.
+  </aside>
+</section>
+
+<!-- ======================================================= 8 · SECTION 1 -->
+<section class="slide section-slide" id="p1-block1" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Block 1 · 0:08–0:30</p>
+  <span class="block-num">1</span>
+  <h2>Observe</h2>
+  <p class="lead">What is inside a transformer, and can we read it as it computes?</p>
+  <aside class="notes">
+    <b>0:08 (a few seconds).</b> Block 1 opens with a 4-minute primer (tokens, directions, logits, the map, three verbs), then one mental model (the residual stream) and one tool (the logit lens). By 0:30 everyone will have decoded GPT-2's intermediate layers themselves.
+  </aside>
+</section>
+
+<!-- ======================================================= PRIMER (p1-pr-*) · core concepts, ~4 min
+     Real numbers: scratch/primer/primer_numbers.py (tokens, logits, probabilities, logit differences)
+     and scratch/primer/primer_extra.py (raw GPT-2 token-embedding rows). Slide p1-pr-direction is illustrative. -->
+<style>
+  .p1-pr .p1-cap { min-height: 38px; }
+  .p1-pr svg text { font-family: var(--font-sans); }
+  .p1-pr svg .mono { font-family: var(--font-mono); }
+  .p1-pr-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 600; color: var(--ink-2);
+    background: var(--bg-2); border-radius: 999px; padding: 3px 14px 3px 10px; white-space: nowrap; }
+  .p1-pr-tag::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--c, var(--muted)); }
+
+  /* direction slide */
+  #p1-pr-direction .p1-pr-body { display: grid; grid-template-columns: 820px 1fr; gap: 40px; align-items: start; }
+  #p1-pr-direction .uses { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
+  #p1-pr-direction .uses h3 { font-size: 28px; color: var(--ink-2); font-weight: 600; margin: 0 0 4px; }
+  #p1-pr-direction .use { background: var(--card); border: 1.5px solid var(--rule); border-radius: 12px; padding: 12px 18px; display: flex; flex-direction: column; gap: 6px; }
+  #p1-pr-direction .use .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  #p1-pr-direction .use b { font-size: 27px; }
+  #p1-pr-direction .use span.f { font-size: 24px; color: var(--ink-2); font-family: var(--font-mono); }
+  #p1-pr-direction .use.write { border-color: var(--feat-4); }
+  #p1-pr-direction .use sub { font-size: 22px; }
+
+  /* logits slide */
+  #p1-pr-logits .p1-pr-body { display: grid; grid-template-columns: 930px 1fr; gap: 36px; align-items: start; }
+  #p1-pr-logits .eqs { position: relative; height: 430px; }
+  #p1-pr-logits .eq { position: absolute; inset: 0; opacity: 0; transition: opacity .35s ease; display: flex; flex-direction: column; gap: 16px; }
+  #p1-pr-logits .eq.on { opacity: 1; }
+  #p1-pr-logits .eq .big { font-family: var(--font-mono); font-size: 27px; line-height: 1.35; color: var(--ink); background: var(--card); border: 1.5px solid var(--rule); border-radius: 12px; padding: 14px 18px; }
+  #p1-pr-logits .eq .big.ld { border-color: var(--good); background: var(--good-soft); font-size: 24px; }
+  #p1-pr-logits .eq p { font-size: 26px; color: var(--ink-2); line-height: 1.3; margin: 0; }
+  #p1-pr-logits sub, #p1-pr-logits sup { font-size: 22px; }
+  @media (prefers-reduced-motion: reduce) { #p1-pr-logits .eq { transition: none; } }
+
+  /* map slide */
+  #p1-pr-map .p1-pr-body { display: grid; grid-template-columns: 720px 1fr; gap: 56px; align-items: center; }
+  #p1-pr-map dl { margin: 0; display: flex; flex-direction: column; gap: 20px; }
+  #p1-pr-map dl > div { display: flex; flex-direction: column; gap: 2px; transition: opacity .4s ease; }
+  #p1-pr-map dt { font-family: var(--font-display); font-weight: 700; font-size: 27px; }
+  #p1-pr-map dd { margin: 0; font-size: 26px; color: var(--ink-2); line-height: 1.28; }
+
+  /* three verbs slide */
+  #p1-pr-verbs .grid-3 { gap: 28px; margin-top: 4px; }
+  #p1-pr-verbs .card { padding: 22px 26px; gap: 10px; }
+  #p1-pr-verbs .verb { font-family: var(--font-display); font-size: 40px; font-weight: 800; letter-spacing: .04em; }
+  #p1-pr-verbs .card p { font-size: 26px; line-height: 1.28; color: var(--ink-2); margin: 0; }
+  #p1-pr-verbs svg { width: 100%; height: 150px; display: block; }
+  #p1-pr-verbs .tags { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+</style>
+
+<!-- ======================================================= P1 · TOKENS -> VECTORS -->
+<section class="slide p1-pr" id="p1-pr-tokens" data-presenter="miguel" data-block="Primer" data-steps="3">
+  <p class="kicker">Primer · 1 / 5 · tokens and embeddings</p>
+  <h2>Text becomes tokens, tokens become vectors</h2>
+  <div class="figure p1-fig" style="height: 520px">
+    <svg id="p1-pr-tok-svg" viewBox="0 0 1408 520" role="img" aria-label="The prompt splits into 11 GPT-2 tokens; each token id selects one row of the embedding matrix, which becomes a column of 768 numbers."></svg>
+  </div>
+  <p class="p1-cap" id="p1-pr-tok-cap"></p>
+  <aside class="notes">
+    <b>0:08–0:08:45 (45 s).</b> Plain words: a model never sees letters, only numbers.<br>
+    Step 1: the tokenizer cuts the text into pieces from a fixed list of 50,257. Common words are one token; rare words are split: “Eiffel” is three tokens (·E, iff, el). The dot means “starts with a space”. Each piece has an id number.<br>
+    Step 2: the id is just a row number into a big table, the embedding matrix (50,257 rows × 768 columns). Common tokens have small ids, so they all sit near the top.<br>
+    Step 3: that row is the token's vector: 768 numbers. We show the first 8, real GPT-2 values; we draw vectors standing up as columns. GPT-2 also adds a position vector (another 768 numbers) so the model knows word order. From here on, “a token” inside the model means “a column of 768 numbers”.<br>
+    If asked: TransformerLens also prepends an &lt;|endoftext|&gt; token at position 0; we leave it out for space. Values from <code>scratch/primer/primer_extra.py</code> (raw GPT-2 weights; TransformerLens's default loading centres them, which changes the third decimal).
+  </aside>
+</section>
+
+<!-- ======================================================= P2 · DIRECTIONS -->
+<section class="slide p1-pr" id="p1-pr-direction" data-presenter="miguel" data-block="Primer" data-steps="3">
+  <p class="kicker">Primer · 2 / 5 · directions and dot products</p>
+  <h2>A direction in activation space can mean something</h2>
+  <div class="p1-pr-body">
+    <svg id="p1-pr-dir-svg" viewBox="0 0 820 500" style="width: 820px; height: 500px" role="img" aria-label="An activation vector, a labelled direction, and the projection of the vector onto the direction; the projection value changes as the vector moves."></svg>
+    <div class="uses">
+      <h3 data-step="2">The same move, all day:</h3>
+      <div class="use" data-step="2"><div class="top"><b>Logit lens</b><span class="p1-pr-tag" style="--c: var(--miguel)">Block 1</span></div><span class="f">x · (a token's vector)</span></div>
+      <div class="use" data-step="2"><div class="top"><b>Probe</b><span class="p1-pr-tag" style="--c: var(--salvador)">Blocks 3, 5</span></div><span class="f">x · w, w learned</span></div>
+      <div class="use" data-step="2"><div class="top"><b>SAE feature</b><span class="p1-pr-tag" style="--c: var(--salvador)">Blocks 3, 4</span></div><span class="f">x · w<sub>enc</sub>, then (Jump)ReLU</span></div>
+      <div class="use write" data-step="2"><div class="top"><b>Steering</b><span class="p1-pr-tag" style="--c: var(--salvador)">Block 3</span></div><span class="f">x + α·d: writes along d</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>0:08:45–0:09:45 (1 min).</b> Everything on this slide is <i>illustrative</i>: 2 of 768 dimensions, made-up numbers, and “French-ness” is a teaching label, not a measured feature.<br>
+    Step 0: an activation is a list of numbers; geometrically it is an arrow. Step 1: pick a direction d (an arrow of length 1). Step 2: the dot product x · d is the length of x's shadow on d: “how much of d is in x”. This is the one operation to remember. Right panel: the logit lens dots x with each token's unembedding vector; a probe dots x with a learned weight vector (plus a bias); an SAE feature's activation is x dotted with its <i>encoder</i> direction, plus a bias, then a (Jump)ReLU. Steering is the reverse: it <i>writes</i> along a direction (adds α·d to x); Salvador shows it in Block 3, where d is a feature's <i>decoder</i> direction.<br>
+    Step 3: a different prompt gives a different arrow; the shadow shrinks and here goes slightly negative (−0.4).<br>
+    Honest caveat for later: a direction that reads well is not proof the model <i>uses</i> it (Block 2, Block 3).
+  </aside>
+</section>
+
+<!-- ======================================================= P3 · LOGITS -> PROBABILITIES -->
+<section class="slide p1-pr" id="p1-pr-logits" data-presenter="miguel" data-block="Primer" data-steps="3">
+  <p class="kicker">Primer · 3 / 5 · the output</p>
+  <h2>Logits are scores; softmax turns them into probabilities</h2>
+  <div class="p1-pr-body">
+    <svg id="p1-pr-lg-svg" viewBox="0 0 930 470" style="width: 930px; height: 470px" role="img" aria-label="GPT-2 small's logits for the next token after 'The Eiffel Tower is in the French city of', morphing into softmax probabilities, then the logit difference between Paris and Lyon."></svg>
+    <div class="eqs">
+      <div class="eq" data-k="0">
+        <div class="big">logit<sub>tok</sub> = x · u<sub>tok</sub></div>
+        <p>x: final vector at “·of”. u<sub>tok</sub>: one vector per vocabulary token.</p>
+      </div>
+      <div class="eq" data-k="1">
+        <div class="big">logit<sub>tok</sub> = x · u<sub>tok</sub></div>
+        <p>50,257 scores, any real number (25,379 negative).</p>
+      </div>
+      <div class="eq" data-k="2">
+        <div class="big">p<sub>tok</sub> = exp(logit<sub>tok</sub>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ Σ<sub>t</sub> exp(logit<sub>t</sub>)</div>
+        <p>Softmax: all positive, sum to 1.</p>
+      </div>
+      <div class="eq" data-k="3">
+        <div class="big ld">LD = logit<sub>Paris</sub> − logit<sub>Lyon</sub><br>= 18.06 − 17.29 = 0.77</div>
+        <p><b>Linear</b> in x, unlike probabilities. Block 2 measures with LD.</p>
+      </div>
+    </div>
+  </div>
+  <p class="tiny" style="margin-top: auto">Real values: GPT-2 small, TransformerLens (logits centred to mean 0 over the vocabulary), scratch/primer/primer_numbers.py.</p>
+  <aside class="notes">
+    <b>0:09:45–0:11 (1 min 15 s).</b> Real numbers, GPT-2 small, prompt “The Eiffel Tower is in the French city of”.<br>
+    Step 0: at the last position the model has one final vector x (after the last LayerNorm). It compares x with every word in its vocabulary by a dot product: one score per token, called a <b>logit</b>. (In GPT-2 the unembedding vectors are the embedding rows again: tied weights.)<br>
+    Step 1: logits are any real number; about half of the 50,257 are negative (“·banana”: −1.34). Top: ·Paris 18.06, ·Nice 17.68, ·Lyon 17.29, ·Marse (first piece of “Marseille”) 16.80, ·L 15.91, ·Saint 15.80; ·London is only rank 176.<br>
+    Step 2: softmax = exponentiate each logit, divide by the total. Now they are probabilities: Paris 0.207, Nice 0.141, Lyon 0.096 … and the other 50,249 tokens together still hold 0.45. Exponentiating means only <i>differences</i> between logits matter: Hugging Face reports these same logits shifted by −116.4 (TransformerLens centres them), and the probabilities are identical.<br>
+    Step 3: so we compare two candidates directly: the <b>logit difference</b>, here 0.77 = ln(0.207/0.096). It is a linear function of x: add a vector v to x and LD moves by exactly v · (u<sub>Paris</sub> − u<sub>Lyon</sub>). A probability depends on all 50,257 logits at once, so it is not. That is why Salvador's patching metric in Block 2 is a logit difference (Mary vs John). Fine print if asked: x is taken after the final LayerNorm, whose rescaling is the one non-linear step between the residual stream and the logits.
+  </aside>
+</section>
+
+<!-- ======================================================= P4 · THE MAP -->
+<section class="slide p1-pr" id="p1-pr-map" data-presenter="miguel" data-block="Primer" data-steps="4">
+  <p class="kicker">Primer · 4 / 5 · vocabulary for the day</p>
+  <h2>A transformer is layers that add to a running sum</h2>
+  <div class="p1-pr-body">
+    <svg id="p1-pr-map-svg" viewBox="0 0 720 540" style="width: 720px; height: 540px" role="img" aria-label="Embed at the bottom, then attention and MLP repeated 12 times, each adding to the residual stream, then unembed at the top. An activation is the vector at one layer and one position."></svg>
+    <dl>
+      <div data-k="0"><dt class="c-resid">Residual stream</dt><dd>the running sum: 768 numbers per position</dd></div>
+      <div data-k="1"><dt class="c-attn">Attention</dt><dd>moves information between positions (12 heads)</dd></div>
+      <div data-k="2"><dt class="c-mlp">MLP</dt><dd>transforms one position at a time</dd></div>
+      <div data-k="3"><dt>Layer</dt><dd>one attention + one MLP; GPT-2 small stacks 12</dd></div>
+      <div data-k="4"><dt style="color: var(--feat-4)">Activation</dt><dd>the numbers at one layer and one position</dd></div>
+    </dl>
+  </div>
+  <aside class="notes">
+    <b>0:11–0:11:30 (30 s).</b> This is the map for the whole day; the next slide zooms in. Read the vocabulary, one word per click.<br>
+    Step 0: embed at the bottom, unembed at the top, and the <b>residual stream</b> in between: one vector per position that every part reads from and adds to. Step 1: <b>attention</b> is the only part that moves information <i>between</i> positions; each layer has 12 <b>heads</b> working in parallel (Block 2 finds specific heads such as L9H9 = layer 9, head 9). Step 2: the <b>MLP</b> works on each position separately. Step 3: attention + MLP = one <b>layer</b>; GPT-2 small stacks 12 (counted 0–11). Step 4: an <b>activation</b> is the vector of numbers at one layer and one position, e.g. the stream after layer 6 at “·of”. (Attention and MLP outputs are activations too; today it usually means the stream.) All of today's methods take an activation and do something to it.
+  </aside>
+</section>
+
+<!-- ======================================================= P5 · THREE VERBS -->
+<section class="slide p1-pr" id="p1-pr-verbs" data-presenter="miguel" data-block="Primer" data-steps="2">
+  <p class="kicker">Primer · 5 / 5 · the session map</p>
+  <h2>Three things we do to activations today</h2>
+  <div class="grid-3">
+    <div class="card">
+      <span class="verb">READ</span>
+      <svg id="p1-pr-v-read" viewBox="0 0 400 150" aria-hidden="true"></svg>
+      <p>Decode what an activation contains.</p>
+      <div class="tags"><span class="p1-pr-tag" style="--c: var(--miguel)">Block 1 · logit lens</span><span class="p1-pr-tag" style="--c: var(--salvador)">Block 3 · probes</span><span class="p1-pr-tag" style="--c: var(--victor)">Block 5 · probes on a judge</span></div>
+    </div>
+    <div class="card" data-step="1">
+      <span class="verb">EDIT</span>
+      <svg id="p1-pr-v-edit" viewBox="0 0 400 150" aria-hidden="true"></svg>
+      <p>Change it, then watch the output.</p>
+      <div class="tags"><span class="p1-pr-tag" style="--c: var(--salvador)">Block 2 · patching</span><span class="p1-pr-tag" style="--c: var(--salvador)">Block 3 · steering</span></div>
+    </div>
+    <div class="card" data-step="2">
+      <span class="verb">DECOMPOSE</span>
+      <svg id="p1-pr-v-dec" viewBox="0 0 400 150" aria-hidden="true"></svg>
+      <p>Split it into interpretable parts.</p>
+      <div class="tags"><span class="p1-pr-tag" style="--c: var(--salvador)">Block 3 · SAEs</span><span class="p1-pr-tag" style="--c: var(--salvador)">Block 4 · attribution graphs</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>0:11:30–0:12 (30 s).</b> The whole session in three verbs. <b>Read</b>: decode what is in an activation (my logit lens in a minute; Salvador's probes; Víctor's probes on an LLM judge). Step 1, <b>Edit</b>: change an activation and watch the output: that is how we test cause (Salvador, Blocks 2–3). Step 2, <b>Decompose</b>: split an activation into a sum of interpretable directions (SAEs) and trace how they connect (attribution graphs, Block 4). Dot colours = presenter. Block 1 is all reading — keep that in mind for the limits slide at the end of my part.
+  </aside>
+</section>
+
+<script>
+(function () {
+  /* ---- primer helpers (local copies; the part's main script keeps its own) ---- */
+  const NS = 'http://www.w3.org/2000/svg';
+  const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function el(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  /* Step-driven tween: target(step) -> {key: number}; render(state). Entering a slide (also backwards,
+     at its last step) or reduced motion jumps straight to the target, so every step has a correct frame. */
+  function anim(id, o) {
+    let st = null, jump = true, stop = null, done = false;
+    const setup = s => { if (!done) { o.setup(s); done = true; } };
+    Deck.on(id, 'enter', (s) => { jump = true; setup(s); });
+    Deck.on(id, 'step', (s, step) => {
+      setup(s);
+      const tg = o.target(step);
+      if (stop) { stop(); stop = null; }
+      s.classList.toggle('p1-nomo', !!Deck.reducedMotion);
+      if (o.onStep) o.onStep(step, jump || Deck.reducedMotion);
+      if (!st || jump || Deck.reducedMotion) { st = Object.assign({}, tg); jump = false; o.render(st); return; }
+      const from = Object.assign({}, st), dur = o.dur || .9;
+      let maxd = 0; for (const k in tg) maxd = Math.max(maxd, o.delay ? o.delay(k, step) : 0);
+      stop = Deck.raf(s, (t) => {
+        for (const k in tg) {
+          const d = o.delay ? o.delay(k, step) : 0, f = from[k] == null ? 0 : from[k];
+          st[k] = f + (tg[k] - f) * ease((t - d) / dur);
+        }
+        o.render(st);
+        if (t > dur + maxd + .05) return false;
+      });
+    });
+  }
+  function setCap(id, html, instant) {
+    const c = document.getElementById(id); if (!c) return;
+    const tok = c.dataset.capTok = String(+(c.dataset.capTok || 0) + 1);   // a later call cancels a pending fade
+    if (instant || Deck.reducedMotion) { c.style.opacity = 1; c.innerHTML = html; return; }
+    c.style.opacity = 0;
+    setTimeout(() => { if (c.dataset.capTok !== tok) return; c.innerHTML = html; c.style.opacity = 1; }, 180);
+  }
+  const vis = s => s.replace(/^ /, '·');
+
+  /* ================= P1 · tokens -> ids -> embedding rows -> columns =================
+     REAL GPT-2 values (scratch/primer/primer_numbers.py, primer_extra.py): tokenisation of the prompt
+     (BOS omitted), token ids, and the first 8 of 768 entries of each raw token-embedding row W_E[id]. */
+  (function () {
+    const T = [
+      ['The', 464, [-0.069, -0.020, 0.064, -0.062, -0.114, -0.062, -0.217, -0.030]],
+      [' E', 412, [0.014, 0.007, 0.021, -0.056, 0.123, -0.021, -0.226, -0.054]],
+      ['iff', 733, [0.159, 0.029, 0.038, -0.053, -0.012, 0.035, -0.364, 0.198]],
+      ['el', 417, [0.049, -0.122, -0.031, -0.112, 0.009, -0.133, -0.298, 0.050]],
+      [' Tower', 8765, [-0.017, 0.054, 0.247, -0.074, 0.043, -0.076, -0.231, 0.110]],
+      [' is', 318, [-0.010, 0.010, 0.056, -0.112, -0.114, 0.127, -0.265, -0.119]],
+      [' in', 287, [-0.034, 0.011, 0.029, 0.078, 0.042, -0.064, -0.268, -0.012]],
+      [' the', 262, [-0.039, 0.005, 0.042, 0.040, -0.036, -0.055, -0.257, -0.002]],
+      [' French', 4141, [-0.153, -0.016, 0.122, 0.004, 0.085, -0.076, -0.225, -0.048]],
+      [' city', 1748, [0.003, 0.087, 0.126, -0.086, -0.037, -0.165, -0.342, 0.020]],
+      [' of', 286, [-0.057, 0.018, 0.033, 0.041, 0.012, -0.040, -0.253, 0.002]]];
+    const N = T.length, X = i => 296 + i * 104, CW = 100;
+    const SENT = 'The Eiffel Tower is in the French city of', SF = 34, CH = SF * 0.6;  // mono advance
+    const SX0 = 704 - SENT.length * CH / 2;
+    const starts = []; { let c = 0; T.forEach(t => { starts.push(c); c += t[0].length; }); }
+    const sentX = i => SX0 + (starts[i] + T[i][0].length / 2) * CH;
+    const MX = 24, MY = 150, MW = 170, MH = 300, V = 50257;          // embedding matrix
+    const rowY = id => MY + 2 + id / V * (MH - 4);
+    const CY = 150, CELL = 34;                                        // column top, cell height
+    let g = {};
+    const CAPS = [
+      'The model never sees letters. First the text is cut into <b>tokens</b>.',
+      '11 GPT-2 tokens, each with an <b>id</b>. “Eiffel” is three tokens; · marks a leading space.',
+      'Each id is a <b>row number</b> in the embedding matrix: one row per vocabulary token.',
+      'That row is the token’s <b>vector</b>: 768 numbers (first 8 shown, real GPT-2 values).'];
+    anim('p1-pr-tokens', {
+      dur: 1.0,
+      onStep: (s, instant) => setCap('p1-pr-tok-cap', CAPS[s], instant),
+      setup() {
+        const svg = document.getElementById('p1-pr-tok-svg');
+        g.sent = el('text', { x: 704, y: 52, 'text-anchor': 'middle', 'font-size': SF, class: 'mono', fill: 'var(--ink)' }, svg, SENT);
+        // matrix
+        g.mat = el('g', {}, svg);
+        el('text', { x: MX + MW / 2, y: MY - 14, 'text-anchor': 'middle', 'font-size': 26, 'font-weight': 700, fill: 'var(--ink)' }, g.mat, 'W_E');
+        el('rect', { x: MX, y: MY, width: MW, height: MH, rx: 8, fill: 'var(--card)', stroke: 'var(--ink-2)', 'stroke-width': 2 }, g.mat);
+        for (let k = 1; k < 24; k++) el('line', { x1: MX + 6, x2: MX + MW - 6, y1: MY + k * MH / 24, y2: MY + k * MH / 24, stroke: 'var(--rule)', 'stroke-width': 1 }, g.mat);
+        const ml = el('text', { x: MX + MW / 2, y: MY + MH + 28, 'text-anchor': 'middle', 'font-size': 22, fill: 'var(--muted)' }, g.mat);
+        el('tspan', { x: MX + MW / 2 }, ml, '50,257 rows'); el('tspan', { x: MX + MW / 2, dy: 26 }, ml, '× 768 numbers');
+        g.hits = el('g', {}, g.mat);
+        // links chip -> row
+        g.links = T.map((t, i) => el('path', { d: '', fill: 'none', stroke: 'var(--resid)', 'stroke-width': 2, 'stroke-opacity': .55 }, svg));
+        // per-token: chip, id, moving row/column, cells
+        g.tok = T.map((t, i) => {
+          const gg = el('g', {}, svg);
+          const chip = el('rect', { x: 0, y: 30, width: CW, height: 46, rx: 9, fill: i === N - 1 ? 'var(--ink)' : 'var(--card)', stroke: i === N - 1 ? 'var(--ink)' : 'var(--rule)', 'stroke-width': 1.5 }, gg);
+          const txt = el('text', { x: 0, y: 61, 'text-anchor': 'middle', 'font-size': 22, class: 'mono', fill: i === N - 1 ? '#fff' : 'var(--ink)' }, gg, vis(t[0]));
+          const id = el('text', { x: X(i), y: 104, 'text-anchor': 'middle', 'font-size': 22, class: 'mono', fill: 'var(--muted)' }, gg, String(t[1]));
+          const col = el('rect', { x: 0, y: 0, width: 0, height: 0, rx: 4, fill: 'var(--resid-soft)', stroke: 'var(--resid)', 'stroke-width': 2 }, svg);
+          const cells = el('g', {}, svg);
+          t[2].forEach((v, k) => {
+            const y = CY + 6 + k * CELL;
+            el('rect', { x: X(i) - CW / 2 + 6, y, width: CW - 12, height: CELL - 5, rx: 4,
+              fill: v >= 0 ? 'var(--resid)' : 'var(--feat-1)', 'fill-opacity': Math.min(.55, Math.abs(v) * 2.2) }, cells);
+            el('text', { x: X(i), y: y + 24, 'text-anchor': 'middle', 'font-size': 22, class: 'mono', fill: 'var(--ink)' }, cells,
+              (v < 0 ? '−' : '') + Math.abs(v).toFixed(2).replace(/^0/, ''));
+          });
+          el('text', { x: X(i), y: CY + 8 * CELL + 30, 'text-anchor': 'middle', 'font-size': 26, 'font-weight': 700, fill: 'var(--muted)' }, cells, '⋮');
+          const hit = el('rect', { x: MX + 4, y: rowY(t[1]) - 2, width: MW - 8, height: 4, fill: 'var(--resid)' }, g.hits);
+          return { gg, chip, txt, id, col, cells, hit };
+        });
+        g.more = el('text', { x: X(5) + 50, y: CY + 8 * CELL + 70, 'text-anchor': 'middle', 'font-size': 24, fill: 'var(--ink-2)' }, svg, '… 768 numbers per token; GPT-2 then adds a position vector of the same size');
+      },
+      target: s => { const o = { split: s >= 1 ? 1 : 0, look: s >= 2 ? 1 : 0, col: s >= 3 ? 1 : 0 }; T.forEach((_, i) => o['c' + i] = s >= 3 ? 1 : 0); return o; },
+      delay: (k) => k[0] === 'c' ? (+k.slice(1)) * .05 : 0,
+      render(st) {
+        g.sent.setAttribute('opacity', clamp(1 - st.split * 2));
+        g.mat.setAttribute('opacity', clamp(st.look * 1.5) * (1 - .55 * st.col));
+        T.forEach((t, i) => {
+          const o = g.tok[i], cx = lerp(sentX(i), X(i), st.split), w = lerp(t[0].length * CH, CW, st.split);
+          o.gg.setAttribute('opacity', clamp(st.split * 2 - .2));
+          o.chip.setAttribute('x', cx - w / 2); o.chip.setAttribute('width', w);
+          o.txt.setAttribute('x', cx);
+          o.id.setAttribute('opacity', clamp(st.split * 2 - 1));
+          // link from the id to its row in W_E
+          const ry = rowY(t[1]), lk = st.look * (1 - st['c' + i]);
+          g.links[i].setAttribute('d', `M${X(i)} 114 C ${X(i)} ${ry}, ${MX + MW + 60} ${ry}, ${MX + MW} ${ry}`);
+          g.links[i].setAttribute('opacity', clamp(lk * 1.5));
+          o.hit.setAttribute('opacity', clamp(st.look * 2));
+          // the row leaves the matrix and stands up as a column under its token
+          const c = st['c' + i];
+          const x = lerp(MX + 4, X(i) - CW / 2, c), y = lerp(ry - 2, CY, c);
+          const ww = lerp(MW - 8, CW, c), hh = lerp(4, 8 * CELL + 4, c);
+          o.col.setAttribute('x', x); o.col.setAttribute('y', y); o.col.setAttribute('width', ww); o.col.setAttribute('height', hh);
+          o.col.setAttribute('opacity', c > 0.001 ? 1 : 0);
+          o.cells.setAttribute('opacity', clamp(c * 2.5 - 1.5));
+        });
+        g.more.setAttribute('opacity', clamp(st.col * 2.5 - 1.5));
+      }
+    });
+  })();
+
+  /* ================= P2 · direction, dot product, steering (ILLUSTRATIVE geometry) ================= */
+  (function () {
+    const O = [250, 410], S = 105, TH = 20 * Math.PI / 180, D = [Math.cos(TH), Math.sin(TH)];
+    const P = (u, v) => [O[0] + u * S, O[1] - v * S];
+    let g = {};
+    anim('p1-pr-direction', {
+      dur: 1.1,
+      setup() {
+        const svg = document.getElementById('p1-pr-dir-svg');
+        const defs = el('defs', {}, svg);
+        const mk = (id, col) => { const m = el('marker', { id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, defs); el('path', { d: 'M0 0 L10 5 L0 10 z', fill: col }, m); };
+        mk('p1-pr-ah-x', 'var(--resid)'); mk('p1-pr-ah-d', 'var(--feat-4)'); mk('p1-pr-ah-g', 'var(--muted)');
+        // faint axes = 2 of 768 dims
+        el('line', { x1: 40, x2: 800, y1: O[1], y2: O[1], stroke: 'var(--rule)', 'stroke-width': 2 }, svg);
+        el('line', { x1: O[0], x2: O[0], y1: 30, y2: 480, stroke: 'var(--rule)', 'stroke-width': 2 }, svg);
+        el('text', { x: 800, y: 470, 'text-anchor': 'end', 'font-size': 22, fill: 'var(--muted)' }, svg, '2 of 768 dimensions · illustrative');
+        // direction line + arrow
+        g.d = el('g', {}, svg);
+        const a = P(-1.4 * D[0], -1.4 * D[1]), b = P(5.2 * D[0], 5.2 * D[1]);
+        el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: 'var(--feat-4)', 'stroke-width': 2, 'stroke-dasharray': '8 8', 'stroke-opacity': .6 }, g.d);
+        const u = P(D[0], D[1]);
+        el('line', { x1: O[0], y1: O[1], x2: u[0], y2: u[1], stroke: 'var(--feat-4)', 'stroke-width': 6, 'marker-end': 'url(#p1-pr-ah-d)' }, g.d);
+        el('text', { x: u[0] - 6, y: u[1] - 18, 'font-size': 26, 'font-weight': 700, fill: 'var(--feat-4)' }, g.d, 'd');
+        el('text', { x: 800, y: 168, 'text-anchor': 'end', 'font-size': 24, 'font-weight': 600, fill: 'var(--feat-4)' }, g.d, '“French-ness”');
+        el('text', { x: 800, y: 196, 'text-anchor': 'end', 'font-size': 22, fill: 'var(--feat-4)' }, g.d, '(label illustrative)');
+        // projection
+        g.drop = el('line', { stroke: 'var(--ink-2)', 'stroke-width': 2, 'stroke-dasharray': '5 6' }, svg);
+        g.shadow = el('line', { stroke: 'var(--feat-4)', 'stroke-width': 14, 'stroke-linecap': 'round', 'stroke-opacity': .45 }, svg);
+        g.foot = el('circle', { r: 7, fill: 'var(--feat-4)' }, svg);
+        // steering: x' = x + α·d. Its shadow, drop line and foot (drawn under x's own shadow marks)
+        g.drop2 = el('line', { stroke: 'var(--ink-2)', 'stroke-width': 2, 'stroke-dasharray': '5 6' }, svg);
+        g.shadow2 = el('line', { stroke: 'var(--feat-4)', 'stroke-width': 14, 'stroke-linecap': 'round', 'stroke-opacity': .45 }, svg);
+        g.foot2 = el('circle', { r: 7, fill: 'var(--feat-4)' }, svg);
+        g.xp = el('line', { x1: O[0], y1: O[1], stroke: 'var(--resid)', 'stroke-width': 5, 'stroke-dasharray': '4 7', 'stroke-linecap': 'round', 'marker-end': 'url(#p1-pr-ah-x)' }, svg);
+        g.xpT = el('text', { 'font-size': 28, 'font-weight': 700, fill: 'var(--resid)' }, svg, 'x′');
+        g.add = el('line', { stroke: 'var(--feat-4)', 'stroke-width': 6, 'marker-end': 'url(#p1-pr-ah-d)' }, svg);
+        g.addT = el('text', { 'font-size': 26, 'font-weight': 700, fill: 'var(--feat-4)' }, svg, '+ α·d');
+        // x
+        g.x = el('line', { x1: O[0], y1: O[1], stroke: 'var(--resid)', 'stroke-width': 7, 'marker-end': 'url(#p1-pr-ah-x)' }, svg);
+        g.xT = el('text', { 'font-size': 28, 'font-weight': 700, fill: 'var(--resid)' }, svg, 'x');
+        el('circle', { cx: O[0], cy: O[1], r: 6, fill: 'var(--ink)' }, svg);
+        // readout
+        g.read = el('g', {}, svg);
+        el('rect', { x: 490, y: 18, width: 300, height: 64, rx: 12, fill: 'var(--card)', stroke: 'var(--feat-4)', 'stroke-width': 2.5 }, g.read);
+        g.readT = el('text', { x: 510, y: 62, 'font-size': 34, 'font-weight': 700, class: 'mono', fill: 'var(--ink)' }, g.read, '');
+        g.cap = el('text', { x: 790, y: 116, 'text-anchor': 'end', 'font-size': 24, fill: 'var(--ink-2)' }, svg, '');
+      },
+      // phi/r: polar position of x; al: steering amount along d
+      target: s => ({ dOn: s >= 1 ? 1 : 0, pOn: s >= 2 ? 1 : 0, phi: s >= 3 ? 118 : 48, r: s >= 3 ? 2.6 : 3.1, al: 0 }),   // al: steering, not animated in the primer (Block 3 shows it)
+      delay: k => k === 'al' ? .1 : 0,
+      render(st) {
+        // all drawing AND the readout come from these same model-space coordinates
+        const ph = st.phi * Math.PI / 180;
+        const xv = [st.r * Math.cos(ph), st.r * Math.sin(ph)];             // x
+        const xs = [xv[0] + st.al * D[0], xv[1] + st.al * D[1]];           // x' = x + α·d (parallel to d)
+        const pj = xv[0] * D[0] + xv[1] * D[1], pjs = xs[0] * D[0] + xs[1] * D[1];
+        const tip = P(xv[0], xv[1]), ft = P(pj * D[0], pj * D[1]);
+        const tps = P(xs[0], xs[1]), fts = P(pjs * D[0], pjs * D[1]);
+        g.x.setAttribute('x2', tip[0]); g.x.setAttribute('y2', tip[1]);
+        g.xT.setAttribute('x', tip[0] - 34); g.xT.setAttribute('y', tip[1] - 6);
+        g.d.setAttribute('opacity', st.dOn);
+        const po = st.pOn, ga = clamp(st.al * 3);
+        [g.drop, g.foot, g.read].forEach(e => e.setAttribute('opacity', po));
+        g.shadow.setAttribute('opacity', po * (1 - .55 * ga));
+        g.drop.setAttribute('x1', tip[0]); g.drop.setAttribute('y1', tip[1]); g.drop.setAttribute('x2', ft[0]); g.drop.setAttribute('y2', ft[1]);
+        g.shadow.setAttribute('x1', O[0]); g.shadow.setAttribute('y1', O[1]); g.shadow.setAttribute('x2', ft[0]); g.shadow.setAttribute('y2', ft[1]);
+        g.foot.setAttribute('cx', ft[0]); g.foot.setAttribute('cy', ft[1]);
+        const f1 = v => { const r = Math.round(v * 10) / 10; return (r < 0 ? '−' : '') + Math.abs(r).toFixed(1); };
+        g.readT.textContent = st.al > .05 ? 'x′ · d = ' + f1(pjs) : 'x · d = ' + f1(pj);
+        // steering: arrow from x's tip along d; dotted x' from the origin; x' shadow
+        [g.add, g.addT, g.xp, g.xpT, g.drop2, g.shadow2, g.foot2].forEach(e => e.setAttribute('opacity', ga));
+        g.add.setAttribute('x1', tip[0]); g.add.setAttribute('y1', tip[1]); g.add.setAttribute('x2', tps[0]); g.add.setAttribute('y2', tps[1]);
+        g.addT.setAttribute('x', (tip[0] + tps[0]) / 2 - 10); g.addT.setAttribute('y', (tip[1] + tps[1]) / 2 + 40);
+        g.xp.setAttribute('x2', tps[0]); g.xp.setAttribute('y2', tps[1]);
+        g.xpT.setAttribute('x', tps[0] + 12); g.xpT.setAttribute('y', tps[1] + 6);
+        g.drop2.setAttribute('x1', tps[0]); g.drop2.setAttribute('y1', tps[1]); g.drop2.setAttribute('x2', fts[0]); g.drop2.setAttribute('y2', fts[1]);
+        g.shadow2.setAttribute('x1', O[0]); g.shadow2.setAttribute('y1', O[1]); g.shadow2.setAttribute('x2', fts[0]); g.shadow2.setAttribute('y2', fts[1]);
+        g.foot2.setAttribute('cx', fts[0]); g.foot2.setAttribute('cy', fts[1]);
+        g.cap.textContent = st.al > .05 ? 'steering: write along d' : st.phi > 60 ? 'another prompt: little of d' : po > .5 ? 'shadow length = how much of d' : '';
+        g.cap.setAttribute('opacity', po);
+      }
+    });
+  })();
+
+  /* ================= P3 · logits -> softmax -> logit difference =================
+     REAL values: GPT-2 small (TransformerLens, centred logits), prompt "The Eiffel Tower is in the French city of",
+     last position. Top-6 by logit + two lower-ranked real tokens (rank 176 and 31,377). scratch/primer/primer_numbers.py */
+  (function () {
+    const R = [[' Paris', 18.061, 0.2074], [' Nice', 17.677, 0.1412], [' Lyon', 17.294, 0.0964], [' Marse', 16.803, 0.0589],
+               [' L', 15.912, 0.0242], [' Saint', 15.803, 0.0217], [' London', 11.750, 0.000377], [' banana', -1.343, 7.8e-10]];
+    const REST = 0.4499;            // the other 50,249 tokens together
+    const RY0 = 52, RH = 38, LX = 128, ZL = 560, SL = 10, ZP = 300, SP = 2080, PX0 = 300, PW = 520;
+    const fmtL = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+    const fmtP = p => p >= 0.01 ? p.toFixed(3) : p >= 0.0001 ? p.toFixed(4) : '≈ 0';
+    const RY = i => RY0 + i * RH + (i >= 6 ? 14 : 0);   // gap before the two lower-ranked rows
+    let g = {};
+    const eqs = () => document.querySelectorAll('#p1-pr-logits .eq');
+    anim('p1-pr-logits', {
+      dur: 1.1,
+      onStep: s => eqs().forEach(e => e.classList.toggle('on', +e.dataset.k === s)),
+      setup() {
+        const svg = document.getElementById('p1-pr-lg-svg');
+        // x column
+        el('text', { x: 40, y: 34, 'text-anchor': 'middle', 'font-size': 26, 'font-weight': 700, fill: 'var(--resid)' }, svg, 'x');
+        for (let k = 0; k < 8; k++) el('rect', { x: 22, y: 52 + k * 34, width: 36, height: 28, rx: 4, fill: 'var(--resid)', 'fill-opacity': .18 + .5 * Math.abs(Math.sin(k * 2.3 + 1)) }, svg);
+        el('text', { x: 40, y: 52 + 8 * 34 + 26, 'text-anchor': 'middle', 'font-size': 26, 'font-weight': 700, fill: 'var(--muted)' }, svg, '⋮');
+        el('text', { x: 40, y: 52 + 8 * 34 + 62, 'text-anchor': 'middle', 'font-size': 22, fill: 'var(--muted)' }, svg, 'at ·of');
+        g.fan = el('g', {}, svg);
+        R.forEach((r, i) => el('line', { x1: 64, y1: 190, x2: LX - 6, y2: RY(i) + RH / 2 - 4, stroke: 'var(--resid)', 'stroke-width': 1.5, 'stroke-opacity': .45 }, g.fan));
+        // grid / axes
+        g.axL = el('g', {}, svg); g.axP = el('g', {}, svg);
+        const yb = RY(R.length - 1) + RH;
+        [-20, -10, 0, 10, 20].forEach(v => {
+          const x = ZL + v * SL;
+          el('line', { x1: x, x2: x, y1: RY0 - 8, y2: yb, stroke: v ? 'var(--rule)' : 'var(--ink-2)', 'stroke-width': v ? 1.5 : 2.5, 'stroke-dasharray': v ? '4 6' : '' }, g.axL);
+          el('text', { x, y: yb + 26, 'text-anchor': 'middle', 'font-size': 22, fill: 'var(--muted)' }, g.axL, v < 0 ? '−' + (-v) : String(v));
+        });
+        el('text', { x: ZL + 270, y: 26, 'text-anchor': 'end', 'font-size': 22, 'font-weight': 600, fill: 'var(--muted)', 'letter-spacing': '.08em' }, g.axL, 'LOGIT');
+        [0, .1, .2].forEach(v => {
+          const x = ZP + v * SP;
+          el('line', { x1: x, x2: x, y1: RY0 - 8, y2: yb, stroke: v ? 'var(--rule)' : 'var(--ink-2)', 'stroke-width': v ? 1.5 : 2.5, 'stroke-dasharray': v ? '4 6' : '' }, g.axP);
+          el('text', { x, y: yb + 26, 'text-anchor': 'middle', 'font-size': 22, fill: 'var(--muted)' }, g.axP, v ? v.toFixed(1) : '0');
+        });
+        el('text', { x: ZP + .25 * SP, y: 26, 'text-anchor': 'end', 'font-size': 22, 'font-weight': 600, fill: 'var(--muted)', 'letter-spacing': '.08em' }, g.axP, 'PROBABILITY');
+        // rows
+        g.rows = R.map((r, i) => {
+          const y = RY(i), gg = el('g', {}, svg);
+          el('text', { x: LX, y: y + 24, 'font-size': 24, class: 'mono', fill: 'var(--ink)', 'font-weight': i === 0 ? 700 : 400 }, gg, vis(r[0]));
+          const bar = el('rect', { y: y + 5, height: RH - 12, rx: 4, fill: i === 0 ? 'var(--good)' : 'var(--resid)' }, gg);
+          const vl = el('text', { y: y + 24, 'font-size': 22, class: 'mono', fill: 'var(--ink-2)' }, gg, fmtL(r[1]));
+          const vp = el('text', { y: y + 24, 'font-size': 22, class: 'mono', fill: 'var(--ink-2)' }, gg, fmtP(r[2]));
+          return { gg, bar, vl, vp };
+        });
+        el('line', { x1: LX, x2: 900, y1: RY(6) - 7, y2: RY(6) - 7, stroke: 'var(--muted)', 'stroke-width': 1.5, 'stroke-dasharray': '3 7' }, svg);
+        // stacked "sums to 1" bar (probability mode)
+        const ys = yb + 40;
+        g.sum = el('g', {}, svg);
+        el('text', { x: LX, y: ys + 24, 'font-size': 22, fill: 'var(--ink-2)', 'font-weight': 600 }, g.sum, 'sum = 1');
+        let acc = 0;
+        R.slice(0, 6).forEach((r, i) => {
+          el('rect', { x: PX0 + acc * PW, y: ys + 4, width: r[2] * PW, height: 26, fill: i === 0 ? 'var(--good)' : 'var(--resid)', 'fill-opacity': 1 - i * .11, stroke: '#fff', 'stroke-width': 1.5 }, g.sum);
+          acc += r[2];
+        });
+        el('rect', { x: PX0 + (1 - REST) * PW, y: ys + 4, width: REST * PW, height: 26, fill: 'var(--bg-2)', stroke: 'var(--rule)', 'stroke-width': 1.5 }, g.sum);
+        el('text', { x: PX0 + (1 - REST / 2) * PW, y: ys + 25, 'text-anchor': 'middle', 'font-size': 22, fill: 'var(--ink-2)' }, g.sum, 'other 50,249: 0.45');
+        // LD bracket (logit mode, zoomed): placed right of the Paris/Lyon bars
+        g.ld = el('g', {}, svg);
+        g.ldPath = el('path', { fill: 'none', stroke: 'var(--good)', 'stroke-width': 3.5 }, g.ld);
+        g.ldT = el('text', { 'font-size': 22, 'font-weight': 700, class: 'mono', fill: 'var(--good)' }, g.ld, 'LD = 0.77');
+      },
+      // m: 0 = logit mode, 1 = probability mode; show: bars grown; ld: highlight
+      target: s => ({ show: s >= 1 ? 1 : 0, m: s === 2 ? 1 : 0, ld: s >= 3 ? 1 : 0 }),
+      render(st) {
+        const m = st.m, z = lerp(ZL, ZP, m);
+        g.axL.setAttribute('opacity', clamp(1 - m * 2)); g.axP.setAttribute('opacity', clamp(m * 2 - 1));
+        g.sum.setAttribute('opacity', clamp(m * 2 - 1));
+        g.fan.setAttribute('opacity', 1 - .6 * st.show);
+        R.forEach((r, i) => {
+          const o = g.rows[i];
+          const w = lerp(r[1] * SL, r[2] * SP, m) * st.show;
+          const x0 = Math.min(z, z + w);
+          o.bar.setAttribute('x', x0); o.bar.setAttribute('width', Math.abs(w));
+          const right = w >= 0 ? z + w + 10 : z + 10;
+          o.vl.setAttribute('x', right); o.vp.setAttribute('x', right);
+          const focus = i === 0 || i === 2, hide = focus ? 1 : 1 - st.ld;
+          o.vl.setAttribute('opacity', clamp(1 - m * 2) * st.show * hide); o.vp.setAttribute('opacity', clamp(m * 2 - 1) * st.show * hide);
+          o.gg.setAttribute('opacity', 1 - .75 * st.ld * (focus ? 0 : 1));
+        });
+        // bracket between Paris (row 0) and Lyon (row 2) bar ends, drawn at the right in a zoomed gap
+        const bx = 905, y0 = RY0 + RH / 2 - 2, y2 = RY0 + 2 * RH + RH / 2 - 2;
+        g.ldPath.setAttribute('d', `M${bx - 22} ${y0} H${bx} V${y2} H${bx - 22}`);
+        g.ldT.setAttribute('x', 893); g.ldT.setAttribute('text-anchor', 'end'); g.ldT.setAttribute('y', RY0 + RH + 24);
+        g.ld.setAttribute('opacity', st.ld);
+      }
+    });
+  })();
+
+  /* ================= P4 · the map: embed -> [attention, MLP] x 12 -> unembed ================= */
+  (function () {
+    const XS = [210, 360, 510], MAIN = 2, TOKS = ['·French', '·city', '·of'];
+    const Y = { tok: 500, emb: 440, att0: 330, att1: 392, mlp0: 222, mlp1: 276, top: 92, un0: 30, un1: 76 };
+    let g = {};
+    anim('p1-pr-map', {
+      dur: .9,
+      onStep: s => document.querySelectorAll('#p1-pr-map dl > div').forEach(d => d.style.opacity = +d.dataset.k <= s ? 1 : .18),
+      setup() {
+        const svg = document.getElementById('p1-pr-map-svg');
+        const defs = el('defs', {}, svg);
+        const mk = (id, col) => { const m = el('marker', { id, viewBox: '0 0 10 10', refX: 7, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto' }, defs); el('path', { d: 'M0 0 L10 5 L0 10 z', fill: col }, m); };
+        mk('p1-pr-m-attn', 'var(--attn)'); mk('p1-pr-m-mlp', 'var(--mlp)');
+        // attention band behind streams
+        g.att = el('g', {}, svg);
+        el('rect', { x: XS[0] - 50, y: Y.att0, width: XS[2] - XS[0] + 100, height: Y.att1 - Y.att0, rx: 12, fill: 'var(--attn-soft)', stroke: 'var(--attn)', 'stroke-width': 2 }, g.att);
+        for (let h = 0; h < 12; h++) el('rect', { x: XS[0] - 36 + h * 32, y: Y.att0 + 8, width: 22, height: 12, rx: 3, fill: 'var(--attn)', 'fill-opacity': .55 }, g.att);
+        el('text', { x: XS[0] - 60, y: (Y.att0 + Y.att1) / 2 + 9, 'text-anchor': 'end', 'font-size': 24, 'font-weight': 700, fill: 'var(--attn)' }, g.att, 'attention');
+        el('text', { x: XS[0] - 60, y: Y.att0 + 4, 'text-anchor': 'end', 'font-size': 22, fill: 'var(--attn)' }, g.att, '12 heads');
+        // streams
+        g.streams = XS.map((x, i) => el('line', { x1: x, x2: x, y1: Y.emb, y2: Y.top, stroke: 'var(--resid)', 'stroke-width': i === MAIN ? 10 : 5, 'stroke-opacity': i === MAIN ? 1 : .45, 'stroke-linecap': 'round' }, svg));
+        // attention arrows: other positions -> main stream
+        g.attA = el('g', {}, svg);
+        [0, 1].forEach(i => el('path', { d: `M${XS[i]} ${Y.att1 - 12} C ${XS[i]} ${Y.att0 + 20}, ${XS[MAIN] - 60} ${Y.att0 + 30}, ${XS[MAIN] - 12} ${Y.att0 + 36}`, fill: 'none', stroke: 'var(--attn)', 'stroke-width': 3.5, 'marker-end': 'url(#p1-pr-m-attn)' }, g.attA));
+        el('circle', { cx: XS[MAIN], cy: Y.att0 + 38, r: 14, fill: 'var(--attn)', stroke: '#fff', 'stroke-width': 3 }, g.attA);
+        el('text', { x: XS[MAIN], y: Y.att0 + 46, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 700, fill: '#fff' }, g.attA, '+');
+        // MLP boxes (one per position, main highlighted)
+        g.mlp = el('g', {}, svg);
+        XS.forEach((x, i) => el('rect', { x: x - 34, y: Y.mlp0, width: 68, height: Y.mlp1 - Y.mlp0, rx: 9, fill: i === MAIN ? 'var(--mlp)' : 'var(--mlp-soft)', stroke: 'var(--mlp)', 'stroke-width': 2 }, g.mlp));
+        el('text', { x: XS[MAIN], y: (Y.mlp0 + Y.mlp1) / 2 + 9, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 700, fill: '#fff' }, g.mlp, '+');
+        el('text', { x: XS[0] - 60, y: (Y.mlp0 + Y.mlp1) / 2 + 9, 'text-anchor': 'end', 'font-size': 24, 'font-weight': 700, fill: 'var(--mlp)' }, g.mlp, 'MLP');
+        // layer bracket
+        g.layer = el('g', {}, svg);
+        const bx = XS[2] + 78;
+        el('path', { d: `M${bx} ${Y.mlp0 - 14} h14 V${Y.att1 + 10} h-14`, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 3 }, g.layer);
+        el('text', { x: bx + 26, y: (Y.mlp0 + Y.att1) / 2 - 6, 'font-size': 26, 'font-weight': 700, fill: 'var(--ink)' }, g.layer, 'layer');
+        el('text', { x: bx + 26, y: (Y.mlp0 + Y.att1) / 2 + 26, 'font-size': 26, 'font-weight': 700, fill: 'var(--ink)' }, g.layer, '× 12');
+        // embed + tokens
+        g.emb = el('g', {}, svg);
+        XS.forEach((x, i) => {
+          el('rect', { x: x - 34, y: Y.emb - 4, width: 68, height: 26, rx: 6, fill: 'var(--resid)', stroke: '#fff', 'stroke-width': 2 }, g.emb);
+          el('text', { x, y: Y.tok + 22, 'text-anchor': 'middle', 'font-size': 23, class: 'mono', fill: i === MAIN ? 'var(--ink)' : 'var(--muted)', 'font-weight': i === MAIN ? 700 : 400 }, g.emb, TOKS[i]);
+        });
+        el('text', { x: XS[0] - 60, y: Y.emb + 18, 'text-anchor': 'end', 'font-size': 24, 'font-weight': 700, fill: 'var(--resid)' }, g.emb, 'embed');
+        // unembed
+        el('rect', { x: XS[MAIN] - 60, y: Y.un0, width: 120, height: Y.un1 - Y.un0, rx: 8, fill: 'var(--ink)' }, g.emb);
+        el('text', { x: XS[MAIN], y: Y.un0 + 31, 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 600, fill: '#fff' }, g.emb, 'unembed');
+        el('text', { x: XS[MAIN] + 76, y: Y.un0 + 31, 'font-size': 22, fill: 'var(--ink-2)' }, g.emb, '→ logits');
+        // activation marker
+        g.act = el('g', {}, svg);
+        const ay = 156, ax = XS[MAIN];
+        el('circle', { cx: ax, cy: ay - 6, r: 13, fill: 'var(--feat-4)', stroke: '#fff', 'stroke-width': 3 }, g.act);
+        el('line', { x1: ax + 14, y1: ay - 6, x2: 540, y2: ay - 6, stroke: 'var(--feat-4)', 'stroke-width': 3 }, g.act);
+        el('text', { x: 548, y: ay - 18, 'font-size': 24, 'font-weight': 700, fill: 'var(--feat-4)' }, g.act, 'activation');
+        el('text', { x: 548, y: ay + 10, 'font-size': 22, fill: 'var(--feat-4)' }, g.act, 'one layer,');
+        el('text', { x: 548, y: ay + 36, 'font-size': 22, fill: 'var(--feat-4)' }, g.act, 'one position');
+      },
+      target: s => ({ att: s >= 1 ? 1 : 0, mlp: s >= 2 ? 1 : 0, layer: s >= 3 ? 1 : 0, act: s >= 4 ? 1 : 0 }),
+      render(st) {
+        g.att.setAttribute('opacity', .12 + .88 * st.att);
+        g.attA.setAttribute('opacity', st.att);
+        g.mlp.setAttribute('opacity', .12 + .88 * st.mlp);
+        g.layer.setAttribute('opacity', st.layer);
+        g.act.setAttribute('opacity', st.act);
+      }
+    });
+  })();
+
+  /* ================= P5 · READ / EDIT / DECOMPOSE mini-mechanisms ================= */
+  (function () {
+    let g = {};
+    const col = (svg, x, y, vals, fill, gg) => vals.map((v, k) => el('rect', { x, y: y + k * 22, width: 34, height: 18, rx: 3, fill, 'fill-opacity': v }, gg || svg));
+    anim('p1-pr-verbs', {
+      dur: 1.0,
+      setup() {
+        // READ: a column, a dial whose needle swings to a reading
+        let svg = document.getElementById('p1-pr-v-read');
+        col(svg, 60, 14, [.3, .8, .5, .2, .9], 'var(--resid)');
+        el('line', { x1: 104, y1: 64, x2: 186, y2: 64, stroke: 'var(--resid)', 'stroke-width': 3 }, svg);
+        el('text', { x: 145, y: 54, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 700, fill: 'var(--resid)' }, svg, '· d');
+        el('path', { d: 'M215 110 A 80 80 0 0 1 375 110', fill: 'none', stroke: 'var(--rule)', 'stroke-width': 10, 'stroke-linecap': 'round' }, svg);
+        g.rArc = el('path', { d: '', fill: 'none', stroke: 'var(--resid)', 'stroke-width': 10, 'stroke-linecap': 'round' }, svg);
+        g.rNeedle = el('line', { x1: 295, y1: 110, x2: 295, y2: 40, stroke: 'var(--ink)', 'stroke-width': 4, 'stroke-linecap': 'round' }, svg);
+        el('circle', { cx: 295, cy: 110, r: 7, fill: 'var(--ink)' }, svg);
+        // EDIT: copy one cell from a "clean" column into a "corrupted" column; output flips
+        svg = document.getElementById('p1-pr-v-edit');
+        col(svg, 50, 14, [.3, .8, .5, .2, .9], 'var(--good)');
+        col(svg, 200, 14, [.6, .2, .7, .5, .3], 'var(--bad)');
+        el('text', { x: 67, y: 148, 'text-anchor': 'middle', 'font-size': 24, fill: 'var(--ink-2)' }, svg, 'run A');
+        el('text', { x: 217, y: 148, 'text-anchor': 'middle', 'font-size': 24, fill: 'var(--ink-2)' }, svg, 'run B');
+        g.eCell = el('rect', { x: 50, y: 14 + 2 * 22, width: 34, height: 18, rx: 3, fill: 'var(--good)', stroke: 'var(--ink)', 'stroke-width': 2 }, svg);
+        g.eOut = el('circle', { cx: 330, cy: 64, r: 26, fill: 'var(--bad)' }, svg);
+        el('line', { x1: 244, y1: 64, x2: 296, y2: 64, stroke: 'var(--ink-2)', 'stroke-width': 3 }, svg);
+        el('text', { x: 330, y: 120, 'text-anchor': 'middle', 'font-size': 24, fill: 'var(--ink-2)' }, svg, 'output');
+        // DECOMPOSE: a column splits into three coloured directions that sum back to it
+        svg = document.getElementById('p1-pr-v-dec');
+        col(svg, 40, 14, [.3, .8, .5, .2, .9], 'var(--mlp)');
+        el('text', { x: 108, y: 74, 'font-size': 30, 'font-weight': 700, fill: 'var(--mlp)' }, svg, '=');
+        g.dParts = ['var(--feat-1)', 'var(--feat-3)', 'var(--feat-5)'].map((c, k) => {
+          const gg = el('g', {}, svg);
+          col(svg, 150 + k * 82, 14, [.2 + .25 * ((k + 1) % 3), .55 - .15 * k, .3, .15 + .2 * k, .6 - .12 * k], c, gg);
+          if (k < 2) el('text', { x: 196 + k * 82, y: 74, 'text-anchor': 'middle', 'font-size': 28, 'font-weight': 700, fill: 'var(--ink-2)' }, gg, '+');
+          return gg;
+        });
+      },
+      target: s => ({ r: 1, e: s >= 1 ? 1 : 0, d: s >= 2 ? 1 : 0 }),
+      delay: k => ({ r: 0, e: .25, d: .25 }[k]),
+      render(st) {
+        // READ needle: angle from -90 (left) to a reading of +35 deg
+        const a = (-90 + 125 * st.r) * Math.PI / 180, nx = 295 + 70 * Math.sin(a), ny = 110 - 70 * Math.cos(a);
+        g.rNeedle.setAttribute('x2', nx); g.rNeedle.setAttribute('y2', ny);
+        const ea = a, ex = 295 + 80 * Math.sin(ea), ey = 110 - 80 * Math.cos(ea);
+        g.rArc.setAttribute('d', st.r > .01 ? `M215 110 A 80 80 0 0 1 ${ex} ${ey}` : '');
+        // EDIT: cell slides from run A to run B; output colour flips
+        g.eCell.setAttribute('x', 50 + 150 * st.e);
+        g.eOut.setAttribute('fill', st.e > .6 ? 'var(--good)' : 'var(--bad)');
+        // DECOMPOSE: parts slide out from behind the column
+        g.dParts.forEach((p, k) => { p.setAttribute('transform', `translate(${(1 - st.d) * (-110 - k * 82)} 0)`); p.setAttribute('opacity', clamp(st.d * 1.6 - k * .2)); });
+      }
+    });
+  })();
+})();
+</script>
+
+<!-- ======================================================= 9 · RESIDUAL STREAM (A2) -->
+<section class="slide" id="p1-residual-bus" data-presenter="miguel" data-block="Block 1 · Observe" data-steps="4">
+  <p class="kicker">Block 1 · Observe</p>
+  <h2>Every layer reads from one shared stream and adds to it</h2>
+  <div class="figure p1-fig" style="height: 520px">
+    <svg id="p1-a2" viewBox="0 0 1408 520" role="img" aria-label="Residual stream per token position; attention moves information between positions, MLP adds a vector, unembedding reads the final stream."></svg>
+  </div>
+  <p class="p1-cap" id="p1-a2-cap"></p>
+  <aside class="notes">
+    <b>0:12–0:14:30 (2 min 30 s).</b> The primer already named the parts; here, show them working. One vertical line per token position = the residual stream at that position (GPT-2 small: a 768-dim vector). Note the real tokenisation: “Eiffel” is three tokens.<br>
+    Step 1: embeddings are written onto the streams. Step 2: attention is the <i>only</i> component that moves information <i>between</i> positions — here “of” reads from “Tower”, “French”, “city” and <i>adds</i> the result to its own stream. Step 3: the MLP works on one position at a time; it reads the stream and adds a vector back (MLPs are where many stored associations seem to live). Step 4: this repeats for 12 layers; at the end, unembedding reads the final stream at the last position and gives next-token probabilities.<br>
+    Key sentence: <b>the residual stream is a running sum — nothing overwrites it, every component adds to it.</b> That is what makes the logit lens possible in 3 minutes. Panel on the right = the stream at “of” growing as a sum (segment sizes are schematic).<br>
+    Accuracy note if asked: in real fact recall (Meng et al. 2022; Geva et al. 2023) early-middle MLPs enrich the <i>subject</i> token (“Tower”) and attention later copies the attribute to the last token; the figure compresses that story to one attention and one MLP step.
+  </aside>
+</section>
+
+<!-- ======================================================= 10 · TRANSFORMER EXPLAINER -->
+<section class="slide" id="p1-explainer" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Live demo · 1 minute</p>
+  <h2>A real GPT-2 runs in your browser — watch it predict</h2>
+  <p class="p1-link" style="font-size: 34px">poloclub.github.io/transformer-explainer</p>
+  <div class="grid-3" style="margin-top: 8px">
+    <div class="card resid"><h3>The stream</h3><p class="small">Embedding, then 12 blocks stacked on the same vectors.</p></div>
+    <div class="card attn"><h3>Attention</h3><p class="small">Click a head: which earlier tokens “of” looks at.</p></div>
+    <div class="card"><h3>Prediction</h3><p class="small">Next-token probabilities; move the temperature slider.</p></div>
+  </div>
+  <p class="tiny" style="margin-top: auto">Transformer Explainer: Cho et al., Georgia Tech Polo Club (2024). Runs GPT-2 small client-side.</p>
+  <aside class="notes">
+    <b>0:14:30–0:15:30 (1 min, hard limit).</b> The primer already showed embeddings and probabilities, so show only (2), the attention view; skip the demo entirely if behind. Open <a href="https://poloclub.github.io/transformer-explainer/">https://poloclub.github.io/transformer-explainer/</a>. Type “The Eiffel Tower is in the French city of”. Show (1) the embedding and the stack of blocks — map it to the bus we just saw; (2) expand one attention block, hover the last token to see its attention weights; (3) the next-token probability bars and the temperature slider. Do not explain softmax/QKV in detail — Salvador's block does not need it. If Wi-Fi fails: skip, say “it's in the resources list”, go straight to the logit lens.
+  </aside>
+</section>
+
+<!-- ======================================================= 11 · LOGIT LENS (A3) -->
+<section class="slide" id="p1-logit-lens" data-presenter="miguel" data-block="Block 1 · Observe" data-steps="4">
+  <p class="kicker">Block 1 · Observe · logit lens</p>
+  <h2>Decoding every layer shows “Paris” emerging late</h2>
+  <div class="figure p1-fig" style="height: 500px">
+    <svg id="p1-a3" viewBox="0 0 1408 500" role="img" aria-label="Logit lens on GPT-2 small: top-1 token and probability of Paris at each layer."></svg>
+  </div>
+  <p class="p1-cap" id="p1-a3-cap"></p>
+  <aside class="notes">
+    <b>0:15:30–0:17:30 (2 min).</b> Method in one sentence: take the residual stream at the last position after block ℓ, apply the model's own final LayerNorm and unembedding, and read it as if the model stopped there (nostalgebraist, 2020). It works because the stream is a running sum written in (roughly) the same basis the output reads.<br>
+    These are <b>real numbers</b>, GPT-2 small, prompt “The Eiffel Tower is in the French city of”, computed with TransformerLens (scratch/p1/logit_lens.py). Step 1: early layers predict generic “ the”; P(Paris)≈0. Step 2: blocks 4–7 drift toward place-like tokens (“ La”, “ Man”, “ Rome”). Step 3: block 8 jumps to “&nbsp;Paris” (0.75), peaks at block 9 (0.96), then the last blocks <i>lower</i> it to 0.21 at the output while keeping it top-1 (late layers spread mass to other cities — “ Nice”, “ Lyon” — a known calibration-like effect). Step 4: highlight. Point at the rank column: from rank ~24,000 to 1.<br>
+    Do not say “block 8 stores the fact” — that is the next slide's warning and Salvador's block.
+  </aside>
+</section>
+
+<!-- ======================================================= 12 · PREDICT -->
+<section class="slide" id="p1-predict" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Before NB1</p>
+  <h2>Predict first: remove one word</h2>
+  <p class="lead">In NB1 you run the logit lens yourself, on the prompt <b>without</b> “French”:</p>
+  <p class="prompt">The Eiffel Tower is in the city of</p>
+  <div class="predict">
+    <span>Before running: at which block does “&nbsp;Paris” first become the top prediction — if at all? Write it down.<span class="blank"></span></span>
+  </div>
+  <aside class="notes">
+    <b>0:17:30–0:18 (30 s).</b> Give 20 seconds of silence; insist they write a number (or “never”). Do not hint.<br>
+    For you only (real GPT-2 small numbers): without “French”, GPT-2 small's final answer is “ London” (P≈0.08); “&nbsp;Paris” rises to <b>rank 2</b> at block 9 (P≈0.20) and never becomes top-1. The top-1 sequence is “ the” (blocks 0–4) → “ England” → “ Ing” → “ Chicago” (block 8) → “ London” (9–11). A small model, a fragile fact. This sets up the poll answer: the information emerges in specific late-middle layers <i>and</i> competes with other cities.
+  </aside>
+</section>
+
+<!-- ======================================================= 13 · NB1 -->
+<section class="slide" id="p1-nb1" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Hands-on · 0:18–0:28</p>
+  <h2>NB1: run the logit lens yourself (10 minutes)</h2>
+  <div class="row" style="gap: 48px">
+    <div class="col" style="flex: 1.25">
+      <ol class="p1-steps">
+        <li><span><b>Run</b> the logit lens on the Eiffel prompt. Check your prediction.</span></li>
+        <li><span><b>Your turn:</b> write the logit lens yourself, 3 lines. Then try your own prompt.</span></li>
+        <li><span class="c-muted"><b>Stretch:</b> find induction heads with an induction score.</span></li>
+      </ol>
+    </div>
+    <div class="card col" style="flex: .75">
+      <h3>Notice</h3>
+      <p class="small">Which prompts resolve early, late, or never? Note one surprise to share.</p>
+    </div>
+  </div>
+  <p class="small" style="margin-top: auto">CPU runtime is fine — GPT-2 small loads in under a minute.</p>
+  <aside class="notes">
+    <b>0:18–0:28 (10 min).</b> Walk the room with the assistant. NB1 order: §1–2 run the lens on the Eiffel prompt and the no-“French” prompt (≈3 min); §3 <b>Your turn</b>: fill the 3 TODO lines of <code>logit_lens_probs</code> (stack the residuals at the last position, <code>model.ln_final</code> with a dummy position dimension, <code>model.unembed</code> + softmax); a cell checks it against the library, and a fallback runs if they skip it (≈5 min); then their own prompts. §4 <b>Stretch</b> (≈3 min, optional): induction score on repeated random tokens; GPT-2 small's top induction heads are L5H5, L6H9, L7H10 (≈0.9), then L5H1, L7H2. Induction heads return in Block 2 (IOI). Good prompts to suggest: “The capital of Japan is” (fact), “English: cat — French:” (translation), “2 + 2 =” (arithmetic; small models often fail — that is fine, look at <i>where</i> it fails). At 0:26 give a 2-minute warning. At 0:27 ask 2–3 people: “When did Paris become top-1 without ‘French’?” — reveal: never; London wins, Paris reaches rank 2 at block 9. Then ask: “So did block 9 <i>cause</i> the answer?” → next slide.
+  </aside>
+</section>
+
+<!-- ======================================================= 14 · LIMITS -->
+<section class="slide p1-limits" id="p1-limits" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Honest limits</p>
+  <h2>Observation shows correlation, not cause</h2>
+  <div class="grid-2" style="margin-top: 6px">
+    <div class="card good">
+      <h3>The logit lens can tell us</h3>
+      <p>By block 8, the stream already points toward “&nbsp;Paris”.</p>
+    </div>
+    <div class="card bad">
+      <h3>It cannot tell us</h3>
+      <p>That block 8 <i>causes</i> the answer, or which component computes it.</p>
+    </div>
+  </div>
+  <ul style="margin-top: 10px; font-size: 28px; color: var(--ink-2)">
+    <li>Attention patterns show where a head looks, not what it moves or whether it matters.</li>
+    <li>Early layers decode poorly: their basis drifts from the output's. The tuned lens learns a translator per layer.</li>
+  </ul>
+  <p class="tiny" style="margin-top: auto">nostalgebraist (2020) “interpreting GPT: the logit lens”. Belrose et al. (2023) “Eliciting Latent Predictions from Transformers with the Tuned Lens”. Jain &amp; Wallace (2019) “Attention is not Explanation”.</p>
+  <aside class="notes">
+    <b>0:28–0:29 (1 min).</b> Everything in Block 1 was <i>reading</i>. A thermometer that shows the temperature rising does not show what heats the room. Two technical caveats: (1) attention weights ≠ importance — a head can look at a token and write nothing useful; (2) the logit lens is biased toward late layers because early representations are not in the unembedding's basis; the tuned lens (Belrose et al.) fixes that with a learned affine map per layer. To claim cause we must <i>intervene</i> — change the activation and watch the output. That is Salvador's block.
+  </aside>
+</section>
+
+<!-- ======================================================= 15 · HANDOFF -->
+<section class="slide handoff-slide" id="p1-handoff" data-presenter="miguel" data-block="Block 1 · Observe">
+  <p class="kicker">Handoff</p>
+  <p class="question">We can see the answer forming — but does that layer cause it?</p>
+  <p class="small" style="margin-top: 30px"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--salvador);margin-right:12px"></span>Next: Salvador Hinojosa · Block 2 · Intervene</p>
+  <aside class="notes">
+    <b>0:29–0:30.</b> Read the question aloud and leave it on screen. Thank the room; Miguel hands over to Salvador at 0:30 sharp and leaves for his other session. Salvador starts Block 2 with this exact question.
+  </aside>
+</section>
+
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  function el(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  /* Step-driven tween helper.
+     target(step) -> {key: number}; render(state, tSeconds) draws; delay(key, step) staggers keys.
+     Entering a slide (incl. backwards at its last step) or reduced motion jumps straight to the target. */
+  function anim(id, o) {
+    let st = null, jump = true, stop = null;
+    Deck.on(id, 'enter', (s) => { jump = true; if (o.setup && !o._done) { o.setup(s); o._done = true; } });
+    Deck.on(id, 'step', (s, step) => {
+      if (o.setup && !o._done) { o.setup(s); o._done = true; }
+      const tg = o.target(step);
+      if (stop) { stop(); stop = null; }
+      s.classList.toggle('p1-nomo', !!Deck.reducedMotion);
+      if (o.onStep) o.onStep(step);
+      if (!st || jump || Deck.reducedMotion) {
+        st = Object.assign({}, tg); jump = false; o.render(st, 99); return;
+      }
+      const from = Object.assign({}, st), dur = o.dur || .9;
+      let maxd = 0; for (const k in tg) maxd = Math.max(maxd, o.delay ? o.delay(k, step) : 0);
+      stop = Deck.raf(s, (t) => {
+        for (const k in tg) {
+          const d = o.delay ? o.delay(k, step) : 0;
+          const f = from[k] == null ? 0 : from[k];
+          st[k] = f + (tg[k] - f) * ease((t - d) / dur);
+        }
+        o.render(st, t);
+        if (t > dur + maxd + .05) return false;
+      });
+    });
+  }
+  function setCap(id, html) {
+    const c = document.getElementById(id); if (!c) return;
+    const tok = c.dataset.capTok = String(+(c.dataset.capTok || 0) + 1);   // a later call cancels a pending fade
+    if (Deck.reducedMotion) { c.style.opacity = 1; c.innerHTML = html; return; }
+    c.style.opacity = 0;
+    setTimeout(() => { if (c.dataset.capTok !== tok) return; c.innerHTML = html; c.style.opacity = 1; }, 180);
+  }
+
+  /* ================= A1 · Black box vs microscope ================= */
+  (function () {
+    let g = {};
+    const COLS = 8, ROWS = 8, X0 = 440, DX = 75, Y0 = 108, DY = 46;
+    const hash = (i, j) => { const x = Math.sin(i * 127.1 + j * 311.7) * 43758.5453; return x - Math.floor(x); };
+    const FEAT = [[4, 2], [4, 4], [5, 3], [5, 5], [6, 3]];   // highlighted "feature" units
+    const isFeat = (i, j) => FEAT.some(([a, b]) => a === i && b === j);
+    anim('p1-hook', {
+      dur: 1.0,
+      setup() {
+        const svg = document.getElementById('p1-a1');
+        // input
+        const tin = el('text', { x: 300, y: 205, 'text-anchor': 'end', 'font-size': 30, fill: 'var(--ink-2)' }, svg);
+        ['The Eiffel Tower', 'is in the', 'French city of'].forEach((l, k) => el('tspan', { x: 300, dy: k ? 40 : 0 }, tin, l));
+        el('text', { x: 300, y: 160, 'text-anchor': 'end', 'font-size': 27, fill: 'var(--muted)', 'letter-spacing': '.1em' }, svg, 'INPUT');
+        el('path', { d: 'M318 235 H372', stroke: 'var(--ink-2)', 'stroke-width': 3, 'marker-end': 'url(#p1-ah)' }, svg);
+        const defs = el('defs', {}, svg);
+        const m = el('marker', { id: 'p1-ah', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto' }, defs);
+        el('path', { d: 'M0 0 L10 5 L0 10 z', fill: 'var(--ink-2)' }, m);
+        const glow = el('filter', { id: 'p1-glow', x: '-1', y: '-1', width: '3', height: '3' }, defs);
+        el('feGaussianBlur', { stdDeviation: 7 }, glow);
+        // box frame
+        g.frame = el('rect', { x: 384, y: 30, width: 632, height: 410, rx: 22, fill: 'var(--card)', stroke: 'var(--ink)', 'stroke-width': 3 }, svg);
+        // internals: faint connections + units
+        g.inner = el('g', {}, svg);
+        for (let i = 0; i < COLS - 1; i++) for (let j = 0; j < ROWS; j++) {
+          const j2 = Math.floor(hash(i, j) * ROWS);
+          el('line', { x1: X0 + i * DX, y1: Y0 + j * DY, x2: X0 + (i + 1) * DX, y2: Y0 + j2 * DY, stroke: 'var(--rule)', 'stroke-width': 1.5 }, g.inner);
+        }
+        g.units = [];
+        for (let i = 0; i < COLS; i++) for (let j = 0; j < ROWS; j++) {
+          const a = .15 + .7 * hash(j + 3, i + 7);
+          const c = el('circle', { cx: X0 + i * DX, cy: Y0 + j * DY, r: 12, fill: 'var(--resid)', 'fill-opacity': a }, g.inner);
+          g.units.push({ c, a, f: isFeat(i, j), i, j });
+        }
+        el('text', { x: 700, y: 474, 'text-anchor': 'middle', 'font-size': 27, fill: 'var(--muted)' }, g.inner, 'layer 1  →  layer N');
+        // feature glow + label
+        g.feat = el('g', {}, svg);
+        FEAT.forEach(([i, j]) => el('circle', { cx: X0 + i * DX, cy: Y0 + j * DY, r: 20, fill: 'var(--feat-4)', filter: 'url(#p1-glow)' }, g.feat));
+        FEAT.forEach(([i, j]) => el('circle', { cx: X0 + i * DX, cy: Y0 + j * DY, r: 13, fill: 'var(--feat-4)', stroke: '#fff', 'stroke-width': 2 }, g.feat));
+        el('rect', { x: 572, y: 42, width: 380, height: 46, rx: 23, fill: 'var(--feat-4)' }, g.feat);
+        el('text', { x: 762, y: 74, 'text-anchor': 'middle', 'font-size': 27, 'font-weight': 600, fill: '#fff' }, g.feat, 'feature: “Paris landmarks”');
+        // the lid (opaque cover)
+        g.lid = el('rect', { x: 384, y: 30, width: 632, height: 410, rx: 22, fill: 'var(--ink)' }, svg);
+        g.lidTxt = el('text', { x: 700, y: 250, 'text-anchor': 'middle', 'font-size': 60, 'font-weight': 700, fill: '#fff', 'letter-spacing': '.04em' }, svg, 'LLM');
+        g.lidSub = el('text', { x: 700, y: 296, 'text-anchor': 'middle', 'font-size': 27, fill: 'rgba(255,255,255,.65)' }, svg, 'billions of numbers');
+        // output
+        el('path', { d: 'M1028 235 H1082', stroke: 'var(--ink-2)', 'stroke-width': 3, 'marker-end': 'url(#p1-ah)' }, svg);
+        el('text', { x: 1104, y: 160, 'font-size': 27, fill: 'var(--muted)', 'letter-spacing': '.1em' }, svg, 'OUTPUT');
+        el('text', { x: 1104, y: 330, 'font-size': 27, fill: 'var(--feat-4)' }, g.feat, 'feature label');
+        el('text', { x: 1104, y: 362, 'font-size': 27, fill: 'var(--feat-4)' }, g.feat, 'is illustrative');
+        g.out = el('text', { x: 1104, y: 250, 'font-size': 46, 'font-weight': 700, class: 'mono', fill: 'var(--ink)' }, svg, '“ Paris”');
+      },
+      target: s => ({ open: s >= 1 ? 1 : 0, feat: s >= 2 ? 1 : 0 }),
+      delay: k => k === 'feat' ? .1 : 0,
+      render(st) {
+        g.lid.setAttribute('fill-opacity', 1 - st.open);
+        g.lidTxt.setAttribute('opacity', clamp(1 - st.open * 1.6));
+        g.lidSub.setAttribute('opacity', clamp(1 - st.open * 1.6));
+        g.inner.setAttribute('opacity', clamp(st.open * 1.2 - .1));
+        g.units.forEach(u => u.c.setAttribute('fill-opacity', u.f ? u.a * (1 - st.feat) : u.a * (1 - .55 * st.feat)));
+        g.feat.setAttribute('opacity', st.feat);
+        g.out.setAttribute('fill', st.feat > .5 ? 'var(--feat-4)' : 'var(--ink)');
+      }
+    });
+  })();
+
+  /* ================= A2 · Residual stream as a shared bus ================= */
+  (function () {
+    // GPT-2 tokenisation of the prompt (BOS omitted for space)
+    const TOK = ['The', ' E', 'iff', 'el', ' Tower', ' is', ' in', ' the', ' French', ' city', ' of'];
+    const X = i => 196 + i * 88, LAST = TOK.length - 1, XL = X(LAST);
+    const SRC = [4, 8, 9];                        // " Tower", " French", " city" -> " of"
+    const Y = { out: 34, unTop: 46, unBot: 84, busTop: 90, dashTop: 104, dashBot: 168, mlpTop: 194, mlpBot: 236,
+                attTop: 272, attBot: 342, emb: 410, busBot: 440, chipTop: 450, chipBot: 494 };
+    const SEG = [ // running-sum panel at " of": [label, colour, height]
+      ['embedding', 'var(--resid)', 104], ['+ attention', 'var(--attn)', 74], ['+ MLP', 'var(--mlp)', 74], ['+ 11 layers', 'var(--muted)', 92]];
+    const PX = 1196, PW = 40;
+    let g = {};
+    const CAPS = [
+      'The prompt is split into <b>tokens</b>; each position gets its own stream.',
+      '<b>Embed:</b> each token writes its vector onto its stream. The sum starts here.',
+      '<b>Attention</b> reads other positions and <b>adds</b> what it finds to the stream at “&nbsp;of”.',
+      'The <b>MLP</b> reads one position and adds a vector back, e.g. a stored association.',
+      'After 12 layers, <b>unembedding</b> reads the final stream at “&nbsp;of” → next token “&nbsp;Paris”.'];
+    anim('p1-residual-bus', {
+      onStep: s => setCap('p1-a2-cap', CAPS[s]),
+      setup() {
+        const svg = document.getElementById('p1-a2');
+        const defs = el('defs', {}, svg);
+        const mk = (id, col) => { const m = el('marker', { id, viewBox: '0 0 10 10', refX: 7, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto' }, defs); el('path', { d: 'M0 0 L10 5 L0 10 z', fill: col }, m); };
+        mk('p1-ah-attn', 'var(--attn)'); mk('p1-ah-mlp', 'var(--mlp)'); mk('p1-ah-ink', 'var(--ink)');
+        // row labels
+        const lab = (y, t, col) => el('text', { x: 0, y, 'font-size': 24, 'font-weight': 600, fill: col }, svg, t);
+        g.labEmb = lab(Y.emb + 8, 'embed', 'var(--resid)');
+        g.labAtt = lab((Y.attTop + Y.attBot) / 2 + 8, 'attention', 'var(--attn)');
+        g.labMlp = lab((Y.mlpTop + Y.mlpBot) / 2 + 8, 'MLP', 'var(--mlp)');
+        g.labMore = el('text', { x: 0, y: 128, 'font-size': 24, fill: 'var(--muted)' }, svg);
+        el('tspan', { x: 0 }, g.labMore, '× 11 more'); el('tspan', { x: 0, dy: 28 }, g.labMore, 'layers');
+        g.labUn = lab(72, 'unembed', 'var(--ink)');
+        // dashed "more layers" band (behind buses)
+        g.more = el('g', {}, svg);
+        el('rect', { x: X(0) - 40, y: Y.dashTop, width: XL - X(0) + 80, height: Y.dashBot - Y.dashTop, rx: 10, fill: 'none', stroke: 'var(--muted)', 'stroke-width': 2, 'stroke-dasharray': '8 8' }, g.more);
+        for (let i = 0; i <= LAST; i++) {
+          el('rect', { x: X(i) - 22, y: Y.dashTop + 12, width: 44, height: 16, rx: 4, fill: 'var(--attn-soft)', stroke: 'var(--attn)', 'stroke-width': 1.5 }, g.more);
+          el('rect', { x: X(i) - 22, y: Y.dashBot - 28, width: 44, height: 16, rx: 4, fill: 'var(--mlp-soft)', stroke: 'var(--mlp)', 'stroke-width': 1.5 }, g.more);
+        }
+        // attention band (behind buses)
+        g.att = el('g', {}, svg);
+        el('rect', { x: X(0) - 40, y: Y.attTop, width: XL - X(0) + 80, height: Y.attBot - Y.attTop, rx: 12, fill: 'var(--attn-soft)', stroke: 'var(--attn)', 'stroke-width': 2 }, g.att);
+        // buses
+        g.bus = [];
+        for (let i = 0; i <= LAST; i++) g.bus.push(el('line', { x1: X(i), x2: X(i), y1: Y.busBot, y2: Y.busBot, stroke: 'var(--resid)', 'stroke-width': i === LAST ? 8 : 6, 'stroke-linecap': 'round' }, svg));
+        // attention arcs (on top of buses)
+        g.arcs = el('g', {}, svg);
+        g.arcPaths = SRC.map(i => {
+          const xs = X(i), y0 = Y.attBot - 14, y1 = Y.attTop + 22;
+          const d = `M${xs} ${y0} C ${xs} ${Y.attTop - 6}, ${XL - 30} ${Y.attTop - 6}, ${XL - 7} ${y1}`;
+          el('circle', { cx: xs, cy: y0, r: 8, fill: 'var(--attn)' }, g.arcs);
+          return el('path', { d, fill: 'none', stroke: 'var(--attn)', 'stroke-width': 4, 'marker-end': 'url(#p1-ah-attn)' }, g.arcs);
+        });
+        g.arcPaths.forEach(p => { const L = p.getTotalLength(); p.dataset.len = L; p.setAttribute('stroke-dasharray', L); });
+        g.attHit = el('circle', { cx: XL, cy: Y.attTop + 24, r: 13, fill: 'var(--attn)', stroke: '#fff', 'stroke-width': 3 }, g.arcs);
+        el('text', { x: XL, y: Y.attTop + 31, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 700, fill: '#fff' }, g.arcs, '+');
+        // MLP boxes
+        g.mlp = el('g', {}, svg); g.mlpLast = null;
+        for (let i = 0; i <= LAST; i++) {
+          const r = el('rect', { x: X(i) - 26, y: Y.mlpTop, width: 52, height: Y.mlpBot - Y.mlpTop, rx: 8, fill: 'var(--mlp-soft)', stroke: 'var(--mlp)', 'stroke-width': 2 }, g.mlp);
+          if (i === LAST) g.mlpLast = r;
+        }
+        g.mlpHi = el('g', {}, svg);
+        el('rect', { x: XL - 30, y: Y.mlpTop - 4, width: 60, height: Y.mlpBot - Y.mlpTop + 8, rx: 10, fill: 'var(--mlp)' }, g.mlpHi);
+        el('text', { x: XL, y: (Y.mlpTop + Y.mlpBot) / 2 + 9, 'text-anchor': 'middle', 'font-size': 26, 'font-weight': 700, fill: '#fff' }, g.mlpHi, '+');
+        // embedding squares
+        g.emb = el('g', {}, svg);
+        for (let i = 0; i <= LAST; i++) el('rect', { x: X(i) - 16, y: Y.emb - 11, width: 32, height: 22, rx: 5, fill: 'var(--resid)', stroke: '#fff', 'stroke-width': 2 }, g.emb);
+        // token chips
+        g.chips = el('g', {}, svg);
+        TOK.forEach((t, i) => {
+          el('rect', { x: X(i) - 41, y: Y.chipTop, width: 82, height: Y.chipBot - Y.chipTop, rx: 9, fill: i === LAST ? 'var(--ink)' : 'var(--card)', stroke: i === LAST ? 'var(--ink)' : 'var(--rule)', 'stroke-width': 1.5 }, g.chips);
+          el('text', { x: X(i), y: Y.chipTop + 30, 'text-anchor': 'middle', 'font-size': 23, fill: i === LAST ? '#fff' : 'var(--ink)' }, g.chips, t.replace(' ', '·'));
+        });
+        // unembed + output
+        g.un = el('g', {}, svg);
+        el('rect', { x: XL - 48, y: Y.unTop, width: 96, height: Y.unBot - Y.unTop, rx: 8, fill: 'var(--ink)' }, g.un);
+        el('text', { x: XL, y: Y.unTop + 27, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 600, fill: '#fff' }, g.un, 'W_U');
+        el('text', { x: XL, y: Y.out - 2, 'text-anchor': 'middle', 'font-size': 30, 'font-weight': 700, class: 'mono', fill: 'var(--good)' }, g.un, '→ “ Paris”');
+        // running-sum panel
+        g.panel = el('g', {}, svg);
+        el('text', { x: PX - 8, y: Y.out - 4, 'font-size': 24, 'font-weight': 600, fill: 'var(--ink-2)' }, g.panel, 'stream at “ of”');
+        el('text', { x: PX - 8, y: Y.out + 24, 'font-size': 24, fill: 'var(--muted)' }, g.panel, '= running sum');
+        el('text', { x: PX - 8, y: Y.busBot + 40, 'font-size': 24, fill: 'var(--muted)' }, g.panel, 'schematic: arcs');
+        el('text', { x: PX - 8, y: Y.busBot + 66, 'font-size': 24, fill: 'var(--muted)' }, g.panel, 'and sizes');
+        el('line', { x1: PX - 8, x2: PX + PW + 8, y1: Y.busBot, y2: Y.busBot, stroke: 'var(--ink-2)', 'stroke-width': 2 }, g.panel);
+        g.seg = SEG.map(([t, c]) => ({
+          r: el('rect', { x: PX, width: PW, y: Y.busBot, height: 0, fill: c, stroke: '#fff', 'stroke-width': 2 }, g.panel),
+          t: el('text', { x: PX + PW + 12, y: 0, 'font-size': 24, fill: c, 'font-weight': 600 }, g.panel, t)
+        }));
+      },
+      target: s => ({ bus: s >= 1 ? 1 : 0, att: s >= 2 ? 1 : 0, mlp: s >= 3 ? 1 : 0, more: s >= 4 ? 1 : 0, un: s >= 4 ? 1 : 0 }),
+      delay: (k) => ({ un: .55 }[k] || 0),
+      dur: 1.0,
+      render(st, t) {
+        const top = Y.busBot - (Y.busBot - Y.busTop) * st.bus;
+        g.bus.forEach((b, i) => b.setAttribute('y2', Math.min(Y.busBot, top + i * 0)));
+        g.emb.setAttribute('opacity', clamp(st.bus * 2));
+        g.labEmb.setAttribute('opacity', clamp(st.bus * 2));
+        // attention
+        g.att.setAttribute('opacity', clamp(st.att * 2));
+        g.labAtt.setAttribute('opacity', clamp(st.att * 2));
+        g.arcs.setAttribute('opacity', st.att > 0 ? 1 : 0);
+        g.arcPaths.forEach((p, k) => { const L = +p.dataset.len; const f = clamp(st.att * 1.4 - k * .12); p.setAttribute('stroke-dashoffset', L * (1 - f)); });
+        g.attHit.setAttribute('opacity', clamp(st.att * 3 - 2));
+        // MLP: all appear, last highlighted
+        g.mlp.setAttribute('opacity', clamp(st.mlp * 2) * (1 - .45 * clamp(st.mlp * 2 - 1)));
+        g.labMlp.setAttribute('opacity', clamp(st.mlp * 2));
+        g.mlpHi.setAttribute('opacity', clamp(st.mlp * 2 - 1));
+        // more layers + unembed
+        g.more.setAttribute('opacity', st.more * .9);
+        g.labMore.setAttribute('opacity', st.more);
+        g.un.setAttribute('opacity', st.un);
+        g.labUn.setAttribute('opacity', st.un);
+        // running sum
+        let y = Y.busBot;
+        const amt = [st.bus, st.att, st.mlp, st.more];
+        g.seg.forEach((s, k) => {
+          const h = SEG[k][2] * amt[k];
+          y -= h; s.r.setAttribute('y', y); s.r.setAttribute('height', Math.max(0, h));
+          s.t.setAttribute('y', y + h / 2 + 8); s.t.setAttribute('opacity', clamp(amt[k] * 2 - 1));
+        });
+      }
+    });
+  })();
+
+  /* ================= A3 · Logit lens, layer by layer =================
+     REAL values, not illustrative. Computed with scratch/p1/logit_lens.py:
+     TransformerLens 'gpt2-small' (CPU), prompt "The Eiffel Tower is in the French city of";
+     last position; embed = blocks.0.hook_resid_pre, block L = blocks.L.hook_resid_post;
+     logits = unembed(ln_final(resid)); softmax. Columns: label, top-1 token, P(" Paris"), rank of " Paris".
+     Block 11 equals the model's actual output distribution (checked).                                   */
+  (function () {
+    const D = [
+      ['embed', ' destro', 0.0000, 23918], ['block 0', ' the', 0.0000, 5323], ['block 1', ' the', 0.0000, 4093],
+      ['block 2', ' the', 0.0000, 1804], ['block 3', ' the', 0.0001, 374], ['block 4', ' the', 0.0003, 233],
+      ['block 5', ' the', 0.0011, 128], ['block 6', ' La', 0.0032, 46], ['block 7', ' Man', 0.0072, 21],
+      ['block 8', ' Paris', 0.7526, 1], ['block 9', ' Paris', 0.9618, 1], ['block 10', ' Paris', 0.6144, 1],
+      ['block 11', ' Paris', 0.2074, 1]];
+    const HI = 9, RY0 = 62, RH = 31, BX = 470, BW = 600;
+    const GROUP = i => i <= 3 ? 1 : i <= 8 ? 2 : 3;   // step at which row i appears
+    let g = {};
+    const CAPS = [
+      'Unembed the residual stream after each block, as if the model stopped there.',
+      'Early blocks: the stream decodes to generic tokens; “&nbsp;Paris” is thousands of ranks down.',
+      'Middle blocks: place-like tokens appear; “&nbsp;Paris” climbs to rank 21.',
+      'Late blocks: “&nbsp;Paris” wins, peaks at block 9, then the final blocks spread probability.',
+      '“&nbsp;Paris” is top-1 from <b>block 8</b> on (after 9 of 12 blocks). Real GPT-2 small values.'];
+    const fmt = p => p >= 0.01 ? p.toFixed(2) : p >= 0.0001 ? p.toFixed(4) : '<0.0001';
+    anim('p1-logit-lens', {
+      dur: .55,
+      onStep: s => setCap('p1-a3-cap', CAPS[s]),
+      setup() {
+        const svg = document.getElementById('p1-a3');
+        const H = (x, t, a) => el('text', { x, y: 30, 'font-size': 24, 'font-weight': 600, fill: 'var(--muted)', 'letter-spacing': '.08em', 'text-anchor': a || 'start' }, svg, t);
+        H(20, 'RESIDUAL AFTER'); H(250, 'TOP-1 TOKEN'); H(BX, 'P(·PARIS)'); H(1388, 'RANK OF ·PARIS', 'end');
+        el('line', { x1: 0, x2: 1408, y1: 44, y2: 44, stroke: 'var(--ink)', 'stroke-width': 2 }, svg);
+        // highlight band (behind rows)
+        g.hi = el('rect', { x: 0, y: RY0 + HI * RH - 4, width: 1408, height: RH + 2, rx: 6, fill: 'var(--warn-soft)', stroke: 'var(--warn)', 'stroke-width': 2.5 }, svg);
+        // scale ticks
+        [0, .5, 1].forEach(v => {
+          el('line', { x1: BX + v * BW, x2: BX + v * BW, y1: 50, y2: RY0 + 13 * RH - 4, stroke: 'var(--rule)', 'stroke-width': 1.5, 'stroke-dasharray': v ? '4 6' : '' }, svg);
+        });
+        g.rows = D.map((d, i) => {
+          const y = RY0 + i * RH, gg = el('g', {}, svg), isP = d[1] === ' Paris';
+          el('text', { x: 20, y: y + 21, 'font-size': 23, fill: 'var(--ink-2)', 'font-weight': i === 0 ? 400 : 500 }, gg, d[0]);
+          el('text', { x: 250, y: y + 21, 'font-size': 23, class: 'mono', 'font-weight': isP ? 700 : 400, fill: isP ? 'var(--good)' : 'var(--ink)' }, gg, d[1].replace(' ', '·'));
+          el('rect', { x: BX, y: y + 3, width: BW, height: RH - 10, rx: 4, fill: 'var(--bg-2)' }, gg);
+          const bar = el('rect', { x: BX, y: y + 3, width: 0, height: RH - 10, rx: 4, fill: isP ? 'var(--good)' : 'var(--resid)' }, gg);
+          const val = el('text', { x: BX + 10, y: y + 21, 'font-size': 24, class: 'mono', fill: 'var(--ink-2)' }, gg, fmt(d[2]));
+          el('text', { x: 1388, y: y + 21, 'font-size': 23, class: 'mono', 'text-anchor': 'end', fill: d[3] === 1 ? 'var(--good)' : 'var(--ink-2)', 'font-weight': d[3] === 1 ? 700 : 400 }, gg, d[3].toLocaleString('en-US'));
+          return { gg, bar, val, p: d[2] };
+        });
+        el('text', { x: BX, y: RY0 + 13 * RH + 20, 'font-size': 24, fill: 'var(--muted)' }, svg, '0');
+        el('text', { x: BX + BW / 2, y: RY0 + 13 * RH + 20, 'font-size': 24, fill: 'var(--muted)', 'text-anchor': 'middle' }, svg, '0.5');
+        el('text', { x: BX + BW, y: RY0 + 13 * RH + 20, 'font-size': 24, fill: 'var(--muted)', 'text-anchor': 'middle' }, svg, '1');
+      },
+      target: s => { const o = { hi: s >= 4 ? 1 : 0 }; D.forEach((_, i) => o['r' + i] = s >= GROUP(i) ? 1 : 0); return o; },
+      delay: (k, s) => {
+        if (k === 'hi') return 0;
+        const i = +k.slice(1); const first = [0, 0, 4, 9][GROUP(i)];
+        return (i - first) * .22;
+      },
+      render(st) {
+        g.rows.forEach((r, i) => {
+          const v = st['r' + i];
+          r.gg.setAttribute('opacity', clamp(v * 1.6));
+          const w = BW * r.p * v;
+          r.bar.setAttribute('width', w);
+          r.val.setAttribute('x', BX + Math.max(w, 0) + 10);
+        });
+        g.hi.setAttribute('opacity', st.hi);
+      }
+    });
+  })();
+})();
+</script>

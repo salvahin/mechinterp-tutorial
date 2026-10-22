@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Mech Interp Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: Letter portrait; margin: 0; }
+:root {
+  --ink: #0C198D; --ink-2: #3A4170; --muted: #6B7090; --rule: #C9C3B5; --code-bg: #F2F0EC;
+  --resid: #0E7C74; --attn: #D9480F; --mlp: #5F3DC4; --feat: #1C6FC2; --victor: #C2187E;
+  --sans: "Inter", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+  --cond: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; }
+body { font-family: var(--sans); color: var(--ink); font-size: 7.7pt; line-height: 1.3;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 8.5in; height: 11in; padding: 0.32in 0.34in 0.28in; overflow: hidden;
+        display: flex; flex-direction: column; break-after: page; }
+.page:last-child { break-after: auto; }
+
+header { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px;
+         border-bottom: 2.2px solid var(--ink); padding-bottom: 4px; margin-bottom: 7px; }
+header h1 { margin: 0; font-size: 15pt; letter-spacing: -.01em; line-height: 1.05; white-space: nowrap; }
+header h1 small { font-weight: 500; color: var(--ink-2); font-size: 9.5pt; margin-left: 4px; }
+header .meta { font-size: 7pt; color: var(--ink-2); text-align: right; line-height: 1.35; }
+header .meta b { color: var(--ink); }
+header code { font-family: var(--mono); font-size: 6.6pt; }
+
+.cols { flex: 1; display: flex; gap: 0.18in; min-height: 0; }
+.col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+section { margin: 0 0 6px; }
+h2 { font-family: var(--cond); font-size: 9.4pt; margin: 0 0 3px; padding: 1px 0 1px 6px;
+     border-left: 4px solid var(--ink); line-height: 1.2; }
+h2 .tag { font-family: var(--mono); font-weight: 500; font-size: 6.6pt; color: var(--muted); margin-left: 4px; }
+h2.resid { border-color: var(--resid); } h2.attn { border-color: var(--attn); } h2.mlp { border-color: var(--mlp); }
+h2.feat { border-color: var(--feat); } h2.victor { border-color: var(--victor); }
+p { margin: 0 0 3px; }
+.note { color: var(--ink-2); font-size: 7.3pt; line-height: 1.3; }
+
+pre { font-family: var(--mono); font-size: 6.85pt; line-height: 1.34; background: var(--code-bg);
+      border: 0.6px solid #DDD8CB; border-left: 2px solid #B8B2A3; border-radius: 2px;
+      padding: 3px 5px; margin: 0 0 3px; white-space: pre; overflow: hidden; }
+pre .c { color: #61666F; font-style: italic; }
+pre .k { color: var(--mlp); font-weight: 600; }
+pre .s { color: #8A3B00; }
+code { font-family: var(--mono); font-size: 6.7pt; background: var(--code-bg); padding: 0 2px; border-radius: 2px; }
+
+table { border-collapse: collapse; width: 100%; margin: 0 0 3px; font-size: 6.9pt; }
+th, td { text-align: left; padding: 1.2px 3px; border-bottom: 0.6px solid var(--rule); vertical-align: top; white-space: nowrap; }
+td:last-child { white-space: normal; }
+th { font-family: var(--cond); font-weight: 600; border-bottom: 1px solid var(--ink); }
+td code { background: none; padding: 0; font-size: 6.5pt; }
+
+dl.gloss { margin: 0; display: grid; grid-template-columns: max-content 1fr; column-gap: 7px; row-gap: 1.2px; font-size: 6.9pt; line-height: 1.25; }
+dl.gloss dt { font-weight: 600; font-family: var(--cond); white-space: nowrap; }
+dl.gloss dd { margin: 0; color: var(--ink-2); }
+
+ul.links { list-style: none; margin: 0; padding: 0; font-size: 7pt; }
+ul.links li { display: grid; grid-template-columns: 1.1in 1fr; gap: 4px; padding: 1.3px 0; border-bottom: 0.6px solid var(--rule); }
+ul.links b { font-family: var(--cond); font-weight: 600; }
+ul.links span { font-family: var(--mono); font-size: 6.5pt; }
+
+.warn { border-left: 3px solid var(--attn); background: #FBF1EA; padding: 3px 6px; margin: 0 0 3px; font-size: 7pt; }
+footer { font-size: 6.7pt; color: var(--muted); display: flex; justify-content: space-between;
+         border-top: 1px solid var(--rule); padding-top: 3px; margin-top: 3px; }
+
+  /* MICAI 2026 brand */
+  :root { --micai-navy: #0C198D; --micai-blue: #3339D4; --micai-pink: #F757BC; --micai-paper: #F2F0EC; }
+  h1, h2, .display { font-family: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif; letter-spacing: -0.015em; }
+  .brandbar { height: 4px; background: linear-gradient(to right, var(--micai-navy) 0 55%, var(--micai-blue) 55% 85%, var(--micai-pink) 85% 100%); margin: 0 0 6px; border-radius: 2px; }
+
+</style></head><body>
+<div class="page">
+<header><h1>Mech Interp cheat sheet <small>front &middot; observe, intervene, decompose</small></h1><div class="meta"><b>MICAI 2026</b> &middot; Fri 6 Nov<br>tested: TL 3.9.0 &middot; sae-lens 6.54.12 &middot; sklearn 1.9.1</div></header>
+<div class="brandbar"></div>
+<div class="cols"><div class="col"><section><h2 class="resid">Load a model, cache every activation <span class="tag">NB1</span></h2><pre><span class="k">import</span> torch
+<span class="k">from</span> transformer_lens <span class="k">import</span> HookedTransformer, utils
+torch.set_grad_enabled(<span class="k">False</span>)          <span class="c"># inference only</span>
+device = <span class="s">&quot;cuda&quot;</span> <span class="k">if</span> torch.cuda.is_available() <span class="k">else</span> <span class="s">&quot;cpu&quot;</span>
+model = HookedTransformer.from_pretrained(<span class="s">&quot;gpt2-small&quot;</span>,
+                                          device=device)
+prompt = <span class="s">&quot;The Eiffel Tower is in the city of&quot;</span>
+tokens = model.to_tokens(prompt)       <span class="c"># [1, pos], BOS first</span>
+model.to_str_tokens(prompt)  <span class="c"># [&#x27;&lt;|endoftext|&gt;&#x27;, &#x27;The&#x27;, ...]</span>
+logits, cache = model.run_with_cache(tokens)
+<span class="c"># logits: [batch, pos, d_vocab]</span>
+top = logits[0, -1].topk(5).indices
+model.to_str_tokens(top)       <span class="c"># [&#x27; London&#x27;, &#x27; Paris&#x27;, ...]</span>
+resid = cache[<span class="s">&quot;resid_post&quot;</span>, 6]
+<span class="c"># same tensor as cache[&quot;blocks.6.hook_resid_post&quot;]</span>
+_, small = model.run_with_cache(   <span class="c"># cache only what you need</span>
+    tokens, names_filter=<span class="s">&quot;blocks.6.hook_resid_post&quot;</span>)</pre></section><section><h2 class="resid">Hook names <span class="tag">utils.get_act_name(name, L)</span></h2>
+<table>
+<tr><th>Hook point</th><th>Shape</th><th>Meaning</th></tr>
+<tr><td><code>hook_embed</code></td><td>[b, pos, d_model]</td><td>token embedding</td></tr>
+<tr><td><code>blocks.{L}.hook_resid_pre</code></td><td>[b, pos, d_model]</td><td>stream into layer L</td></tr>
+<tr><td><code>blocks.{L}.hook_resid_mid</code></td><td>[b, pos, d_model]</td><td>after attn, before MLP</td></tr>
+<tr><td><code>blocks.{L}.hook_resid_post</code></td><td>[b, pos, d_model]</td><td>stream out of layer L</td></tr>
+<tr><td><code>blocks.{L}.attn.hook_pattern</code></td><td>[b, head, q, k]</td><td>attention weights</td></tr>
+<tr><td><code>blocks.{L}.attn.hook_z</code></td><td>[b, pos, head, d_head]</td><td>per-head output</td></tr>
+<tr><td><code>blocks.{L}.hook_attn_out</code></td><td>[b, pos, d_model]</td><td>attn write to stream</td></tr>
+<tr><td><code>blocks.{L}.mlp.hook_post</code></td><td>[b, pos, d_mlp]</td><td>MLP neurons</td></tr>
+<tr><td><code>blocks.{L}.hook_mlp_out</code></td><td>[b, pos, d_model]</td><td>MLP write to stream</td></tr>
+<tr><td><code>ln_final.hook_normalized</code></td><td>[b, pos, d_model]</td><td>input to unembed</td></tr>
+</table>
+<p class="note">Short names: <code>utils.get_act_name("z", 9)</code> &rarr; <code>blocks.9.attn.hook_z</code>; <code>cache["pattern", 9]</code>. GPT-2 small: 12 layers, 12 heads, d_model 768, d_head 64.</p></section><section><h2 class="resid">Logit lens: read any layer as a prediction <span class="tag">NB1</span></h2><pre><span class="k">for</span> L <span class="k">in</span> range(model.cfg.n_layers):
+    r = cache[<span class="s">&quot;resid_post&quot;</span>, L][:, -1:, :]   <span class="c"># last position</span>
+    lg = model.unembed(model.ln_final(r))   <span class="c"># [1, 1, d_vocab]</span>
+    tok = lg[0, -1].argmax().item()
+    print(L, model.to_single_str_token(tok))
+<span class="c"># all layers at once (final LayerNorm applied for you)</span>
+acc = cache.accumulated_resid(layer=-1, incl_mid=<span class="k">False</span>,
+                              apply_ln=<span class="k">True</span>, pos_slice=-1)
+lens_logits = acc @ model.W_U    <span class="c"># [n_layers+1, 1, d_vocab]</span></pre><p class="note">The lens is a <i>view</i>, not a cause: early layers were never trained to be read this way.</p></section><section><h2 class="feat">Sparse autoencoders with SAELens <span class="tag">NB3</span></h2><pre><span class="k">from</span> sae_lens <span class="k">import</span> SAE
+<span class="c"># sae-lens v6 returns the SAE itself (no tuple)</span>
+sae = SAE.from_pretrained(release=<span class="s">&quot;gpt2-small-res-jb&quot;</span>,
+                          sae_id=<span class="s">&quot;blocks.8.hook_resid_pre&quot;</span>,
+                          device=device)
+hook = sae.cfg.metadata.hook_name  <span class="c"># &#x27;blocks.8.hook_resid_pre&#x27;</span>
+text = <span class="s">&quot;The Golden Gate Bridge is in San Francisco&quot;</span>
+_, cache = model.run_with_cache(text)
+x = cache[hook]                    <span class="c"># [1, pos, d_model]</span>
+f = sae.encode(x)                  <span class="c"># [1, pos, d_sae], sparse</span>
+x_hat = sae.decode(f)              <span class="c"># [1, pos, d_model]</span>
+vals, idx = f[0, -1].topk(5)       <span class="c"># top latents, last token</span>
+rel_err = ((x_hat - x).norm() / x.norm()).item()
+sae.W_dec.shape                    <span class="c"># [d_sae, d_model]</span></pre><p class="note">Gemma Scope 2 in NB3 (Gemma 3 1B IT, float32 on T4): <code>SAE.from_pretrained("gemma-scope-2-1b-it-res", "layer_17_width_16k_l0_medium")</code>, layer 17 of 26. Without a GPU NB3 falls back to GPT-2 + <code>gpt2-small-res-jb</code> automatically.</p></section></div><div class="col"><section><h2 class="attn">Activation patching: clean &rarr; corrupted <span class="tag">NB2</span></h2><pre><span class="k">from</span> functools <span class="k">import</span> partial
+ctx = <span class="s">&quot;When John and Mary went to the store,&quot;</span>
+clean = ctx + <span class="s">&quot; John gave a drink to&quot;</span>
+corrupt = ctx + <span class="s">&quot; Mary gave a drink to&quot;</span>
+c_tok = model.to_tokens(clean)
+x_tok = model.to_tokens(corrupt)       <span class="c"># must be same length</span>
+ans = model.to_single_token(<span class="s">&quot; Mary&quot;</span>)
+wrong = model.to_single_token(<span class="s">&quot; John&quot;</span>)
+
+<span class="k">def</span> logit_diff(logits):        <span class="c"># &gt; 0: model prefers &quot; Mary&quot;</span>
+    <span class="k">return</span> (logits[0, -1, ans] - logits[0, -1, wrong]).item()
+
+clean_logits, clean_cache = model.run_with_cache(c_tok)
+CLEAN = logit_diff(clean_logits)
+CORR = logit_diff(model(x_tok))
+
+<span class="k">def</span> patch_resid(act, hook, pos):  <span class="c"># hook(act, hook) -&gt; act</span>
+    act[:, pos, :] = clean_cache[hook.name][:, pos, :]
+    <span class="k">return</span> act
+
+name = utils.get_act_name(<span class="s">&quot;resid_pre&quot;</span>, 8)
+patched = model.run_with_hooks(
+    x_tok, fwd_hooks=[(name, partial(patch_resid, pos=-1))])
+recovered = (logit_diff(patched) - CORR) / (CLEAN - CORR)
+<span class="c"># 0 = no effect, 1 = clean behaviour fully restored</span>
+
+<span class="k">def</span> patch_head(z, hook, head):     <span class="c"># one head, via hook_z</span>
+    z[:, :, head, :] = clean_cache[hook.name][:, :, head, :]
+    <span class="k">return</span> z
+
+z9 = utils.get_act_name(<span class="s">&quot;z&quot;</span>, 9)
+model.run_with_hooks(
+    x_tok, fwd_hooks=[(z9, partial(patch_head, head=9))])
+
+<span class="c"># persistent hook: stays until you remove it</span>
+model.add_hook(name, partial(patch_resid, pos=-1))
+out = model(x_tok)
+model.reset_hooks()
+<span class="c"># scoped hook: removed automatically on exit</span>
+<span class="k">with</span> model.hooks(fwd_hooks=[(name,
+                             partial(patch_resid, pos=-1))]):
+    out = model(x_tok)</pre><pre><span class="c"># every (layer, position) of resid_pre in one call (slow on CPU)</span>
+<span class="k">from</span> transformer_lens <span class="k">import</span> patching
+metric = <span class="k">lambda</span> lg: lg[0, -1, ans] - lg[0, -1, wrong]
+grid = patching.get_act_patch_resid_pre(
+    model, x_tok, clean_cache, metric)    <span class="c"># [n_layers, pos]</span></pre><div class="warn"><b>Pitfalls.</b> Clean and corrupted prompts must tokenize to the same length. A hook that edits in place must still <code>return</code> the tensor. A hook left by <code>add_hook</code> silently changes every later run: call <code>model.reset_hooks()</code>.</div></section><section><h2 class="feat">Steering: add a latent's decoder direction <span class="tag">NB3</span></h2><pre>i, alpha = int(idx[0]), 8.0      <span class="c"># latent index, strength</span>
+v = sae.W_dec[i]                 <span class="c"># [d_model]</span>
+<span class="k">def</span> steer(act, hook):
+    <span class="k">return</span> act + alpha * v       <span class="c"># all positions</span>
+<span class="k">with</span> model.hooks(fwd_hooks=[(hook, steer)]):
+    print(model.generate(<span class="s">&quot;I think that&quot;</span>, max_new_tokens=20,
+                         do_sample=<span class="k">False</span>, verbose=<span class="k">False</span>))</pre><p class="note">Sweep <code>alpha</code> (0, 2, 4, 8, 16) and compare with a <i>random</i> direction of the same norm: steering vectors are not unique.</p></section></div></div>
+<footer><span>MICAI 2026 &middot; Opening the Black Box: A Hands-On Introduction to Mechanistic Interpretability of LLMs</span><span>Turn over: probes, calibration, circuit tracing, glossary, links</span></footer>
+</div>
+<div class="page">
+<header><h1>Mech Interp cheat sheet <small>back &middot; probe, audit, trace</small></h1><div class="meta">Snippets continue from the front (same <code>model</code>, <code>utils</code>)<br><b>circuit-tracer 0.5.0</b>: calls checked against the released source</div></header>
+<div class="brandbar"></div>
+<div class="cols"><div class="col"><section><h2 class="mlp">Linear probe on the residual stream <span class="tag">NB3 · NB5</span></h2><pre><span class="k">import</span> numpy <span class="k">as</span> np
+<span class="k">from</span> sklearn.linear_model <span class="k">import</span> LogisticRegression
+<span class="k">from</span> sklearn.model_selection <span class="k">import</span> train_test_split
+pos = [<span class="s">&quot;I love this&quot;</span>, <span class="s">&quot;What a great day&quot;</span>, <span class="s">&quot;Amazing work&quot;</span>,
+       <span class="s">&quot;Best meal ever&quot;</span>, <span class="s">&quot;I am so happy&quot;</span>, <span class="s">&quot;Truly delightful&quot;</span>]
+neg = [<span class="s">&quot;I hate this&quot;</span>, <span class="s">&quot;What an awful day&quot;</span>, <span class="s">&quot;Horrible work&quot;</span>,
+       <span class="s">&quot;Worst meal ever&quot;</span>, <span class="s">&quot;I am so sad&quot;</span>, <span class="s">&quot;Truly disgusting&quot;</span>]
+texts = pos + neg
+y = np.array([1] * len(pos) + [0] * len(neg))
+L = 6
+hp = utils.get_act_name(<span class="s">&quot;resid_post&quot;</span>, L)
+<span class="k">def</span> feats(t):                 <span class="c"># last-token residual at layer L</span>
+    _, c = model.run_with_cache(t, names_filter=hp)
+    <span class="k">return</span> c[hp][0, -1].float().cpu().numpy()
+X = np.stack([feats(t) <span class="k">for</span> t <span class="k">in</span> texts])     <span class="c"># [n, d_model]</span>
+X_tr, X_te, y_tr, y_te = train_test_split(
+    X, y, test_size=0.33, stratify=y, random_state=0)
+probe = LogisticRegression(max_iter=1000, C=1.0)
+probe.fit(X_tr, y_tr)
+p = probe.predict_proba(X_te)[:, 1]   <span class="c"># P(class 1)</span>
+acc = probe.score(X_te, y_te)</pre><p class="note">Compare with a baseline (shuffled labels, layer 0, bag of words). When transfer matters, split by <i>rule or source</i>, not by row.</p></section><section><h2 class="victor">Calibration and selective prediction <span class="tag">NB5</span></h2><pre><span class="k">from</span> sklearn.metrics <span class="k">import</span> roc_auc_score, brier_score_loss
+<span class="k">from</span> sklearn.calibration <span class="k">import</span> calibration_curve
+<span class="c"># conf: P(verdict correct); correct: 1 if the judge was right</span>
+rng = np.random.default_rng(0)
+conf = rng.uniform(0.5, 1, 200)
+correct = (rng.uniform(size=200) &lt; conf).astype(int)
+
+auroc = roc_auc_score(correct, conf)     <span class="c"># 0.5 = chance</span>
+brier = brier_score_loss(correct, conf)  <span class="c"># lower is better</span>
+
+<span class="k">def</span> ece(conf, correct, n_bins=10):  <span class="c"># expected calib. error</span>
+    ids = np.clip((conf * n_bins).astype(int), 0, n_bins - 1)
+    gap = 0.0
+    <span class="k">for</span> b <span class="k">in</span> range(n_bins):
+        m = ids == b
+        <span class="k">if</span> m.any():
+            d = abs(correct[m].mean() - conf[m].mean())
+            gap += d * m.mean()
+    <span class="k">return</span> gap
+
+<span class="c"># reliability diagram: observed accuracy per confidence bin</span>
+frac_ok, mean_conf = calibration_curve(correct, conf, n_bins=10)
+
+order = np.argsort(-conf)                 <span class="c"># risk-coverage</span>
+n = np.arange(1, len(conf) + 1)
+coverage = n / len(conf)
+risk = np.cumsum(1 - correct[order]) / n
+
+t = 0.8                      <span class="c"># threshold policy</span>
+auto = conf &gt;= t             <span class="c"># auto-accept; rest -&gt; human</span>
+esc = (1 - correct[auto]).mean()  <span class="c"># error among accepted</span>
+print(<span class="s">f&quot;coverage {auto.mean():.2f}, error {esc:.2f}&quot;</span>)</pre><p class="note">Choose <code>t</code> on a held-out calibration split, never on the test set. Report coverage and error among accepted together.</p></section></div><div class="col"><section><h2 class="attn">Circuit tracing with circuit-tracer <span class="tag">NB4</span></h2><pre><span class="c"># fresh runtime; NB4 pins (nnsight 0.8 breaks 0.5.0):</span>
+<span class="c"># %pip install circuit-tracer==0.5.0 nnsight==0.7.0</span>
+<span class="c">#   transformers==4.57.3 huggingface_hub==0.36.2</span>
+<span class="c">#   transformer_lens==3.2.1</span>
+<span class="k">from</span> circuit_tracer <span class="k">import</span> ReplacementModel, attribute, Graph
+<span class="k">from</span> circuit_tracer.utils <span class="k">import</span> create_graph_files
+<span class="c"># &quot;gemma&quot; = Gemma Scope transcoders for Gemma 2 2B (gated)</span>
+rm = ReplacementModel.from_pretrained(
+    <span class="s">&quot;google/gemma-2-2b&quot;</span>, <span class="s">&quot;gemma&quot;</span>, dtype=torch.bfloat16)
+<span class="c"># Gemma 3 (nnsight backend, experimental), e.g.</span>
+<span class="c"># ReplacementModel.from_pretrained(&quot;google/gemma-3-1b-it&quot;,</span>
+<span class="c">#   &quot;mwhanna/gemma-scope-2-1b-it/transcoder_all/&quot;</span>
+<span class="c">#   &quot;width_16k_l0_small&quot;, backend=&quot;nnsight&quot;)</span>
+prompt = <span class="s">&quot;Fact: the capital of the state containing Dallas is&quot;</span>
+graph = attribute(prompt, rm, max_n_logits=10,
+                  desired_logit_prob=0.95, batch_size=256,
+                  max_feature_nodes=4096, verbose=<span class="k">True</span>)
+graph.to_pt(<span class="s">&quot;dallas.pt&quot;</span>)       <span class="c"># Graph.from_pt(&quot;dallas.pt&quot;)</span>
+create_graph_files(graph, slug=<span class="s">&quot;dallas&quot;</span>,
+                   output_path=<span class="s">&quot;graphs/&quot;</span>,   <span class="c"># pruned JSON</span>
+                   node_threshold=0.8, edge_threshold=0.98)
+<span class="c"># validate: (layer, position, feature_idx, new_value)</span>
+logits, acts = rm.feature_intervention(
+    prompt, [(20, 10, 15589, 0.0)])</pre><p class="note">NB4 default <code>PATH = "neuronpedia"</code>: no download. The Gemma 2 2B path is opt-in (~18 GB). Featured Dallas graph: see Links. <code>attribute(prompt, model, ...)</code>: prompt first. Rows of <code>graph.active_features</code> are (layer, pos, feature). Big <i>error nodes</i> = computation the transcoders miss. Ids above show the format only.</p></section><section><h2 class="">Glossary</h2><dl class="gloss"><dt>Residual stream</dt><dd>The running sum every layer reads from and writes to; per-token shared memory.</dd><dt>Logit lens</dt><dd>Final LayerNorm + unembedding applied to an intermediate residual: its current guess.</dd><dt>Activation patching</dt><dd>Copy a clean-run activation into a corrupted run; measure how much behaviour returns.</dd><dt>Logit difference</dt><dd>logit(correct) &minus; logit(alternative); a clean metric for patching.</dd><dt>Polysemantic</dt><dd>One neuron responds to several unrelated concepts.</dd><dt>Superposition</dt><dd>More features than dimensions, stored as almost-orthogonal directions.</dd><dt>SAE / latent</dt><dd>Sparse autoencoder: activation = sparse sum of decoder directions (latents).</dd><dt>Transcoder</dt><dd>Like an SAE, but reads an MLP's input and predicts its output.</dd><dt>Attribution graph</dt><dd>Direct linear effects among tokens, transcoder features, error nodes and logits for one prompt.</dd><dt>Error node</dt><dd>What the transcoders fail to reconstruct at a layer and position: unexplained computation.</dd><dt>Probe</dt><dd>A small, usually linear, classifier trained on activations to read out a property.</dd><dt>Steering vector</dt><dd>A direction added to the residual stream to push behaviour; not unique.</dd><dt>Calibration</dt><dd>Stated confidence matches observed accuracy (80% sure &rarr; right 80% of the time).</dd><dt>Risk&ndash;coverage</dt><dd>Error among accepted items versus share accepted, as the threshold moves.</dd><dt>Escape rate</dt><dd>Wrong verdicts that pass the threshold and skip human review.</dd></dl></section><section><h2 class="">Links</h2><ul class="links"><li><b>Neuronpedia</b><span>neuronpedia.org</span></li><li><b>Dallas graph (NB4)</b><span>neuronpedia.org/gemma-2-2b/graph?slug=<br>gemma-fact-dallas-austin</span></li><li><b>Transformer Explainer</b><span>poloclub.github.io/transformer-explainer</span></li><li><b>ARENA, chapter 1</b><span>learn.arena.education</span></li><li><b>TransformerLens</b><span>transformerlensorg.github.io/TransformerLens</span></li><li><b>SAELens</b><span>decoderesearch.github.io/SAELens</span></li><li><b>circuit-tracer</b><span>github.com/decoderesearch/circuit-tracer</span></li><li><b>Gemma Scope 2</b><span>huggingface.co/collections/google/gemma-scope-2</span></li><li><b>Open problems</b><span>arXiv 2501.16496 (Sharkey et al.)</span></li></ul></section></div></div>
+<footer><span>MICAI 2026 &middot; Opening the Black Box &middot; cheat sheet, back</span><span>Miguel Gonz&aacute;lez &middot; Salvador Hinojosa &middot; V&iacute;ctor Mac&iacute;as-Terr&oacute;n</span></footer>
+</div>
+</body></html>

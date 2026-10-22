@@ -1,0 +1,15 @@
+# Original hand-off bundle and the older top-level deck copies (superseded by slides/)
+*.zip
+/deck.html
+/deck.pdf
+
+# Presenter-only material: keep local, do not publish
+printables/presenter_run_sheet.*
+printables/pre_session_email.*
+printables/README_distribution.md
+
+# Build previews and local clutter
+slides/preview_*.html
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

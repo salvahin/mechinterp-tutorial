@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opening the Black Box · Mech Interp Tutorial</title>
+<meta name="description" content="Materials for the hands-on tutorial on mechanistic interpretability of large language models at MICAI 2026: slides, Colab notebooks and printables.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F6F4EE; --card: #FFFFFF; --ink: #15171C; --ink-2: #3F4450; --muted: #6B707A; --rule: #D9D4C7;
+  --resid: #0E7C74; --resid-soft: #D3EEEA; --attn: #D9480F; --mlp: #5F3DC4;
+  --miguel: #1C6FC2; --salvador: #0E7C74; --victor: #B5245A;
+  --font-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #15171C; --card: #1E2128; --ink: #ECEAE4; --ink-2: #C4C6CC; --muted: #9A9EA8; --rule: #33363F;
+          --resid: #3FBFB4; --resid-soft: #173A37; --attn: #F07B45; --mlp: #9C84F0;
+          --miguel: #5BA2EA; --salvador: #3FBFB4; --victor: #E0679A; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--resid); }
+main { max-width: 960px; margin: 0 auto; padding: 56px 16px 72px; }
+.kicker { font-family: var(--font-mono); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+h1 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(34px, 6vw, 56px); line-height: 1.1; margin: 0 0 12px; }
+.sub { font-size: clamp(18px, 2.4vw, 22px); color: var(--ink-2); margin: 0 0 20px; }
+.meta { color: var(--ink-2); margin: 0 0 4px; }
+.people span { white-space: nowrap; font-weight: 600; }
+.people .m { color: var(--miguel); } .people .s { color: var(--salvador); } .people .v { color: var(--victor); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 8px; }
+.btn { display: inline-block; padding: 12px 20px; border-radius: 10px; font-weight: 600; text-decoration: none; border: 1.5px solid var(--resid); }
+.btn.primary { background: var(--resid); color: #fff; }
+@media (prefers-color-scheme: dark) { .btn.primary { color: #0d1513; } }
+.btn.ghost { color: var(--resid); }
+h2 { font-family: var(--font-serif); font-weight: 600; font-size: 28px; margin: 56px 0 8px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.note { color: var(--ink-2); margin: 8px 0 20px; }
+code { font-family: var(--font-mono); font-size: .92em; background: var(--resid-soft); padding: 1px 5px; border-radius: 4px; }
+.nbs { display: grid; gap: 12px; }
+.nb { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--rule); border-left: 5px solid var(--c, var(--resid)); border-radius: 12px; padding: 16px 18px; }
+.nb .id { font-family: var(--font-mono); font-weight: 600; font-size: 20px; color: var(--c, var(--resid)); }
+.nb h3 { margin: 0; font-size: 18px; font-weight: 600; }
+.nb p { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+.nb .links { display: flex; gap: 10px; align-items: center; font-size: 14px; white-space: nowrap; }
+.nb .links img { display: block; height: 20px; }
+.files { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.file { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; text-decoration: none; color: var(--ink); }
+.file strong { display: block; color: var(--resid); margin-bottom: 2px; }
+.file span { font-size: 14px; color: var(--muted); }
+footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--muted); }
+@media (max-width: 640px) {
+  .nb { grid-template-columns: 1fr; gap: 6px; }
+  .nb .id { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">MICAI 2026 · Tutorial</p>
+  <h1>Opening the Black Box</h1>
+  <p class="sub">A Hands-On Introduction to Mechanistic Interpretability of Large Language Models</p>
+  <p class="meta">Friday 6 November 2026 · Tec de Monterrey, Campus Chihuahua</p>
+  <p class="meta people"><span class="m">Miguel González</span> · <span class="s">Salvador Hinojosa</span> · <span class="v">Víctor Macías-Terrón</span></p>
+
+  <div class="cta">
+    <a class="btn primary" href="slides/deck.html">Open the slides</a>
+    <a class="btn ghost" href="slides/deck.pdf">Slides (PDF)</a>
+    <a class="btn ghost" href="https://github.com/salvahin/mechinterp-tutorial">GitHub repository</a>
+  </div>
+
+  <h2>Notebooks</h2>
+  <p class="note">Everything runs in Google Colab. Open a notebook, then <strong>File › Save a copy in Drive</strong> so your work is kept. Some notebooks use Gemma models: add a Hugging Face read token as a Colab secret named <code>HF_TOKEN</code> and accept the Gemma licences first. NB0 checks all of this for you.</p>
+
+  <div class="nbs">
+    <div class="nb" style="--c: var(--miguel)">
+      <div class="id">NB0</div>
+      <div><h3>Setup check</h3><p>Hook · CPU · run before the session</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB0_setup_check.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB0 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB0_setup_check_solutions.ipynb">solutions</a></div>
+    </div>
+    <div class="nb" style="--c: var(--miguel)">
+      <div class="id">NB1</div>
+      <div><h3>The logit lens: watching an answer form</h3><p>Block 1 · Observe · CPU</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB1_logit_lens.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB1 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB1_logit_lens_solutions.ipynb">solutions</a></div>
+    </div>
+    <div class="nb" style="--c: var(--salvador)">
+      <div class="id">NB2</div>
+      <div><h3>Activation patching: which parts <em>cause</em> the answer?</h3><p>Block 2 · Intervene · CPU</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB2_activation_patching.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB2 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB2_activation_patching_solutions.ipynb">solutions</a></div>
+    </div>
+    <div class="nb" style="--c: var(--salvador)">
+      <div class="id">NB3</div>
+      <div><h3>Features, steering and probes</h3><p>Block 3 · Decompose · T4 GPU</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB3_features_steering_probes.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB3 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB3_features_steering_probes_solutions.ipynb">solutions</a></div>
+    </div>
+    <div class="nb" style="--c: var(--salvador)">
+      <div class="id">NB4</div>
+      <div><h3>Circuit tracing: from <em>Dallas</em> to <em>Austin</em></h3><p>Block 4 · Trace · CPU, fresh runtime</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB4_circuit_tracing.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB4 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB4_circuit_tracing_solutions.ipynb">solutions</a></div>
+    </div>
+    <div class="nb" style="--c: var(--victor)">
+      <div class="id">NB5</div>
+      <div><h3>Audit: can we trust the judge?</h3><p>Block 5 · Audit · CPU, in pairs</p></div>
+      <div class="links"><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/student/NB5_judge_confidence.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open NB5 in Colab"></a><a href="https://colab.research.google.com/github/salvahin/mechinterp-tutorial/blob/main/notebooks/solutions/NB5_judge_confidence_solutions.ipynb">solutions</a></div>
+    </div>
+  </div>
+
+  <h2>Printables</h2>
+  <div class="files">
+    <a class="file" href="printables/cheat_sheet.pdf"><strong>Cheat sheet</strong><span>Two pages, every method on one sheet</span></a>
+    <a class="file" href="printables/transfer_canvas.pdf"><strong>Transfer canvas</strong><span>Apply these methods to your own research</span></a>
+    <a class="file" href="printables/colab_troubleshooting.pdf"><strong>Colab troubleshooting</strong><span>Tokens, licences, GPUs and runtimes</span></a>
+  </div>
+
+  <footer>
+    MICAI 2026 · Tec de Monterrey · Source and rebuild instructions on <a href="https://github.com/salvahin/mechinterp-tutorial">GitHub</a>.
+  </footer>
+</main>
+</body>
+</html>

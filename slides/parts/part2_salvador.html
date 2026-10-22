@@ -1,0 +1,1054 @@
+<style>
+/* ---- part 2 (Salvador) scoped styles: everything prefixed .p2- or #p2- ---- */
+.p2-fig { width: 100%; height: 100%; display: block; }
+section[id^="p2-"] sub { font-size: max(22px, .62em); }
+.p2-fig text { font-family: var(--font-sans); }
+section[id^="p2-"] .card > *, section[id^="p2-"] .predict p { margin: 0; }
+.p2-fig .mono { font-family: var(--font-mono); }
+.p2-fig .muted { fill: var(--muted); }
+.p2-fig .ink2 { fill: var(--ink-2); }
+.p2-steps { list-style: none; padding: 0 !important; counter-reset: p2s; gap: 18px !important; }
+.p2-steps li { counter-increment: p2s; display: block; position: relative; padding-left: 66px; }
+.p2-steps li::before { content: counter(p2s); position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--resid); color: #fff; font-weight: 700; font-size: 24px; display: grid; place-items: center; }
+.p2-hands .p2-badge { display: inline-flex; gap: 14px; align-items: center; font-size: 24px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 8px 18px; border-radius: 10px; align-self: flex-start; }
+.p2-hands .p2-badge span { font-weight: 500; letter-spacing: 0; text-transform: none; opacity: .8; }
+.p2-hands .card h3 { font-size: 28px; }
+.p2-hands .card p, .p2-hands .card li { font-size: 26px; }
+.p2-eq { font-family: var(--font-serif); font-size: 40px; line-height: 1.4; }
+.p2-eq .v { font-family: var(--font-mono); font-size: 32px; }
+.p2-big { font-size: 64px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.p2-label { font-size: 22px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+.p2-arc { display: flex; gap: 0; align-items: stretch; }
+.p2-arc .card { flex: 1; border-radius: 0; gap: 14px; }
+.p2-arc .card:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.p2-arc .card:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.p2-arc .card + .card { border-left: none; }
+.p2-arc .num { font-size: 22px; font-weight: 700; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+.p2-arc h3 { font-size: 40px !important; }
+.p2-arc p { font-size: 26px; color: var(--ink-2); margin: 0; }
+.p2-arc .tool { font-family: var(--font-mono); font-size: 24px; color: var(--ink); }
+#p2-break { justify-content: center; }
+#p2-break .p2-big { font-size: 110px; }
+.p2-kv { display: grid; grid-template-columns: auto 1fr; gap: 10px 26px; font-size: 26px; align-items: baseline; }
+.p2-kv b { font-weight: 600; }
+.p2-quote { font-family: var(--font-serif); font-style: italic; color: var(--ink-2); }
+.p2-tight { gap: 20px !important; }
+</style>
+
+<!-- =====================================================================
+     BLOCK 2 · INTERVENE (0:30 – 1:00)
+     ===================================================================== -->
+
+<section class="slide section-slide" id="p2-sec2" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">0:30 · Salvador Hinojosa</p>
+  <div class="block-num">2</div>
+  <h2>Intervene: from seeing to causing</h2>
+  <p class="lead">The logit lens showed the answer forming. Now we change the inside and watch the output.</p>
+  <aside class="notes"><b>0:30.</b> Take over from Miguel. Repeat his question out loud: "Does that layer cause it?" Short answer: we cannot know by looking. We have to intervene. The next 100 minutes are one story in three acts: cause, units, circuits.</aside>
+</section>
+
+<section class="slide" id="p2-arc" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene</p>
+  <h2>The next 100 minutes are one story: cause, units, circuits</h2>
+  <div class="p2-arc">
+    <div class="card resid" data-step="1"><span class="num">Block 2 · 0:30</span><h3>Cause</h3><p>Which activations does the model actually rely on?</p><span class="tool">activation patching</span></div>
+    <div class="card mlp" data-step="2"><span class="num">Block 3 · 1:10</span><h3>Units</h3><p>What are the variables inside those activations?</p><span class="tool">SAEs · steering · probes</span></div>
+    <div class="card attn" data-step="3"><span class="num">Block 4 · 1:40</span><h3>Circuits</h3><p>How do those units combine into one answer?</p><span class="tool">attribution graphs</span></div>
+  </div>
+  <p class="small" data-step="3">Each act answers the question the previous one leaves open.</p>
+  <aside class="notes"><b>0:31.</b> One slide of map. Patching tells us <i>where</i>. That leaves the question <i>what</i>: units. Units leave the question <i>how they combine</i>: circuits. Each block has one prediction and one notebook. Keep this under a minute.</aside>
+</section>
+
+<section class="slide" id="p2-corr" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene</p>
+  <h2>Seeing a representation does not show that the model uses it</h2>
+  <div class="grid-2">
+    <div class="card">
+      <span class="p2-label">Observe</span>
+      <h3>Read an activation</h3>
+      <p class="small">Logit lens, probes: the information is <b>present</b>. A decoder can find it even if no later layer ever reads it.</p>
+    </div>
+    <div class="card resid" data-step="1">
+      <span class="p2-label c-resid">Intervene</span>
+      <h3>Change an activation, measure the output</h3>
+      <p class="small">If the output moves, the model <b>uses</b> that activation. This is a causal claim about the network.</p>
+    </div>
+  </div>
+  <p class="callout resid" data-step="2">Does that layer cause it? Only an intervention can say.</p>
+  <aside class="notes"><b>0:32.</b> Answer Miguel's question directly. A probe or the logit lens shows information is decodable; that is correlation. Example to give: a probe can decode word position from almost any layer, but that does not mean the model computes the next token from it there. Intervention: overwrite an activation, rerun, measure. Ask the room: "What would you overwrite it <i>with</i>?" Lead into the next slide: with the activation from a different prompt.</aside>
+</section>
+
+<section class="slide" id="p2-transplant" data-presenter="salvador" data-block="Block 2 · Intervene" data-steps="4">
+  <p class="kicker">Block 2 · Intervene · activation patching</p>
+  <h2>A patch transplants one activation between runs</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-tp-svg" viewBox="0 0 1408 560"></svg></div>
+  <aside class="notes"><b>0:33–0:37.</b> Step 0: two prompts. Clean: "When Mary and John went to the store, John gave a drink to" → Mary. Corrupted: the repeated name changes ("…, Mary gave a drink to"), so the answer flips to John. Only one token differs (S2); same length, same positions. These are NB2's 8 prompts; the slide shows the first.<br>Step 1: run both forward and cache every activation (layers × positions).<br>Step 2: copy ONE activation, the residual stream entering layer 9 at the last position, from the clean run into the corrupted run.<br>Step 3: let the corrupted run continue. Its answer moves back to Mary: 0.99 of the way (computed, GPT-2 small, mean over NB2's 8 prompts).<br>Step 4: repeat for every (layer, position): 12 layers × 15 positions = 180 runs in NB2 (the BOS column is always 0, so the slide hides it). One heatmap: the real NB2 grid; it ends at 0.98 for layer 11. The blue-grey grids are schematic activations; teal is reserved for the restored score. Ask: "Which cells do you expect to light up?" Do not answer yet.</aside>
+</section>
+
+<section class="slide" id="p2-metric" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · the metric</p>
+  <h2>We score each patch by how far it restores the clean answer</h2>
+  <div class="p2-eq">LD = logit(<span class="c-resid">IO</span>) − logit(<span class="c-bad">S</span>)</div>
+  <p class="small" style="margin-top:-14px"><b class="c-resid">IO</b> = indirect object, the right answer (Mary) · <b class="c-bad">S</b> = subject, the repeated name (John)</p>
+  <div class="p2-eq" data-step="1">restored = (LD<sub>patched</sub> − LD<sub>corr</sub>) / (LD<sub>clean</sub> − LD<sub>corr</sub>)</div>
+  <div class="figure" data-step="2" style="max-height:200px"><svg class="p2-fig" id="p2-metric-svg" viewBox="0 0 1408 190"></svg></div>
+  <p class="tiny" data-step="2">Computed on GPT-2 small (TransformerLens), mean over NB2's 8 prompts: LD<sub>clean</sub> = +3.02, LD<sub>corr</sub> = −4.61.</p>
+  <aside class="notes"><b>0:37–0:39.</b> Why a logit difference and not accuracy: it is continuous and it cancels everything the two names share. Normalizing gives 0 = behaves like the corrupted run, 1 = fully restored to clean. Values above 1 or below 0 are possible; we will see a few. These are the real numbers from NB2's 8-prompt batch, so they will match the notebook.</aside>
+</section>
+
+<section class="slide" id="p2-ioi" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · the IOI circuit</p>
+  <h2>Indirect object identification is the canonical worked circuit</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-ioi-svg" viewBox="0 0 1408 470"></svg></div>
+  <p class="tiny">Wang et al. 2022, “Interpretability in the Wild”, GPT-2 small. Simplified: the paper also reports backup and negative name movers.</p>
+  <aside class="notes"><b>0:39–0:41.</b> A teaser, not a lecture. Three groups of heads, earliest first. (1) Duplicate-token heads at the second "John" attend back to the first John and notice the repeat. Induction heads do a related job (they attend to the token after the first John); the arc omits them for clarity, but you will meet two of them (L5H5, L6H9) in the head ranking. (2) S-inhibition heads (L7H3, L7H9, L8H6, L8H10) carry "John is the duplicate, do not say John" to the final position. (3) Name mover heads (L9H9, L9H6, L10H0) at the final position attend to the remaining name, Mary, and copy it to the output. You will try to find the name movers yourselves in the notebook.</aside>
+</section>
+
+<section class="slide" id="p2-predict-resid" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene</p>
+  <h2>Before you run it: where will the patch matter?</h2>
+  <div class="predict"><div><b>Which layers and positions will matter most when you patch the residual stream?</b><br><span class="small">Sketch a grid of 12 layers × 14 tokens on paper. Shade the cells you expect to restore Mary.</span></div></div>
+  <div class="grid-3" data-step="1">
+    <div class="card"><h3>Positions</h3><p class="small">First name? Second John? Final token? All of them?</p></div>
+    <div class="card"><h3>Layers</h3><p class="small">Early, middle, late, or a band that moves?</p></div>
+    <div class="card"><h3>Commit</h3><p class="small">Write it in the notebook cell before running.</p></div>
+  </div>
+  <aside class="notes"><b>0:41.</b> One minute, silent. Insist they write it. A typical wrong guess: "the Mary position, in all layers". The interesting part is the moving band. Then open NB2.</aside>
+</section>
+
+<section class="slide p2-hands" id="p2-nb2" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · hands-on</p>
+  <div class="p2-badge">NB2 · Patching <span>≈ 14 min · GPT-2 small · CPU is fine</span></div>
+  <h2>Find where IOI happens, then find the heads</h2>
+  <div class="row">
+    <ol class="p2-steps col" style="flex:1.4">
+      <li>Check the 8 clean and corrupted prompts and the metric (given).</li>
+      <li>Write the patching hook.</li>
+      <li>Patch the residual stream at every layer × position.</li>
+      <li>Patch each attention head; rank them.</li>
+      <li>Does attention predict importance?</li>
+    </ol>
+    <div class="col">
+      <div class="card resid"><h3>Done when</h3><p>Your heatmap shows the handover from S2 to the final token, and you can name the heads that carry it.</p></div>
+      <div class="card"><h3>Stuck?</h3><p>Raise a hand: the assistant is on Colab duty.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><b>0:41–0:55.</b> In NB2 the prompts and the logit-difference metric are given; the one coding exercise is the residual-patching hook (a reference hook takes over if they skip it). Step 5 is NB2's productive failure: scatter each head's attention from the final token to the IO name against its causal effect. Most people expect a strong positive link; across all 144 heads it is r ≈ −0.16. Walk the room. At 0:48 check that most people have the heatmap. If someone finishes early: stretch exercise, patch attention outputs vs MLP outputs separately. At 0:54 give a one-minute warning. Do not show the next slide until 0:55.</aside>
+</section>
+
+<section class="slide" id="p2-heatmap" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · our result</p>
+  <h2>Information moves from the repeated name to the final token in layers 7–8</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-hm-svg" viewBox="0 0 1408 560"></svg></div>
+  <aside class="notes"><b>0:55–0:57.</b> Real numbers, the same grid NB2 produces: GPT-2 small, residual stream entering each layer, mean over the 8 notebook prompts (script scratch/p2/ioi_patching_nb2.py). First: every position before S2 is exactly 0, because those tokens are identical in the clean and corrupted prompts and attention is causal. Step 1: up to layer 7 the whole effect sits at S2, the one token that differs (≈ 1.0, 0.95 at L7). Step 2: the handover happens in layers 7–8: S2 drops to 0.75 at L8 and 0.05 at L9, while the final token rises from 0.03 (L7) to 0.39 (L8) to 0.99 (L9). Step 3: from layer 9 on, everything sits at the final token. So attention heads in layers 7–8 move the information from S2 to the end: that is where the S-inhibition heads live. A faint trace (≈ 0.04) at " gave" is real but small. Compare with your prediction.</aside>
+</section>
+
+<section class="slide" id="p2-heads" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · head-level patching</p>
+  <h2>Head patching finds S-inhibition and name-mover heads, and two that fight back</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-heads-svg" viewBox="0 0 1408 420"></svg></div>
+  <p class="tiny">Computed: GPT-2 small, NB2's 8 prompts, each head's output patched at all positions. Role labels from Wang et al. 2022. NB2 §5: attention to IO vs causal effect over 144 heads, r = −0.16.</p>
+  <aside class="notes"><b>0:57–0:59.</b> Same numbers as NB2. No single head restores more than about half: the circuit is distributed. The top of the ranking maps onto Wang et al.'s classes: L5H5 (0.45) and L6H9 are induction heads that feed the "John is repeated" signal; L8H6, L8H10, L7H9, L7H3 are S-inhibition heads, which fits the layer 7–8 handover on the previous slide; L9H9 and L10H0 are name movers; L3H0 is a duplicate-token head. Ask: why is L9H6, a published name mover, only 0.03? Single-head patching measures what one head adds while all the others stay corrupted; redundant and backup heads look weak alone. A small number does not prove a head is unimportant. The heads that fight back: L10H7 (−0.51) and L11H10 (−0.22) are negative name movers: restoring them pushes against the right answer. Debrief NB2 §5 here: L10H7 is also one of the heads that attends most to Mary (≈ 0.78), yet its effect is negative; over all 144 heads, attention to the IO vs causal effect gives r ≈ −0.16. Attention is not explanation; intervention is.</aside>
+</section>
+
+<section class="slide" id="p2-where" data-presenter="salvador" data-block="Block 2 · Intervene">
+  <p class="kicker">Block 2 · Intervene · limits</p>
+  <h2>Patching tells us where, not what</h2>
+  <div class="grid-2">
+    <div class="card good"><h3>We now know</h3><p class="small">Which layer, position and head the answer depends on, for this task, measured causally.</p></div>
+    <div class="card bad" data-step="1"><h3>We still do not know</h3><p class="small">What is written in that 768-dimensional vector. "Name info at layer 9" is a location, not a variable.</p></div>
+  </div>
+  <p class="callout mlp" data-step="2">Next: what are the units inside an activation?</p>
+  <aside class="notes"><b>0:59–1:00.</b> Also: patching depends on the corruption you choose; a different counterfactual can light up different cells. Bridge to Block 3: to say <i>what</i>, we need to decompose the vector into units. Then announce the break.</aside>
+</section>
+
+<!-- =====================================================================
+     BREAK (1:00 – 1:10)
+     ===================================================================== -->
+
+<section class="slide" id="p2-break" data-presenter="salvador" data-block="Break">
+  <p class="kicker">1:00 – 1:10</p>
+  <div class="p2-big">Break · 10 min</div>
+  <p class="lead">Before you leave your seat, prepare Block 3:</p>
+  <ol class="p2-steps">
+    <li>Colab: Runtime → Change runtime type → <b>T4 GPU</b>.</li>
+    <li>Open <b>NB3</b> and run the first cells to preload Gemma weights.</li>
+    <li>No GPU or an error? The student assistant will help.</li>
+  </ol>
+  <p class="tiny">Optional, Block 4 on your own GPU: NB4 needs its own fresh runtime and free Colab gives one T4 per account. Start its 18 GB download only if you will skip NB3 on GPU, or in a second account.</p>
+  <aside class="notes"><b>1:00.</b> Read the three steps out loud. NB3 uses Gemma 3 1B IT; downloads take several minutes on conference Wi-Fi, which is why they start now. Mention the optional line only briefly: the default Block 4 path runs on Neuronpedia in the browser, so nobody needs NB4's 18 GB Gemma 2 2B download. NB4's own runtime uses older library pins and would break NB3's stack in the same runtime, and free Colab gives one T4 per account, which NB3 needs from 1:10 to 1:40. So only people who will run NB3 on the CPU fallback, or who have a second account, should start it. Restart at 1:10 sharp.</aside>
+</section>
+
+<!-- =====================================================================
+     BLOCK 3 · DECOMPOSE (1:10 – 1:40)
+     ===================================================================== -->
+
+<section class="slide section-slide" id="p2-sec3" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">1:10 · Salvador Hinojosa</p>
+  <div class="block-num">3</div>
+  <h2>Decompose: what are the units?</h2>
+  <p class="lead">Patching found where. Now we look for the variables inside an activation.</p>
+  <aside class="notes"><b>1:10.</b> Check that NB3 is loading on most machines (show of hands). Then: "We know where. The obvious idea is to look at individual neurons. Let us see why that fails."</aside>
+</section>
+
+<section class="slide" id="p2-poly" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose</p>
+  <h2>A single neuron often fires for unrelated things</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-poly-svg" viewBox="0 0 1408 470"></svg></div>
+  <p class="tiny">Kinds of contexts after Bricken et al. 2023 (“Towards Monosemanticity”); activation values illustrative.</p>
+  <aside class="notes"><b>1:11–1:13.</b> Polysemanticity: one neuron, top activations from four unrelated contexts. If neurons were the units, we could label them. They are not clean units. Ask: "Why would training do this?" Answer on the next slide: there are more things to represent than neurons.</aside>
+</section>
+
+<section class="slide" id="p2-super" data-presenter="salvador" data-block="Block 3 · Decompose" data-steps="4">
+  <p class="kicker">Block 3 · Decompose · superposition</p>
+  <h2>Sparse features can share dimensions</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-sp-svg" viewBox="0 0 1408 570"></svg></div>
+  <p class="tiny">Illustrative toy geometry after Elhage et al. 2022, “Toy Models of Superposition”.</p>
+  <aside class="notes"><b>1:13–1:16.</b> Toy model (Elhage et al. 2022): 5 features, a 2-dimensional hidden space, then reconstruct. Step 1: pack 5 directions into 2D. Activate feature 1 and read every direction: the others pick up part of it. That leak is interference. Step 2: if features are dense (often on together), leaks pile up on every input, so the model keeps 2 orthogonal features and drops 3. Step 3: as features become sparse, they are rarely on together; the leak is mostly cut by the ReLU, so the model packs all 5 as a pentagon. Step 4: more features than dimensions, paid for with interference. One honest clause: superposition makes individual <i>neurons</i> polysemantic only when the neuron basis is privileged, i.e. a nonlinearity acts per neuron, as in an MLP. This toy hidden layer is linear, so here it shows features sharing directions, not neurons as such.</aside>
+</section>
+
+<section class="slide" id="p2-sae" data-presenter="salvador" data-block="Block 3 · Decompose" data-steps="3">
+  <p class="kicker">Block 3 · Decompose · sparse autoencoders</p>
+  <h2>An SAE is a learned dictionary of directions</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-sae-svg" viewBox="0 0 1408 520"></svg></div>
+  <p class="tiny">JumpReLU = a ReLU with a learned threshold per latent (what Gemma Scope 2 uses). Latent labels and values illustrative.</p>
+  <aside class="notes"><b>1:16–1:19.</b> Step 0: one residual vector, dense, every entry a little bit on. Step 1: the encoder maps it to a much wider vector where only a few latents are non-zero (sparsity penalty). Gemma Scope 2 uses JumpReLU: a ReLU with a learned threshold, so a latent is exactly 0 unless its pre-activation clears the threshold. Students will see 'jumprelu' in the NB3 config. Each latent can get a human label from the texts that activate it. Labels here are illustrative. Step 2: the decoder adds those latents' directions back up (W_dec·f + b_dec, i.e. Σ latent × direction plus a bias): a reconstruction. Step 3: the reconstruction is imperfect. The leftover, the error term, is real computation the dictionary does not explain. Concrete number from NB3: splicing the SAE reconstruction back into Gemma 3 1B IT (layer 17) raises next-token loss by +0.37 nats. Block 4 will draw this leftover as error nodes.</aside>
+</section>
+
+<section class="slide" id="p2-gscope" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose · tools</p>
+  <h2>Gemma Scope 2 opens SAEs on every layer of Gemma 3</h2>
+  <div class="row">
+    <div class="col">
+      <ul>
+        <li>SAEs and transcoders for every layer of Gemma 3, 270M to 27B.</li>
+        <li><b>Neuronpedia</b>: browse each feature's top activating texts.</li>
+        <li data-step="1"><b>Steering</b>: add a feature's decoder direction, scaled to a fraction of the residual norm; the output changes.</li>
+      </ul>
+    </div>
+    <div class="col" data-step="1">
+      <svg class="p2-fig" id="p2-steer-svg" viewBox="0 0 600 330" style="height:330px"></svg>
+    </div>
+  </div>
+  <pre class="code" data-step="2"><span class="k">from</span> sae_lens <span class="k">import</span> SAE
+sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-1b-it-res"</span>, <span class="s">"layer_17_width_16k_l0_medium"</span>)</pre>
+  <p class="tiny">Google DeepMind, Gemma Scope 2 (2025). The SAE NB3 loads for Gemma 3 1B IT (SAELens 6.54 ids).</p>
+  <aside class="notes"><b>1:19–1:21.</b> Gemma Scope 2: open weights for SAEs and transcoders across the Gemma 3 family; cross-layer transcoders for 270M and 1B (we use those ideas in Block 4). In NB3 everyone uses Gemma 3 1B IT, layer 17 of 26, and the latent #3440 "Mexico and Argentina locations" (Neuronpedia: gemma-3-1b-it / 17-gemmascope-2-res-16k). Steering formula in the notebook: x ← x + α · r̄ · d, with d the latent's unit decoder direction and r̄ the mean residual norm of the prompt at that layer (one constant, not each token's own norm), so α is a fraction of a typical residual vector. (The primer's steering example used an absolute step; here α is relative, which makes numbers comparable across models.) α = 0.25 changes the topic while staying fluent; α = 1.0 degrades into repetition. The notebook includes a random-direction control of the same size: always run it.</aside>
+</section>
+
+<section class="slide" id="p2-predict-probe" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose</p>
+  <h2>Before you run it: which probe wins, raw or SAE?</h2>
+  <div class="predict"><div><b>Will a linear probe trained on raw activations do better or worse than one trained on SAE latents?</b><br><span class="small">Same labels, same layer, same 20 lines of scikit-learn.</span></div></div>
+  <div class="grid-3" data-step="1">
+    <div class="card"><h3>Raw probe wins</h3><p class="small">Raw keeps all the information.</p></div>
+    <div class="card"><h3>SAE probe wins</h3><p class="small">SAE latents are the "real" units.</p></div>
+    <div class="card"><h3>About the same</h3><p class="small">Write down why.</p></div>
+  </div>
+  <aside class="notes"><b>1:21.</b> Show of hands for each option and note the count on the whiteboard; we come back to it. Most people pick "SAE probe wins": that is the point of the productive failure.</aside>
+</section>
+
+<section class="slide p2-hands" id="p2-nb3" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose · hands-on</p>
+  <div class="p2-badge">NB3 · Features &amp; probes <span>≈ 14 min · Gemma 3 1B IT + Gemma Scope 2 · T4</span></div>
+  <h2>Find a feature, steer with it, then race two probes</h2>
+  <div class="row">
+    <ol class="p2-steps col" style="flex:1.4">
+      <li>Load the layer-17 SAE; find a Mexico latent.</li>
+      <li>Check its label on Neuronpedia: is it really Mexico?</li>
+      <li>Steer at α = 0.25 of the residual norm; compare a random direction.</li>
+      <li>Race a raw probe against SAE probes, in and out of distribution.</li>
+    </ol>
+    <div class="col">
+      <div class="card resid"><h3>Done when</h3><p>You have IID and OOD accuracies for both probes.</p></div>
+      <div class="card"><h3>No GPU?</h3><p>The notebook switches to GPT-2 small and its SAE on CPU.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><b>1:22–1:35.</b> The suggested latent is #3440 "Mexico and Argentina locations"; the top-ranked one is often broader ("South American countries"), so reading labels is part of the exercise. Most time goes to steps 3 and 4. If steering produces gibberish, α is too large (1.0 breaks it). On the GPT-2 fallback, watch the top latent #14944: it is a "Spanish words" latent that also fires on Simón Bolívar and Buenos Aires, a shortcut its label did not warn about. At 1:33 ask everyone to run the probe cell even if they skipped steering.</aside>
+</section>
+
+<section class="slide" id="p2-reveal" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose · what the field found</p>
+  <h2>SAE probes are not reliably better than plain probes</h2>
+  <div class="grid-2">
+    <div class="card"><span class="p2-big c-resid">113</span><p class="small">datasets: SAE probes won on some, but not consistently, and did not beat strong baselines on average (Kantamneni et al., ICML 2025).</p></div>
+    <div class="card" data-step="1"><span class="p2-big c-bad">Mar 2025</span><p class="small">Google DeepMind deprioritized fundamental SAE research after SAEs underperformed linear probes on out-of-distribution harmful-intent detection.</p></div>
+  </div>
+  <p class="small" data-step="2">Your own race may go either way: one 200-sentence dataset is an anecdote. Benchmark against a plain probe before trusting a feature.</p>
+  <aside class="notes"><b>1:35–1:37.</b> Go back to the hand count. Then ask who saw which result: in our test runs the race was mixed. Gemma 3 1B IT: plain probe 90% IID / 95% OOD vs 88% / 87% for the top-16 SAE latents (plain wins, most clearly out of distribution). GPT-2 fallback: the top-16 SAE probe won, 89% vs 78% IID. Both are legitimate. The headline is the literature, not our anecdote: across 113 datasets SAE probes were not reliably better, and DeepMind found them worse out of distribution on harmful intent. Why plain probes are tough: a probe sees every direction and is trained for this label; SAE latents drop the reconstruction error and were not trained for it. Linear probes are what is deployed, e.g. for misuse detection in Gemini.</aside>
+</section>
+
+<section class="slide" id="p2-usefor" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose</p>
+  <h2>Probes detect what you name; SAEs find what you did not</h2>
+  <table class="t">
+    <tr><th></th><th>Linear probe</th><th>SAE</th></tr>
+    <tr><td><b>Needs</b></td><td>labels for a concept you chose</td><td>no labels</td></tr>
+    <tr><td><b>Good for</b></td><td>cheap, supervised detection</td><td>unsupervised discovery of units</td></tr>
+    <tr><td><b>Weak at</b></td><td>concepts nobody thought to label</td><td>reliably beating a probe on a known label</td></tr>
+  </table>
+  <p class="callout" data-step="1">Use them together: SAEs suggest hypotheses, probes and patching test them.</p>
+  <aside class="notes"><b>1:37–1:38.</b> The honest framing: SAEs failed a test they were not designed for. Their value is discovery: you found a Mexico-ish latent in NB3 before writing a single label. But a label is a hypothesis: the GPT-2 "Spanish words" latent looked like Mexico and fired on Simón Bolívar. Validate with a probe or an intervention.</aside>
+</section>
+
+<section class="slide" id="p2-nonid" data-presenter="salvador" data-block="Block 3 · Decompose">
+  <p class="kicker">Block 3 · Decompose · a caution on steering</p>
+  <h2>A steering effect does not identify the representation</h2>
+  <div class="row" style="align-items:center">
+    <div class="col" style="flex:1"><svg class="p2-fig" id="p2-nonid-svg" viewBox="0 0 620 420" style="height:420px"></svg></div>
+    <div class="col" style="flex:1.1">
+      <p class="small">In their experiments, directions orthogonal to a steering vector reached <b>95–100%</b> of its effect.</p>
+      <p class="small" data-step="1">So "steering with feature f changes the output" shows f is <i>sufficient</i> to cause the change, not that f is <i>the</i> variable the model uses.</p>
+      <p class="tiny">Venkatesh &amp; Kurapath, “On the Non-Identifiability of Steering Vectors in LLMs”, ICLR 2026 workshop (Re-Align), arXiv 2602.06801.</p>
+    </div>
+  </div>
+  <aside class="notes"><b>1:38–1:40.</b> Source: Venkatesh &amp; Kurapath, a poster at the ICLR 2026 Representational Alignment workshop, not the main conference. The 95–100% figure is from the paper body (arXiv v3, contributions: "orthogonal perturbations achieving 95–100% of the original steering efficacy across multiple models and traits"); the abstract says "near-equivalent efficacy". Many directions do the same job. Steering is an existence proof of an effect, not evidence of a unique representation. Combine with necessity tests (ablation, patching). This sets up Block 4: we want to validate whole explanations by intervention.</aside>
+</section>
+
+<!-- =====================================================================
+     BLOCK 4 · TRACE (1:40 – 2:10)
+     ===================================================================== -->
+
+<section class="slide section-slide" id="p2-sec4" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">1:40 · Salvador Hinojosa</p>
+  <div class="block-num">4</div>
+  <h2>Trace: how does one answer get made?</h2>
+  <p class="lead">Units connected into a graph for a single prompt, then tested by intervention.</p>
+  <aside class="notes"><b>1:40.</b> We have places (patching) and units (features). Now we connect units into a computation for one prompt.</aside>
+</section>
+
+<section class="slide" id="p2-graph" data-presenter="salvador" data-block="Block 4 · Trace" data-steps="4">
+  <p class="kicker">Block 4 · Trace · attribution graph</p>
+  <h2>A two-hop answer passes through a "Texas" feature</h2>
+  <p class="small" style="margin-top:-10px"><span class="mono" style="font-size:24px">"Fact: the capital of the state containing Dallas is"</span> → <b>" Austin"</b></p>
+  <div class="figure"><svg class="p2-fig" id="p2-ag-svg" viewBox="0 0 1408 500"></svg></div>
+  <p class="tiny">Redrawn and simplified from Anthropic, “On the Biology of a Large Language Model” and “Circuit Tracing” (2025); edge weights illustrative. Open-sourced as circuit-tracer + Neuronpedia.</p>
+  <aside class="notes"><b>1:41–1:45.</b> Step 0: input tokens. Step 1: "Dallas" activates a Texas feature; "capital" and "state" activate a "say a capital" feature. Step 2: the two combine into "say Austin". Thickness = strength of the direct effect. Step 3: that feature pushes the Austin logit. Step 4: grey nodes are error nodes: the part of each layer's output the replacement model cannot explain. The paper also finds a weaker direct shortcut from Dallas; the thin edge. The point: two hops, with an inspectable intermediate. In the featured Neuronpedia graph you will open in NB4 (Gemma 2 2B), the Texas supernode includes layer 16 #25 "Texas" and layer 14 #2268.</aside>
+</section>
+
+<section class="slide" id="p2-howbuilt" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">Block 4 · Trace · method</p>
+  <h2>A graph comes from a replacement model, one prompt at a time</h2>
+  <div class="grid-3">
+    <div class="card mlp"><span class="p2-label c-mlp">1 · Replace</span><p class="small">Swap the MLPs for per-layer or cross-layer transcoders: sparse, interpretable features. Keep an error node for what they miss.</p></div>
+    <div class="card" data-step="1"><span class="p2-label">2 · Attribute</span><p class="small">On one prompt, compute the direct linear effect between features, tokens, error nodes and logits.</p></div>
+    <div class="card" data-step="2"><span class="p2-label">3 · Prune</span><p class="small">Keep the nodes and edges that carry most of the effect on the chosen logit.</p></div>
+  </div>
+  <p class="small" data-step="3">Attention patterns are frozen from the real run, so the effects are linear and exact for that prompt.</p>
+  <aside class="notes"><b>1:45–1:47.</b> A transcoder reads the MLP input and predicts the MLP output through a sparse layer. Freezing attention patterns and normalization makes the replacement linear in the features, so edge weights are exact direct effects for this one prompt. Pruning keeps a readable subgraph, often under a hundred nodes.</aside>
+</section>
+
+<section class="slide" id="p2-validate" data-presenter="salvador" data-block="Block 4 · Trace" data-steps="2">
+  <p class="kicker">Block 4 · Trace · validation</p>
+  <h2>A graph is a hypothesis until an intervention confirms it</h2>
+  <div class="figure"><svg class="p2-fig" id="p2-val-svg" viewBox="0 0 1408 470"></svg></div>
+  <p class="tiny">Measured in NB4 (Gemma 2 2B, featured Dallas graph, Neuronpedia steering). The same two tests appear in “On the Biology of a Large Language Model” (2025).</p>
+  <aside class="notes"><b>1:47–1:49.</b> All numbers measured in NB4's default path: Gemma 2 2B, the featured Dallas graph, interventions sent through Neuronpedia's steering API. Step 0: P(Austin) = 0.44. Step 1: steer the six Texas features at the Dallas token. Ablating them (0×) drops Austin to 0.18 (Oklahoma and Sacramento appear); steering them to −1× pushes Austin to ≈ 0.00 (Albany appears, as in Neuronpedia's own walkthrough). The control matters: −1× on six other active features at Dallas leaves Austin at 0.38. Step 2: Texas −1× plus a California feature at +0.5× puts Sacramento at the top, tied, at 0.135. The swap is the stronger evidence: the intermediate is used, and used as a state. This mirrors the experiment in the Biology paper. Honest caveat: writing a concept in is harder than switching one off; at +1.0× California overshoots into other California cities. Same logic as patching in Block 2, now at the level of features.</aside>
+</section>
+
+<section class="slide p2-hands" id="p2-nb4" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">Block 4 · Trace · hands-on</p>
+  <div class="p2-badge">NB4 · Circuit tracing <span>≈ 14 min · Neuronpedia in the browser · no GPU needed</span></div>
+  <h2>Trace your own two-hop prompt, then break the Dallas one on purpose</h2>
+  <div class="row">
+    <ol class="p2-steps col" style="flex:1.4">
+      <li><b>+ New Graph</b> for your own prompt, e.g. Ciudad Juárez → Chihuahua.</li>
+      <li>On the featured Dallas graph, find Texas (e.g. layer 16 #25).</li>
+      <li>Pin it, <b>Steer</b> it to −1×, and watch Austin drop.</li>
+    </ol>
+    <div class="col">
+      <div class="card resid"><h3>Done when</h3><p>One intervention changed the answer the way the graph predicts.</p></div>
+      <div class="card"><h3>Opt-in</h3><p>Own GPU runtime for NB4? Build the graph with circuit-tracer.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><b>1:49–2:03.</b> Default path for the room is "neuronpedia": no model, runs anywhere. Step 1, NB4's default own-graph prompt is a local hook for Chihuahua: "Fact: the capital of the state containing Ciudad Juárez is" → Chihuahua. Make it with + New Graph on https://www.neuronpedia.org/gemma-2-2b/graph and look at the features on " Juárez" (Mexico, Latin American locations). In our test, steering its top features to −1× took P(Chihuahua) from 0.20 to 0.00. Steps 2–3: the featured graph is https://www.neuronpedia.org/gemma-2-2b/graph?slug=gemma-fact-dallas-austin; Texas features include layer 16 #25 "Texas" and layer 14 #2268. Pin the Texas supernode, click Steer, set −1×, run: Austin drops (Albany appears). Opt-in: circuit-tracer on Gemma 2 2B needs its own fresh GPU runtime (older library pins, ≈ 18 GB download), so only for people who did not use their T4 for NB3 or have a second account; the light CPU path (Gemma 3 270M) cannot do two-hop and traces "the capital of the state of Texas" instead. At 2:01, one-minute warning.</aside>
+</section>
+
+<section class="slide" id="p2-limits" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">Block 4 · Trace · limits</p>
+  <h2>Attribution graphs explain one prompt, partially</h2>
+  <div class="grid-2 p2-tight">
+    <div class="card"><h3>Local</h3><p class="small">One prompt. A different phrasing can use a different path.</p></div>
+    <div class="card"><h3>Incomplete</h3><p class="small">Error nodes carry computation nobody has explained.</p></div>
+    <div class="card"><h3>Attention partly hidden</h3><p class="small">Patterns are frozen, so why a head attends where it does is not in the graph.</p></div>
+    <div class="card"><h3>Needs validation</h3><p class="small">Feature labels are interpretations. Test them by intervention.</p></div>
+  </div>
+  <aside class="notes"><b>2:03–2:05.</b> Anthropic themselves stress that the method gives satisfying insight only on part of the prompts they try; do not quote a number. Every point here applies to Block 5: an audit needs explanations we can test.</aside>
+</section>
+
+<section class="slide" id="p2-recap" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">Blocks 2 – 4 · recap</p>
+  <h2>Each method answers one question and leaves one open</h2>
+  <table class="t">
+    <tr><th>Method</th><th>Answers</th><th>Leaves open</th></tr>
+    <tr><td class="c-resid"><b>Patching</b></td><td>where the model relies on information</td><td>what that information is</td></tr>
+    <tr><td class="c-mlp"><b>SAEs · probes · steering</b></td><td>which units are present; can we detect them</td><td>whether they are <i>the</i> variables</td></tr>
+    <tr><td class="c-attn"><b>Attribution graphs</b></td><td>how units combine on one prompt</td><td>whether it generalizes</td></tr>
+  </table>
+  <p class="callout" data-step="1">The common rule: an explanation counts when an intervention can test it.</p>
+  <aside class="notes"><b>2:05–2:08.</b> Recap in one breath per row. Then the rule: intervention is the test. This is exactly what Víctor will apply to an LLM judge.</aside>
+</section>
+
+<section class="slide handoff-slide" id="p2-handoff" data-presenter="salvador" data-block="Block 4 · Trace">
+  <p class="kicker">Handoff · 2:10</p>
+  <p class="question">A plain probe can match an SAE feature, and patching tests what a model relies on.</p>
+  <p class="small">Next: Víctor Macías-Terrón · Block 5 · Audit</p>
+  <aside class="notes"><b>2:08–2:10.</b> Read the line verbatim, then introduce Víctor: he will use exactly these two tools, a probe and patching, to ask whether we can trust an LLM judge.</aside>
+</section>
+
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  function E(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const seg = (p, a, b) => ease(clamp((p - a) / (b - a)));      // eased sub-interval of progress
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function hex(h) { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); }
+  function mix(a, b, t) { const A = hex(a), B = hex(b); return 'rgb(' + A.map((v, i) => Math.round(lerp(v, B[i], clamp(t)))).join(',') + ')'; }
+  const C = { resid: '#0E7C74', residSoft: '#D3EEEA', attn: '#D9480F', attnSoft: '#FBE3D6', mlp: '#5F3DC4', mlpSoft: '#E5DEFA',
+    f1: '#1C6FC2', f2: '#E8590C', f3: '#2B8A3E', f4: '#C2255C', f5: '#E09F00', bad: '#D6332F', badSoft: '#FADBDA',
+    good: '#2B8A3E', ink: '#0C198D', ink2: '#3A4170', muted: '#6B7090', rule: '#D6D2C8', bg: '#F2F0EC', bg2: '#EEEAE0', card: '#FFFFFF', err: '#A9AEB8', slate: '#8C93A0' };
+  function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+
+  /* Step-driven animation helper.
+     render(step, p) must be a pure function of (step, progress p in [0,1]) and fully set the frame,
+     so entering at any step (forwards or backwards) shows a correct final frame. */
+  function stepAnim(id, init, render, dur) {
+    let ready = false, last = -1, cancel = null;
+    Deck.on(id, 'enter', (s) => { if (!ready) { init(s); ready = true; } last = -1; });
+    Deck.on(id, 'step', (s, step) => {
+      if (!ready) { init(s); ready = true; }
+      if (cancel) { cancel(); cancel = null; }
+      const animate = !Deck.reducedMotion && last >= 0 && step === last + 1;
+      last = step;
+      if (!animate) { render(step, 1); return; }
+      const d = (typeof dur === 'function' ? dur(step) : dur) || 1.2;
+      render(step, 0);
+      cancel = Deck.raf(s, t => { const p = Math.min(1, t / d); render(step, p); return p < 1; });
+    });
+  }
+
+  /* ---------- IOI patching data (computed; see scratch/p2/ioi_patching_nb2.py) ----------
+     Exactly NB2's setup (notebooks/src/build_nb2.py): GPT-2 small, TransformerLens 3.9, CPU, 8 prompts
+     (4 name pairs x both orders), template "When {A} and {B} went to the store, {S} gave a drink to".
+     Corrupted = the repeated name S2 changed, so only position 10 (S2) differs. Metric: mean logit(IO) - logit(S)
+     at the last position, normalized: 0 = corrupted run, 1 = clean run. LD_clean = +3.02, LD_corr = -4.61.
+     blocks.{L}.hook_resid_pre patched clean -> corrupted at (L, pos). BOS column omitted (always 0).
+     Token labels are those of the first clean prompt (Mary/John). */
+  const TOK = ["When", " Mary", " and", " John", " went", " to", " the", " store", ",", " John", " gave", " a", " drink", " to"];
+  const TOK_CORR = ["When", " Mary", " and", " John", " went", " to", " the", " store", ",", " Mary", " gave", " a", " drink", " to"];
+  const HM = [[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.99,0.01,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.98,0.04,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.98,0.04,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.95,0.05,0.0,0.0,0.03],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.75,0.03,0.0,0.0,0.39],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.03,0.0,0.0,0.99],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.01,0.02,0.0,0.0,1.02],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.01,0.0,0.0,0.98]];
+  function hmColor(v) { return v >= 0 ? mix(C.bg2, C.resid, clamp(v)) : mix(C.bg2, C.bad, clamp(-v / 0.45)); }
+  function fmt(v) { return (v < 0 ? '−' : '') + Math.abs(v).toFixed(2); }
+
+  /* ======================= A4 · transplant ======================= */
+  (function () {
+    const svg = document.getElementById('p2-tp-svg');
+    const NL = 12, NP = 14, CW = 36, CH = 22;
+    const GX = [70, 864], GY = 158;   // grid origins (top-left), layer 11 on top
+    const CLEANC = '#3F5A80';  // schematic clean activations: blue-grey (teal is reserved for 'restored')
+    const PL = 9, PP = 13;            // patched cell: layer 9, final " to" (computed 0.99)
+    let cells = [[], []], meters = [], hdr = [], sel = [], fly, arc, arcLbl, legend, sweepLbl, recompute = [];
+    const r = rng(7), base = [[], []];
+    for (let g = 0; g < 2; g++) for (let l = 0; l < NL; l++) { base[g][l] = []; for (let p = 0; p < NP; p++) base[g][l][p] = 0.28 + 0.55 * r(); }
+    const cx = (g, p) => GX[g] + p * CW, cy = l => GY + (NL - 1 - l) * CH;
+
+    function init() {
+      // headers
+      hdr[0] = E('text', { x: GX[0], y: 30, 'font-size': 26, 'font-weight': 700 }, svg, 'Clean run');
+      hdr[1] = E('text', { x: GX[1], y: 30, 'font-size': 26, 'font-weight': 700 }, svg, 'Corrupted run');
+      E('text', { x: GX[0] + 140, y: 30, 'font-size': 22, fill: C.muted }, svg, 'cells: activations (schematic)');
+      for (let g = 0; g < 2; g++) {
+        // meter: 0 (John) .. 1 (Mary)
+        const m = {}; const mx = GX[g], my = 86, mw = NP * CW;
+        m.g = E('g', {}, svg);
+        E('line', { x1: mx, y1: my, x2: mx + mw, y2: my, stroke: C.rule, 'stroke-width': 8, 'stroke-linecap': 'round' }, m.g);
+        m.fill = E('line', { x1: mx, y1: my, x2: mx, y2: my, stroke: C.resid, 'stroke-width': 8, 'stroke-linecap': 'round' }, m.g);
+        E('text', { x: mx, y: my + 34, 'font-size': 22, class: 'muted' }, m.g, '0 · John');
+        E('text', { x: mx + mw, y: my + 34, 'font-size': 22, class: 'muted', 'text-anchor': 'end' }, m.g, 'Mary · 1');
+        m.dot = E('circle', { cx: mx, cy: my, r: 13, fill: C.ink }, m.g);
+        m.val = E('text', { x: mx, y: my - 20, 'font-size': 24, 'font-weight': 700, 'text-anchor': 'middle', class: 'mono' }, m.g, '');
+        m.x = mx; m.w = mw; meters[g] = m;
+        // cells
+        for (let l = 0; l < NL; l++) { cells[g][l] = []; for (let p = 0; p < NP; p++) cells[g][l][p] = E('rect', { x: cx(g, p) + 1.5, y: cy(l) + 1.5, width: CW - 3, height: CH - 3, rx: 3, fill: C.bg2 }, svg); }
+        // token labels (rotated)
+        const toks = g ? TOK_CORR : TOK;
+        toks.forEach((t, p) => {
+          const swapped = (p === 9);
+          const tx = cx(g, p) + CW / 2 + 6, ty = GY + NL * CH + 12;
+          E('text', { x: tx, y: ty, 'font-size': 22, 'text-anchor': 'end', transform: `rotate(-50 ${tx} ${ty})`, class: 'mono',
+            fill: swapped ? (g ? C.bad : CLEANC) : C.ink2, 'font-weight': swapped ? 700 : 400 }, svg, t.trim() || t);
+        });
+      }
+      // layer axis between grids? left of left grid, and left of right grid
+      for (let g = 0; g < 2; g++) for (let l = 0; l < NL; l += 2) E('text', { x: GX[g] - 10, y: cy(l) + CH / 2 + 7, 'font-size': 22, 'text-anchor': 'end', class: 'muted' }, svg, 'L' + l);
+      E('text', { x: GX[0] - 10, y: GY - 10, 'font-size': 22, 'text-anchor': 'end', class: 'muted' }, svg, '');
+      // selection outlines
+      for (let g = 0; g < 2; g++) sel[g] = E('rect', { x: 0, y: 0, width: CW + 2, height: CH + 2, rx: 4, fill: 'none', stroke: C.ink, 'stroke-width': 3.5, opacity: 0 }, svg);
+      arc = E('path', { d: '', fill: 'none', stroke: C.ink, 'stroke-width': 2.5, 'stroke-dasharray': '7 7', opacity: 0 }, svg);
+      fly = E('rect', { width: CW - 3, height: CH - 3, rx: 3, fill: C.resid, stroke: C.ink, 'stroke-width': 2, opacity: 0 }, svg);
+      arcLbl = E('text', { x: 716, y: 290, 'font-size': 24, 'text-anchor': 'middle', 'font-weight': 600, opacity: 0 }, svg);
+      E('tspan', { x: 716, dy: 0 }, arcLbl, 'copy one');
+      E('tspan', { x: 716, dy: 30 }, arcLbl, 'activation');
+      E('tspan', { x: 716, dy: 30, fill: C.ink2, 'font-weight': 400, 'font-size': 22 }, arcLbl, 'layer 9,');
+      E('tspan', { x: 716, dy: 28, fill: C.ink2, 'font-weight': 400, 'font-size': 22 }, arcLbl, 'final token');
+      sweepLbl = E('text', { x: 716, y: 250, 'font-size': 24, 'text-anchor': 'middle', 'font-weight': 600, opacity: 0 }, svg);
+      E('tspan', { x: 716, dy: 0 }, sweepLbl, 'repeat for');
+      E('tspan', { x: 716, dy: 30 }, sweepLbl, 'every layer');
+      E('tspan', { x: 716, dy: 30 }, sweepLbl, '× position');
+      E('tspan', { x: 716, dy: 30, fill: C.muted, 'font-weight': 400, 'font-size': 22 }, sweepLbl, '180 runs');
+      E('tspan', { x: 716, dy: 28, fill: C.muted, 'font-weight': 400, 'font-size': 22 }, sweepLbl, '(BOS hidden)');
+      // legend (step 4)
+      legend = E('g', { opacity: 0 }, svg);
+      const lx = 716 - 78, ly = 420;
+      E('text', { x: 716, y: ly - 14, 'font-size': 22, 'text-anchor': 'middle', class: 'muted' }, legend, 'restored');
+      [-0.3, 0, 0.25, 0.5, 0.75, 1].forEach((v, i) => E('rect', { x: lx + i * 26, y: ly, width: 25, height: 22, fill: hmColor(v), rx: 2 }, legend));
+      E('text', { x: lx, y: ly + 48, 'font-size': 22, class: 'muted' }, legend, '−.3');
+      E('text', { x: lx + 156, y: ly + 48, 'font-size': 22, class: 'muted', 'text-anchor': 'end' }, legend, '1');
+    }
+    function setMeter(g, v, show) {
+      const m = meters[g]; const x = m.x + clamp(v, 0, 1.1) * m.w;
+      m.g.setAttribute('opacity', show); m.fill.setAttribute('x2', x); m.dot.setAttribute('cx', x);
+      const right = clamp(v, 0, 1.1) > 0.6;
+      m.val.setAttribute('x', right ? m.x + m.w + 14 : x); m.val.setAttribute('text-anchor', right ? 'end' : 'middle'); m.val.textContent = v.toFixed(2);
+    }
+    function placeSel(g, l, p, o) { sel[g].setAttribute('x', cx(g, p) - 1); sel[g].setAttribute('y', cy(l) - 1); sel[g].setAttribute('opacity', o); }
+    function render(step, p) {
+      // forward pass fill (step >= 1): rows fill bottom-up
+      const fp = step >= 2 ? 1 : step === 1 ? p : 0;
+      for (let g = 0; g < 2; g++) for (let l = 0; l < NL; l++) for (let q = 0; q < NP; q++) {
+        const on = clamp(fp * (NL + 2) - l);
+        const col = g === 0 ? mix(C.bg2, CLEANC, base[g][l][q] * on) : mix(C.bg2, C.slate, base[g][l][q] * on);
+        cells[g][l][q].setAttribute('fill', col);
+      }
+      const outOn = step >= 1 ? (step === 1 ? seg(p, .85, 1) : 1) : 0;
+      setMeter(0, 1, outOn);
+      // corrupted meter value
+      let cv = 0;
+      if (step === 3) cv = HM[PL][PP] * seg(p, .25, .9);
+      // transplant
+      const tp = step === 2 ? p : step >= 3 ? 1 : 0;
+      const x0 = cx(0, PP) + 1.5, x1 = cx(1, PP) + 1.5, y0 = cy(PL) + 1.5;
+      const ctrlY = 108;
+      arc.setAttribute('d', `M${x0 + CW / 2},${y0} C${x0 + CW / 2},${ctrlY} ${x1 + CW / 2},${ctrlY} ${x1 + CW / 2},${y0}`);
+      const showTP = step >= 2 && step <= 3;
+      placeSel(0, PL, PP, showTP ? 1 : 0); placeSel(1, PL, PP, showTP ? seg(tp, .9, 1) : 0);
+      arc.setAttribute('opacity', showTP ? .55 * seg(tp, 0, .2) : 0);
+      arcLbl.setAttribute('opacity', showTP ? seg(tp, 0, .3) : 0);
+      if (step === 2 && p > 0.05 && p < 1) {
+        const t = seg(p, .1, .9);
+        // cubic bezier position
+        const bx = (u, a, b, c, d) => Math.pow(1 - u, 3) * a + 3 * Math.pow(1 - u, 2) * u * b + 3 * (1 - u) * u * u * c + u * u * u * d;
+        const X = bx(t, x0, x0, x1, x1), Y = bx(t, y0, ctrlY - 18, ctrlY - 18, y0);
+        fly.setAttribute('x', X); fly.setAttribute('y', Y); fly.setAttribute('opacity', 1);
+        fly.setAttribute('fill', mix(C.bg2, CLEANC, base[0][PL][PP]));
+      } else fly.setAttribute('opacity', 0);
+      if (step >= 2 && step <= 3 && tp >= 0.9) cells[1][PL][PP].setAttribute('fill', mix(C.bg2, CLEANC, base[0][PL][PP]));
+      // step 3: downstream recompute at final position (layer 11) shifts toward clean
+      if (step === 3) {
+        const k = seg(p, 0, .5);
+        for (let l2 = PL + 1; l2 < 12; l2++) cells[1][l2][PP].setAttribute('fill', k > .5 ? mix(C.bg2, CLEANC, base[0][l2][PP] * .85 * k) : mix(C.bg2, C.slate, base[1][l2][PP] * (1 - k)));
+      }
+      // step 4: sweep -> heatmap
+      const showSweep = step >= 4;
+      let k = -1;
+      if (showSweep) {
+        const n = NL * NP; const kk = Math.floor(clamp(p) * n * 1.0001);
+        k = Math.min(n - 1, kk);
+        for (let l = 0; l < NL; l++) for (let q = 0; q < NP; q++) {
+          const idx = l * NP + q;
+          if (idx <= k || p >= 1) cells[1][l][q].setAttribute('fill', hmColor(HM[l][q]));
+        }
+        const l = Math.floor(k / NP), q = k % NP;
+        if (p < 1) { placeSel(0, l, q, 1); placeSel(1, l, q, 1); cv = HM[l][q]; }
+        else { placeSel(0, 0, 0, 0); placeSel(1, 0, 0, 0); cv = HM[11][13]; }
+        hdr[1].textContent = 'Corrupted run: patching map';
+      } else hdr[1].textContent = 'Corrupted run';
+      setMeter(1, cv, outOn);
+      if (showSweep) meters[1].val.textContent = (p < 1 ? fmt(cv) : fmt(cv) + ' (L11)');
+      if (step === 3 || (step === 2 && p >= 1)) {}
+      sweepLbl.setAttribute('opacity', showSweep ? 1 : 0);
+      legend.setAttribute('opacity', showSweep ? seg(p, .0, .15) : 0);
+      if (step === 3) meters[1].val.textContent = cv.toFixed(2) + (p >= 1 ? ' restored' : '');
+    }
+    stepAnim('p2-transplant', init, render, s => (s === 1 ? 2.2 : s === 2 ? 1.6 : s === 3 ? 1.6 : 7));
+  })();
+
+  /* ======================= metric number line ======================= */
+  (function () {
+    const svg = document.getElementById('p2-metric-svg');
+    const x0 = 120, x1 = 1290, y = 90;
+    const X = v => lerp(x0, x1, (v + 5) / 9);
+    E('line', { x1: x0 - 40, y1: y, x2: x1 + 40, y2: y, stroke: C.rule, 'stroke-width': 4 }, svg);
+    for (let v = -5; v <= 4; v++) { E('line', { x1: X(v), y1: y - 8, x2: X(v), y2: y + 8, stroke: C.muted, 'stroke-width': 2 }, svg); E('text', { x: X(v), y: y + 36, 'font-size': 22, 'text-anchor': 'middle', class: 'muted' }, svg, (v < 0 ? '−' : '') + Math.abs(v)); }
+    E('text', { x: x1 + 50, y: y + 8, 'font-size': 22, class: 'muted' }, svg, 'LD');
+    const pts = [[-4.61, C.slate, 'corrupted', 'restored = 0'], [3.02, C.resid, 'clean', 'restored = 1']];
+    pts.forEach(([v, c, a, b]) => {
+      E('circle', { cx: X(v), cy: y, r: 14, fill: c }, svg);
+      E('text', { x: X(v), y: y - 50, 'font-size': 24, 'font-weight': 700, 'text-anchor': 'middle' }, svg, a + ' ' + (v < 0 ? '−' : '') + Math.abs(v).toFixed(2));
+      E('text', { x: X(v), y: y - 24, 'font-size': 22, 'text-anchor': 'middle', class: 'ink2' }, svg, b);
+    });
+    E('path', { d: `M${X(-4.2)},${y + 60} L${X(2.6)},${y + 60}`, stroke: C.resid, 'stroke-width': 3, fill: 'none', 'marker-end': 'url(#p2-arrowhead)' }, svg);
+    const defs = E('defs', {}, svg);
+    const mk = E('marker', { id: 'p2-arrowhead', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, defs);
+    E('path', { d: 'M0,0 L10,5 L0,10 z', fill: C.resid }, mk);
+    E('text', { x: X(-0.8), y: y + 92, 'font-size': 22, 'text-anchor': 'middle', class: 'c-resid', fill: C.resid }, svg, 'a good patch moves the corrupted run toward clean');
+  })();
+
+  /* ======================= IOI teaser diagram ======================= */
+  (function () {
+    const svg = document.getElementById('p2-ioi-svg');
+    const words = ['When', 'Mary', 'and', 'John', 'went to the store,', 'John', 'gave a drink', 'to'];
+    const CHW = 18, GAP = 26, yT = 400;
+    const xs = [], ws = []; let xx = 40;
+    words.forEach((w, i) => { xs[i] = xx; ws[i] = w.length * CHW; xx += ws[i] + GAP; });
+    const roles = { 1: 'IO', 3: 'S1', 5: 'S2', 7: 'END' };
+    words.forEach((w, i) => {
+      E('text', { x: xs[i], y: yT, 'font-size': 30, class: 'mono', 'font-weight': roles[i] ? 700 : 400, fill: i === 1 ? C.resid : (roles[i] ? C.ink : C.muted) }, svg, w);
+      if (roles[i]) E('text', { x: xs[i] + ws[i] / 2, y: yT + 38, 'font-size': 24, 'text-anchor': 'middle', fill: C.muted, 'font-weight': 600 }, svg, roles[i]);
+    });
+    const cxw = i => xs[i] + ws[i] / 2;
+    E('text', { x: xx + 10, y: yT, 'font-size': 30, 'font-weight': 700, fill: C.resid }, svg, '→ Mary');
+    function arcG(step, from, to, h, lines, lx, ly, anchor) {
+      const g = E('g', { 'data-step': step }, svg);
+      const a = cxw(from), b = cxw(to), y = yT - 40;
+      E('path', { d: `M${a},${y} C${a},${y - h} ${b},${y - h} ${b},${y}`, fill: 'none', stroke: C.attn, 'stroke-width': 4 }, g);
+      E('circle', { cx: b, cy: y, r: 8, fill: C.attn }, g);
+      E('circle', { cx: a, cy: y, r: 8, fill: '#fff', stroke: C.attn, 'stroke-width': 3 }, g);
+      lines.forEach((t, i) => E('text', { x: lx, y: ly + i * 30, 'font-size': i ? 25 : 27, 'font-weight': i ? 400 : 700, fill: i ? C.ink2 : C.attn, 'text-anchor': anchor || 'middle' }, g, t));
+      return g;
+    }
+    arcG(1, 5, 3, 120, ['1 · Duplicate-token', '"John" appeared before'], (cxw(3) + cxw(5)) / 2, 232);
+    arcG(2, 7, 5, 200, ['2 · S-inhibition', 'L7H3 · L7H9 · L8H6 · L8H10', 'carry "not John" to END'], 1090, 150, 'start');
+    arcG(3, 7, 1, 340, ['3 · Name movers', 'L9H9 · L9H6 · L10H0 copy "Mary"'], (cxw(1) + cxw(7)) / 2, 66);
+    E('text', { x: 1404, y: 466, 'text-anchor': 'end', 'font-size': 24, fill: C.muted }, svg, 'arc: attention from ○ (reading position) to ● (attended token)');
+  })();
+
+  /* ======================= heatmap (computed) ======================= */
+  (function () {
+    const svg = document.getElementById('p2-hm-svg');
+    const NL = 12, NP = 14, CW = 60, CH = 33, X0 = 90, Y0 = 18;
+    const cx = p => X0 + p * CW, cy = l => Y0 + (NL - 1 - l) * CH;
+    for (let l = 0; l < NL; l++) for (let p = 0; p < NP; p++) {
+      const v = HM[l][p];
+      E('rect', { x: cx(p) + 1, y: cy(l) + 1, width: CW - 2, height: CH - 2, fill: hmColor(v) }, svg);
+      if (Math.abs(v) >= 0.1) E('text', { x: cx(p) + CW / 2, y: cy(l) + CH / 2 + 7, 'font-size': 24, 'text-anchor': 'middle', fill: Math.abs(v) > 0.55 ? '#fff' : C.ink, 'font-variant-numeric': 'tabular-nums' }, svg, fmt(v).replace(/^(−?)0\./, '$1.'));
+    }
+    for (let l = 0; l < NL; l++) E('text', { x: X0 - 12, y: cy(l) + CH / 2 + 8, 'font-size': 24, 'text-anchor': 'end', class: 'muted' }, svg, l);
+    E('text', { x: 24, y: Y0 + NL * CH / 2, 'font-size': 24, 'text-anchor': 'middle', class: 'muted', transform: `rotate(-90 24 ${Y0 + NL * CH / 2})` }, svg, 'layer');
+    TOK.forEach((t, p) => {
+      const tx = cx(p) + CW / 2 + 8, ty = Y0 + NL * CH + 14;
+      const key = p === 9 || p === 13;
+      E('text', { x: tx, y: ty, 'font-size': 24, 'text-anchor': 'end', class: 'mono', transform: `rotate(-45 ${tx} ${ty})`, fill: key ? C.ink : C.ink2, 'font-weight': key ? 700 : 400 }, svg, t.trim() || t);
+    });
+    // legend
+    const lx = X0 + NP * CW + 40, ly = Y0 + 4;
+    E('text', { x: lx, y: ly + 18, 'font-size': 24, 'font-weight': 600 }, svg, 'restored (0 = corrupted, 1 = clean)');
+    [-0.3, 0, 0.25, 0.5, 0.75, 1].forEach((v, i) => {
+      E('rect', { x: lx + i * 44, y: ly + 32, width: 42, height: 24, fill: hmColor(v) }, svg);
+      E('text', { x: lx + i * 44 + 21, y: ly + 80, 'font-size': 24, 'text-anchor': 'middle', class: 'muted' }, svg, i === 0 ? '−.3' : i === 5 ? '1' : '');
+    });
+    // annotations
+    const box = (step, p, l0, l1, col) => E('rect', { 'data-step': step, x: cx(p) - 2, y: cy(l1) - 2, width: CW + 4, height: (l1 - l0 + 1) * CH + 4, fill: 'none', stroke: col, 'stroke-width': 4, rx: 4 }, svg);
+    box(1, 9, 0, 7, C.ink);
+    box(2, 9, 8, 9, C.attn); box(2, 13, 7, 8, C.attn);
+    box(3, 13, 9, 11, C.resid);
+    const note = (step, y, title, body, col) => {
+      const g = E('g', { 'data-step': step }, svg);
+      E('circle', { cx: lx + 12, cy: y - 8, r: 15, fill: col }, g);
+      E('text', { x: lx + 12, y: y - 1, 'font-size': 24, 'font-weight': 700, 'text-anchor': 'middle', fill: '#fff' }, g, step);
+      E('text', { x: lx + 40, y, 'font-size': 24, 'font-weight': 700 }, g, title);
+      body.forEach((b, i) => E('text', { x: lx + 40, y: y + 31 * (i + 1), 'font-size': 24, class: 'ink2' }, g, b));
+    };
+    note(1, 158, 'Early: all at S2', ['the only token that differs', 'restores ≈ 1 up to L7'], C.ink);
+    note(2, 268, 'Handover in L7–8', ['S2: 0.95 → 0.75 → 0.05', 'END: 0.03 → 0.39 → 0.99'], C.attn);
+    note(3, 378, 'Late: all at the final token', ['≈ 1 from layer 9 on', 'earlier tokens: 0 (identical)'], C.resid);
+    E('text', { x: lx, y: 506, 'font-size': 24, class: 'muted' }, svg, 'GPT-2 small · resid_pre');
+    E('text', { x: lx, y: 534, 'font-size': 24, class: 'muted' }, svg, 'mean over NB2’s 8 prompts');
+  })();
+
+  /* ======================= head ranking (computed) ======================= */
+  (function () {
+    const svg = document.getElementById('p2-heads-svg');
+    // patching.get_act_patch_attn_head_out_all_pos on NB2's 8 prompts; values from scratch/p2/ioi_patching_nb2.json
+    const H = [['L5H5', .446, 'induction'], ['L8H6', .419, 'S-inhibition'], ['L8H10', .343, 'S-inhibition'], ['L9H9', .321, 'name mover'],
+      ['L7H9', .231, 'S-inhibition'], ['L6H9', .197, 'induction'], ['L3H0', .153, 'duplicate-token'], ['L7H3', .125, 'S-inhibition'],
+      ['L10H0', .095, 'name mover'], ['L10H10', .091, ''], ['L9H6', .028, 'name mover (weak alone)'],
+      null, ['L11H10', -.216, 'negative name mover'], ['L10H7', -.513, 'negative name mover']];
+    const X0 = 640, S = 1000, y0 = 2, RH = 27.5;
+    E('line', { x1: X0, y1: y0 - 6, x2: X0, y2: y0 + H.length * RH, stroke: C.ink, 'stroke-width': 2 }, svg);
+    H.forEach((row, i) => {
+      const y = y0 + i * RH;
+      if (!row) { E('text', { x: X0 + 14, y: y + RH / 2 + 8, 'font-size': 22, fill: C.muted }, svg, '⋯ 131 other heads, all between −0.08 and 0.05'); return; }
+      const [n, v, role] = row;
+      const col = v < 0 ? C.bad : role ? C.attn : C.slate;
+      const w = Math.abs(v) * S;
+      E('rect', { x: v >= 0 ? X0 : X0 - w, y: y + 4, width: w, height: RH - 8, fill: col, rx: 3 }, svg);
+      const ty = y + RH / 2 + 8;
+      if (v >= 0) {
+        E('text', { x: X0 - 14, y: ty, 'font-size': 24, 'text-anchor': 'end', class: 'mono', 'font-weight': 600 }, svg, n);
+        E('text', { x: X0 + w + 12, y: ty, 'font-size': 22, class: 'mono' }, svg, fmt(v));
+        if (role) E('text', { x: X0 + w + 84, y: ty, 'font-size': 22, fill: col, 'font-weight': 600 }, svg, role);
+      } else {
+        E('text', { x: X0 + 14, y: ty, 'font-size': 24, class: 'mono', 'font-weight': 600 }, svg, n);
+        E('text', { x: X0 + 140, y: ty, 'font-size': 22, class: 'mono' }, svg, fmt(v));
+        if (role) E('text', { x: X0 + 232, y: ty, 'font-size': 22, fill: col, 'font-weight': 600 }, svg, role);
+      }
+    });
+    E('text', { x: X0, y: y0 + H.length * RH + 26, 'font-size': 22, class: 'muted', 'text-anchor': 'middle' }, svg, '0');
+    E('text', { x: X0 + 0.25 * S, y: y0 + H.length * RH + 26, 'font-size': 22, class: 'muted', 'text-anchor': 'middle' }, svg, 'restored by one head →');
+  })();
+
+  /* ======================= polysemantic neuron (illustrative) ======================= */
+  (function () {
+    const svg = document.getElementById('p2-poly-svg');
+    // a neuron node on the left, fan-out to four contexts with activation bars
+    E('circle', { cx: 160, cy: 230, r: 62, fill: C.mlpSoft, stroke: C.mlp, 'stroke-width': 4 }, svg);
+    E('text', { x: 160, y: 225, 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle', fill: C.mlp }, svg, 'one');
+    E('text', { x: 160, y: 255, 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle', fill: C.mlp }, svg, 'neuron');
+    const ctx = [['academic citation', '… as shown by Smith et al. [12] …', .92], ['English dialogue', '“Where were you?” she asked.', .81],
+      ['HTTP request', 'GET /index.html HTTP/1.1', .77], ['Korean text', '오늘 날씨가 좋네요', .70]];
+    ctx.forEach(([k, ex, a], i) => {
+      const y = 48 + i * 112;
+      E('path', { d: `M222,230 C330,230 330,${y + 26} 420,${y + 26}`, fill: 'none', stroke: C.mlp, 'stroke-width': 2 + a * 4, opacity: .5 }, svg);
+      E('text', { x: 440, y: y + 14, 'font-size': 26, 'font-weight': 700 }, svg, k);
+      E('text', { x: 440, y: y + 50, 'font-size': 24, class: 'mono ink2' }, svg, ex);
+      E('rect', { x: 1060, y: y + 4, width: 300, height: 34, fill: C.bg2, rx: 4 }, svg);
+      E('rect', { x: 1060, y: y + 4, width: 300 * a, height: 34, fill: C.mlp, rx: 4 }, svg);
+      E('text', { x: 1060 + 300 * a - 10, y: y + 30, 'font-size': 22, 'text-anchor': 'end', fill: '#fff', class: 'mono' }, svg, a.toFixed(2));
+    });
+    E('text', { x: 1210, y: 30, 'font-size': 22, 'text-anchor': 'middle', class: 'muted' }, svg, 'activation');
+  })();
+
+  /* ======================= A5 · toy superposition ======================= */
+  (function () {
+    const svg = document.getElementById('p2-sp-svg');
+    const O = [290, 300], R = 215;
+    const cols = [C.f1, C.f2, C.f3, C.f4, C.f5];
+    const pentA = i => (90 - i * 72) * Math.PI / 180;
+    // dense solution: f1 up, f2 right, others length 0
+    const denseA = [90, 0, -144, -216, -288].map(d => d * Math.PI / 180);
+    let arrows = [], heads = [], lbls = [], bars = [], barVals = [], barNeg = [], title, sub, spMarker, spLbl, take, reluNote, dropped;
+    function init() {
+      E('circle', { cx: O[0], cy: O[1], r: R + 20, fill: 'none', stroke: C.rule, 'stroke-width': 2, 'stroke-dasharray': '4 8' }, svg);
+      E('line', { x1: O[0] - R - 30, y1: O[1], x2: O[0] + R + 30, y2: O[1], stroke: C.rule, 'stroke-width': 2 }, svg);
+      E('line', { x1: O[0], y1: O[1] - R - 30, x2: O[0], y2: O[1] + R + 30, stroke: C.rule, 'stroke-width': 2 }, svg);
+      E('text', { x: O[0], y: 568, 'font-size': 25, 'text-anchor': 'middle', class: 'muted' }, svg, 'hidden space: 2 dimensions');
+      for (let i = 0; i < 5; i++) {
+        arrows[i] = E('line', { x1: O[0], y1: O[1], x2: O[0], y2: O[1], stroke: cols[i], 'stroke-width': 7, 'stroke-linecap': 'round' }, svg);
+        heads[i] = E('circle', { r: 11, fill: cols[i] }, svg);
+        lbls[i] = E('text', { 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle', fill: cols[i] }, svg, 'f' + (i + 1));
+      }
+      // right panel
+      const bx = 820, by = 150;
+      title = E('text', { x: 650, y: 40, 'font-size': 30, 'font-weight': 700 }, svg, '');
+      sub = E('text', { x: 650, y: 78, 'font-size': 26, class: 'ink2' }, svg, '');
+      E('text', { x: 650, y: by - 18, 'font-size': 25, class: 'muted' }, svg, 'turn on f1 only; read each direction:');
+      E('line', { x1: bx + 220, y1: by, x2: bx + 220, y2: by + 5 * 52 - 8, stroke: C.ink, 'stroke-width': 2 }, svg);
+      for (let i = 0; i < 5; i++) {
+        const y = by + i * 52;
+        E('text', { x: 650, y: y + 30, 'font-size': 26, 'font-weight': 700, fill: cols[i] }, svg, 'f' + (i + 1));
+        bars[i] = E('rect', { x: bx + 220, y: y + 8, width: 0, height: 30, fill: cols[i], rx: 3 }, svg);
+        barVals[i] = E('text', { x: bx + 230, y: y + 31, 'font-size': 25, class: 'mono' }, svg, '');
+      }
+      reluNote = E('text', { x: bx + 220, y: by + 5 * 52 + 22, 'font-size': 25, class: 'muted', 'text-anchor': 'middle' }, svg, '');
+      // sparsity meter
+      const my = 500, mx0 = 900, mx1 = 1300;
+      E('text', { x: 650, y: my + 8, 'font-size': 25, class: 'muted' }, svg, 'feature sparsity');
+      E('line', { x1: mx0, y1: my, x2: mx1, y2: my, stroke: C.rule, 'stroke-width': 8, 'stroke-linecap': 'round' }, svg);
+      E('text', { x: mx0, y: my + 36, 'font-size': 25, class: 'muted', 'text-anchor': 'middle' }, svg, 'dense');
+      E('text', { x: mx1, y: my + 36, 'font-size': 25, class: 'muted', 'text-anchor': 'middle' }, svg, 'sparse');
+      spMarker = E('circle', { cx: mx0, cy: my, r: 13, fill: C.ink }, svg);
+      spMarker._x = [mx0, mx1];
+      take = E('g', { opacity: 0 }, svg);
+      E('rect', { x: 640, y: 96, width: 768, height: 370, fill: C.bg }, take);
+      E('rect', { x: 650, y: 150, width: 740, height: 250, rx: 14, fill: C.card, stroke: C.ink, 'stroke-width': 2 }, take);
+      E('text', { x: 680, y: 210, 'font-size': 34, 'font-weight': 700 }, take, '5 features in 2 dimensions');
+      E('text', { x: 680, y: 262, 'font-size': 28, class: 'ink2' }, take, 'More features than dimensions,');
+      E('text', { x: 680, y: 300, 'font-size': 28, class: 'ink2' }, take, 'paid for with interference.');
+      E('text', { x: 680, y: 360, 'font-size': 26, fill: C.mlp, 'font-weight': 600 }, take, '→ a neuron mixes several features');
+    }
+    function frame(mixDense, len, sparsity, readMode) {
+      // mixDense: 0 = pentagon, 1 = dense solution. len: global arrow growth.
+      const W = [];
+      for (let i = 0; i < 5; i++) {
+        let a = lerp(pentA(i), denseA[i], mixDense);
+        const L = (i < 2 ? 1 : 1 - mixDense) * len;
+        if (i === 1) a = lerp(pentA(1), 0, mixDense);
+        W[i] = [Math.cos(a) * L, Math.sin(a) * L];
+        const x = O[0] + W[i][0] * R, y = O[1] - W[i][1] * R;
+        arrows[i].setAttribute('x2', x); arrows[i].setAttribute('y2', y);
+        heads[i].setAttribute('cx', x); heads[i].setAttribute('cy', y);
+        heads[i].setAttribute('opacity', L > 0.04 ? 1 : 0);
+        const lx = O[0] + Math.cos(a) * (L * R + 34), ly = O[1] - Math.sin(a) * (L * R + 34) + 9;
+        lbls[i].setAttribute('x', lx); lbls[i].setAttribute('y', ly); lbls[i].setAttribute('opacity', clamp(L * 3));
+      }
+      // readouts r_i = w_i . w_1
+      for (let i = 0; i < 5; i++) {
+        let v = W[i][0] * W[0][0] + W[i][1] * W[0][1];
+        const raw = v;
+        if (readMode === 'relu') v = Math.max(0, v);
+        const w = Math.abs(v) * 200;
+        bars[i].setAttribute('x', v >= 0 ? 1040 : 1040 - w); bars[i].setAttribute('width', w);
+        bars[i].setAttribute('opacity', i === 0 ? 1 : .85);
+        const dead = i >= 2 && mixDense > .98;
+        barVals[i].setAttribute('x', v >= 0 ? 1040 + w + 10 : 1040 + 10);
+        barVals[i].textContent = len < .05 ? '' : dead ? 'not represented' : (readMode === 'relu' && raw < 0 ? '0 (ReLU)' : fmt(v));
+        barVals[i].setAttribute('fill', dead ? C.muted : C.ink);
+      }
+      const t = sparsity; spMarker.setAttribute('cx', lerp(spMarker._x[0], spMarker._x[1], t));
+    }
+    function render(step, p) {
+      take.setAttribute('opacity', 0); reluNote.textContent = '';
+      if (step === 0) { frame(0, 0, .5, 'raw'); title.textContent = '5 features, 2 dimensions'; sub.textContent = 'How can a 2-D space hold 5 features?'; return; }
+      if (step === 1) { frame(0, seg(p, 0, .6), .5, 'raw'); title.textContent = 'Pack 5 directions: they overlap'; sub.textContent = 'f1 leaks onto every other feature: interference'; return; }
+      if (step === 2) { const m = seg(p, .1, .9); frame(m, 1, lerp(.5, 0, m), 'raw'); title.textContent = 'Dense features: keep 2, drop 3'; sub.textContent = 'often on together, so leaks pile up on every input'; return; }
+      const m = 1 - seg(p, .1, .9);
+      frame(step === 3 ? m : 0, 1, step === 3 ? lerp(0, 1, 1 - m) : 1, 'relu');
+      title.textContent = 'Sparse features: pack all 5';
+      sub.textContent = 'rarely on together; ReLU removes negative leaks';
+      reluNote.textContent = '';
+      if (step === 4) take.setAttribute('opacity', seg(p, 0, .5));
+    }
+    stepAnim('p2-super', init, render, s => (s === 4 ? .8 : 1.8));
+  })();
+
+  /* ======================= A6 · sparse autoencoder ======================= */
+  (function () {
+    const svg = document.getElementById('p2-sae-svg');
+    const D = 24, NLAT = 64, ACT = [[12, 1.0, 'Eiffel Tower', C.f1], [33, .72, 'French', C.f3], [51, .5, 'capital city', C.f4]];
+    const r = rng(11);
+    const dirs = ACT.map(() => Array.from({ length: D }, () => (r() * 2 - 1)));
+    const noise = Array.from({ length: D }, () => (r() * 2 - 1) * .32);
+    const x = Array.from({ length: D }, (_, k) => ACT.reduce((s, a, i) => s + a[1] * dirs[i][k], 0) + noise[k]);
+    const mx = Math.max(...x.map(Math.abs));
+    const col = v => v >= 0 ? mix(C.bg2, C.resid, clamp(v / mx)) : mix(C.bg2, C.ink2, clamp(-v / mx));
+    const XC = 40, CY0 = 40, XH = 18, CWd = 52;          // dense column
+    const LX = 420, LH = 7, LY0 = 40, LW = 40;           // latent column
+    const RX = 1000, EX = 1120;
+    let xCells = [], latCells = [], latLbl = [], encT, decT, recCells = [], errCells = [], errG, recG, decLines = [], eqG, encLbl, decLbl;
+    function trap(x0, x1, yl0, yl1, yr0, yr1, fill, stroke) { return E('path', { d: `M${x0},${yl0} L${x1},${yr0} L${x1},${yr1} L${x0},${yl1} Z`, fill, stroke, 'stroke-width': 2 }, svg); }
+    function init() {
+      E('text', { x: XC + CWd / 2, y: 22, 'font-size': 25, 'text-anchor': 'middle', 'font-weight': 700 }, svg, 'x');
+      for (let k = 0; k < D; k++) xCells[k] = E('rect', { x: XC, y: CY0 + k * XH, width: CWd, height: XH - 2, fill: col(x[k]) }, svg);
+      E('text', { x: XC, y: CY0 + D * XH + 30, 'font-size': 25, class: 'muted' }, svg, 'residual (dense)');
+      encT = trap(120, 390, CY0, CY0 + D * XH, LY0, LY0 + NLAT * LH, C.mlpSoft, C.mlp);
+      encLbl = E('text', { x: 255, y: 250, 'font-size': 26, 'text-anchor': 'middle', 'font-weight': 700, fill: C.mlp }, svg, 'encoder');
+      E('text', { x: 255, y: 282, 'font-size': 25, 'text-anchor': 'middle', fill: C.mlp }, svg, 'JumpReLU');
+      E('text', { x: 255, y: 312, 'font-size': 25, 'text-anchor': 'middle', fill: C.mlp }, svg, '(W_enc·x + b_enc)');
+      for (let j = 0; j < NLAT; j++) latCells[j] = E('rect', { x: LX, y: LY0 + j * LH, width: LW, height: LH - 1.5, fill: C.bg2 }, svg);
+      E('text', { x: LX + LW / 2, y: LY0 + NLAT * LH + 30, 'font-size': 25, 'text-anchor': 'middle', class: 'muted' }, svg, 'latents (wide, sparse)');
+      ACT.forEach(([j, a, name, c], i) => {
+        const g = E('g', { opacity: 0 }, svg);
+        const y = LY0 + j * LH + LH / 2;
+        E('text', { x: LX + LW + 20, y: y - 12, 'font-size': 26, 'font-weight': 700, fill: c }, g, name);
+        E('text', { x: LX + LW + 20, y: y + 32, 'font-size': 25, class: 'mono', fill: C.ink2 }, g, a.toFixed(2));
+        latLbl[i] = g;
+      });
+      decT = trap(760, 920, LY0, LY0 + NLAT * LH, CY0, CY0 + D * XH, C.mlpSoft, C.mlp);
+      decLbl = E('text', { x: 840, y: 250, 'font-size': 26, 'text-anchor': 'middle', 'font-weight': 700, fill: C.mlp }, svg, 'decoder');
+      E('text', { x: 840, y: 282, 'font-size': 25, 'text-anchor': 'middle', fill: C.mlp }, svg, 'W_dec·f');
+      E('text', { x: 840, y: 312, 'font-size': 25, 'text-anchor': 'middle', fill: C.mlp }, svg, '+ b_dec');
+      ACT.forEach(([j, a, n, c], i) => { decLines[i] = E('path', { d: `M${LX + LW},${LY0 + j * LH + 3} L${760},${LY0 + j * LH + 3}`, stroke: c, 'stroke-width': 3, fill: 'none', opacity: 0 }, svg); });
+      recG = E('g', {}, svg);
+      E('text', { x: RX + CWd / 2, y: 22, 'font-size': 25, 'text-anchor': 'middle', 'font-weight': 700 }, recG, 'x̂');
+      for (let k = 0; k < D; k++) recCells[k] = E('rect', { x: RX, y: CY0 + k * XH, width: CWd, height: XH - 2, fill: C.bg2 }, recG);
+      E('text', { x: RX + CWd, y: CY0 + D * XH + 30, 'font-size': 25, 'text-anchor': 'end', class: 'muted' }, recG, 'reconstruction');
+      errG = E('g', { opacity: 0 }, svg);
+      E('text', { x: (RX + CWd + EX) / 2, y: CY0 + D * XH / 2 + 12, 'font-size': 40, 'text-anchor': 'middle', class: 'muted' }, errG, '+');
+      E('text', { x: EX + CWd / 2, y: 22, 'font-size': 25, 'text-anchor': 'middle', 'font-weight': 700 }, errG, 'ε');
+      for (let k = 0; k < D; k++) errCells[k] = E('rect', { x: EX, y: CY0 + k * XH, width: CWd, height: XH - 2, fill: noise[k] >= 0 ? mix(C.bg2, C.err, Math.abs(noise[k]) / .32) : mix(C.bg2, '#6B7280', Math.abs(noise[k]) / .32), stroke: C.err, 'stroke-dasharray': '3 3' }, errG);
+      E('text', { x: EX, y: CY0 + D * XH + 30, 'font-size': 25, fill: C.ink2, 'font-weight': 700 }, errG, 'error');
+      eqG = E('g', { opacity: 0 }, svg);
+      E('text', { x: 1196, y: 200, 'font-size': 34, 'font-family': 'var(--font-serif)', fill: C.ink }, eqG, 'x = x̂ + ε');
+      ['ε is computation', 'the dictionary', 'does not explain'].forEach((t, i) => E('text', { x: 1196, y: 260 + i * 30, 'font-size': 25, fill: C.ink2 }, eqG, t));
+      E('text', { x: 1196, y: 370, 'font-size': 26, fill: C.ink, 'font-weight': 700 }, eqG, '→ error nodes');
+    }
+    function render(step, p) {
+      const enc = step >= 2 ? 1 : step === 1 ? p : 0;
+      encT.setAttribute('opacity', .35 + .65 * seg(enc, 0, .3));
+      for (let j = 0; j < NLAT; j++) latCells[j].setAttribute('fill', C.bg2);
+      ACT.forEach(([j, a, n, c], i) => {
+        const on = seg(enc, .3 + i * .18, .5 + i * .18);
+        latCells[j].setAttribute('fill', mix(C.bg2, c, on));
+        latCells[j].setAttribute('height', lerp(LH - 1.5, LH * 2, on)); latCells[j].setAttribute('y', LY0 + j * LH - on * LH / 2);
+        latLbl[i].setAttribute('opacity', on);
+      });
+      const dec = step >= 3 ? 1 : step === 2 ? p : 0;
+      decT.setAttribute('opacity', .35 + .65 * seg(dec, 0, .2));
+      decLines.forEach((l, i) => l.setAttribute('opacity', seg(dec, .1 + i * .25, .3 + i * .25)));
+      for (let k = 0; k < D; k++) {
+        const v = ACT.reduce((s, a, i) => s + a[1] * dirs[i][k] * seg(dec, .1 + i * .25, .35 + i * .25), 0);
+        recCells[k].setAttribute('fill', dec > 0 ? col(v) : C.bg2);
+      }
+      const err = step >= 3 ? (step === 3 ? p : 1) : 0;
+      errG.setAttribute('opacity', seg(err, 0, .5)); eqG.setAttribute('opacity', seg(err, .4, 1));
+    }
+    stepAnim('p2-sae', init, render, s => (s === 3 ? 1.2 : 2.0));
+  })();
+
+  /* ======================= steering diagram ======================= */
+  (function () {
+    const svg = document.getElementById('p2-steer-svg');
+    const defs = E('defs', {}, svg);
+    [['p2-ah-r', C.resid], ['p2-ah-f', C.f1], ['p2-ah-i', C.ink]].forEach(([id, c]) => { const m = E('marker', { id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, defs); E('path', { d: 'M0,0 L10,5 L0,10 z', fill: c }, m); });
+    const o = [60, 270];
+    E('line', { x1: o[0], y1: o[1], x2: 420, y2: 220, stroke: C.resid, 'stroke-width': 6, 'marker-end': 'url(#p2-ah-r)' }, svg);
+    E('text', { x: 250, y: 290, 'font-size': 26, fill: C.resid, 'font-weight': 700 }, svg, 'x');
+    E('line', { x1: 430, y1: 218, x2: 470, y2: 40, stroke: C.f1, 'stroke-width': 6, 'stroke-dasharray': '10 6', 'marker-end': 'url(#p2-ah-f)' }, svg);
+    E('text', { x: 486, y: 140, 'font-size': 26, fill: C.f1, 'font-weight': 700 }, svg, 'α·r̄·d');
+    E('line', { x1: o[0], y1: o[1], x2: 462, y2: 46, stroke: C.ink, 'stroke-width': 3, 'marker-end': 'url(#p2-ah-i)' }, svg);
+    E('text', { x: 120, y: 130, 'font-size': 26, 'font-weight': 700 }, svg, 'x + α·r̄·d');
+    E('text', { x: 20, y: 322, 'font-size': 22, class: 'muted' }, svg, 'd: unit decoder direction · r̄: mean residual norm');
+  })();
+
+  /* ======================= non-identifiability diagram ======================= */
+  (function () {
+    const svg = document.getElementById('p2-nonid-svg');
+    const defs = E('defs', {}, svg);
+    [['p2-ni-a', C.f1], ['p2-ni-b', C.f4]].forEach(([id, c]) => { const m = E('marker', { id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, defs); E('path', { d: 'M0,0 L10,5 L0,10 z', fill: c }, m); });
+    const o = [120, 330];
+    E('circle', { cx: o[0], cy: o[1], r: 9, fill: C.ink }, svg);
+    E('text', { x: o[0] - 10, y: o[1] + 44, 'font-size': 22, class: 'muted' }, svg, 'activation');
+    E('line', { x1: o[0], y1: o[1], x2: 470, y2: o[1], stroke: C.f1, 'stroke-width': 7, 'marker-end': 'url(#p2-ni-a)' }, svg);
+    E('text', { x: 300, y: o[1] + 44, 'font-size': 26, 'font-weight': 700, fill: C.f1 }, svg, 'v');
+    E('line', { x1: o[0], y1: o[1], x2: o[0], y2: 60, stroke: C.f4, 'stroke-width': 7, 'marker-end': 'url(#p2-ni-b)' }, svg);
+    E('text', { x: o[0] + 20, y: 110, 'font-size': 26, 'font-weight': 700, fill: C.f4 }, svg, 'u ⟂ v');
+    E('path', { d: `M${o[0] + 34},${o[1]} L${o[0] + 34},${o[1] - 34} L${o[0]},${o[1] - 34}`, fill: 'none', stroke: C.muted, 'stroke-width': 2 }, svg);
+    E('rect', { x: 300, y: 120, width: 300, height: 120, rx: 12, fill: C.card, stroke: C.rule, 'stroke-width': 2 }, svg);
+    E('text', { x: 320, y: 162, 'font-size': 24 }, svg, 'effect of v: 100%');
+    E('text', { x: 320, y: 206, 'font-size': 24 }, svg, 'effect of u: 95–100%');
+  })();
+
+  /* ======================= A7 · attribution graph ======================= */
+  (function () {
+    const svg = document.getElementById('p2-ag-svg');
+    const N = {
+      capital: { x: 140, y: 120, t: 'capital', k: 'tok', s: 0 },
+      state:   { x: 140, y: 250, t: 'state', k: 'tok', s: 0 },
+      dallas:  { x: 140, y: 400, t: 'Dallas', k: 'tok', s: 0 },
+      sayCap:  { x: 530, y: 150, t: 'say a capital', k: 'feat', c: C.f3, s: 1 },
+      texas:   { x: 530, y: 390, t: 'Texas', k: 'feat', c: C.f1, s: 1 },
+      err1:    { x: 530, y: 270, t: 'error', k: 'err', s: 4 },
+      sayAus:  { x: 900, y: 270, t: 'say Austin', k: 'feat', c: C.f4, s: 2 },
+      err2:    { x: 900, y: 420, t: 'error', k: 'err', s: 4 },
+      austin:  { x: 1260, y: 270, t: 'Austin', k: 'logit', s: 3 },
+    };
+    const EDG = [['capital', 'sayCap', 9, 1], ['state', 'sayCap', 5, 1], ['state', 'texas', 2.5, 1], ['dallas', 'texas', 10, 1],
+      ['texas', 'sayAus', 9, 2], ['sayCap', 'sayAus', 8, 2], ['dallas', 'sayAus', 2.5, 2],
+      ['sayAus', 'austin', 12, 3], ['err1', 'sayAus', 3, 4], ['err2', 'austin', 3, 4]];
+    const W = { tok: 170, feat: 220, err: 130, logit: 170 };
+    const edges = [], nodes = {};
+    function init() {
+      [['input tokens', 140], ['features', 530], ['features (later)', 900], ['output logit', 1260]].forEach(([t, x]) => E('text', { x, y: 30, 'font-size': 26, 'text-anchor': 'middle', class: 'muted', 'font-weight': 600 }, svg, t));
+      const gE = E('g', {}, svg), gN = E('g', {}, svg);
+      EDG.forEach(([a, b, w, s]) => {
+        const A = N[a], B = N[b];
+        const x0 = A.x + W[A.k] / 2, x1 = B.x - W[B.k] / 2, mx = (x0 + x1) / 2;
+        const isErr = A.k === 'err';
+        const p = E('path', { d: `M${x0},${A.y} C${mx},${A.y} ${mx},${B.y} ${x1},${B.y}`, fill: 'none', stroke: isErr ? C.err : (A.c || C.ink2), 'stroke-width': w, 'stroke-linecap': 'round', opacity: .8 }, gE);
+        edges.push({ p, s, len: 0 });
+      });
+      for (const k in N) {
+        const n = N[k], g = E('g', {}, gN), w = W[n.k], h = n.k === 'err' ? 52 : 64;
+        const fill = n.k === 'tok' ? C.card : n.k === 'feat' ? mix('#FFFFFF', n.c, .14) : n.k === 'err' ? '#ECEDEF' : C.ink;
+        const stroke = n.k === 'tok' ? C.ink2 : n.k === 'feat' ? n.c : n.k === 'err' ? C.err : C.ink;
+        E('rect', { x: n.x - w / 2, y: n.y - h / 2, width: w, height: h, rx: n.k === 'feat' ? 32 : 10, fill, stroke, 'stroke-width': n.k === 'err' ? 2.5 : 3, 'stroke-dasharray': n.k === 'err' ? '6 5' : '' }, g);
+        E('text', { x: n.x, y: n.y + 9, 'font-size': 26, 'text-anchor': 'middle', 'font-weight': n.k === 'err' ? 400 : 700,
+          class: n.k === 'tok' ? 'mono' : '', fill: n.k === 'logit' ? '#fff' : n.k === 'err' ? C.ink2 : (n.c || C.ink) }, g, n.k === 'logit' ? '" Austin"' : n.t);
+        nodes[k] = { g, s: n.s, x: n.x, y: n.y };
+      }
+      edges.forEach(e => { e.len = e.p.getTotalLength ? e.p.getTotalLength() : 600; e.p.setAttribute('stroke-dasharray', e.len + ' ' + e.len); });
+    }
+    function render(step, p) {
+      for (const k in nodes) {
+        const n = nodes[k];
+        const v = n.s < step ? 1 : n.s === step ? (step === 0 ? 1 : seg(p, .45, 1)) : 0;
+        n.g.setAttribute('opacity', v);
+        n.g.setAttribute('transform', `translate(${n.x},${n.y}) scale(${.85 + .15 * v}) translate(${-n.x},${-n.y})`);
+      }
+      edges.forEach(e => {
+        const v = e.s < step ? 1 : e.s === step ? seg(p, 0, .6) : 0;
+        e.p.setAttribute('stroke-dashoffset', e.len * (1 - v));
+        e.p.setAttribute('opacity', v > 0 ? .8 : 0);
+      });
+    }
+    stepAnim('p2-graph', init, render, 1.4);
+  })();
+
+  /* ======================= validation by intervention ======================= */
+  (function () {
+    const svg = document.getElementById('p2-val-svg');
+    let tx, sa, cross, tag, swapG; const rows = [];
+    // [label, P(Austin), colour, step shown] — NB4 test run, Neuronpedia steer API on graph gemma-fact-dallas-austin
+    const ROWS = [['no intervention', 0.44, C.f4, 0], ['6 control features −1×', 0.38, C.slate, 1], ['Texas features ablated (0×)', 0.18, C.bad, 1], ['Texas features −1×', 0.0, C.bad, 1]];
+    function node(x, y, w, t, c, kind) {
+      const g = E('g', {}, svg);
+      const r = E('rect', { x: x - w / 2, y: y - 32, width: w, height: 64, rx: kind === 'feat' ? 32 : 10, fill: kind === 'feat' ? mix('#FFFFFF', c, .14) : kind === 'logit' ? C.ink : C.card, stroke: c, 'stroke-width': 3 }, g);
+      const tt = E('text', { x, y: y + 9, 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle', fill: kind === 'logit' ? '#fff' : c, class: kind === 'tok' ? 'mono' : '' }, g, t);
+      return { g, r, tt };
+    }
+    function init() {
+      const y = 200;
+      E('path', { d: 'M150,200 L250,200', stroke: C.ink2, 'stroke-width': 6 }, svg);
+      E('path', { d: 'M410,200 L490,200', stroke: C.ink2, 'stroke-width': 6 }, svg);
+      E('path', { d: 'M725,200 L770,200', stroke: C.ink2, 'stroke-width': 6 }, svg);
+      node(80, y, 140, 'Dallas', C.ink2, 'tok');
+      tx = node(330, y, 160, 'Texas', C.f1, 'feat');
+      sa = node(610, y, 230, 'say Austin', C.f4, 'feat');
+      tag = E('text', { x: 330, y: 120, 'font-size': 24, 'text-anchor': 'middle', 'font-weight': 700 }, svg, '');
+      cross = E('path', { d: 'M260,150 L400,250 M400,150 L260,250', stroke: C.bad, 'stroke-width': 7, 'stroke-linecap': 'round', opacity: 0 }, svg);
+      E('text', { x: 40, y: 330, 'font-size': 24, fill: C.muted }, svg, 'steer features at the Dallas token, rerun, read the output');
+      // bars: measured in NB4 (Gemma 2 2B, Dallas graph, Neuronpedia steer API)
+      const bx = 820, by = 40, BW = 560, MAXP = 0.5;
+      E('text', { x: bx, y: by, 'font-size': 26, 'font-weight': 700 }, svg, 'P(" Austin")');
+      E('text', { x: bx + 200, y: by, 'font-size': 22, fill: C.muted }, svg, 'measured · Gemma 2 2B');
+      ROWS.forEach((r, i) => {
+        const yy = by + 26 + i * 72;
+        const g = E('g', {}, svg);
+        E('text', { x: bx, y: yy + 26, 'font-size': 24, fill: C.ink2 }, g, r[0]);
+        E('rect', { x: bx, y: yy + 36, width: BW, height: 24, rx: 4, fill: C.bg2 }, g);
+        const bar = E('rect', { x: bx, y: yy + 36, width: 0, height: 24, rx: 4, fill: r[2] }, g);
+        const val = E('text', { x: bx + 8, y: yy + 56, 'font-size': 22, class: 'mono', fill: C.ink }, g, '');
+        rows.push({ g, bar, val, p: r[1], step: r[3], bx, BW, MAXP });
+      });
+      const sy = by + 26 + ROWS.length * 72 + 20;
+      swapG = E('g', {}, svg);
+      E('rect', { x: bx - 16, y: sy - 8, width: BW + 32, height: 104, rx: 12, fill: mix('#FFFFFF', C.f2, .10), stroke: C.f2, 'stroke-width': 2 }, swapG);
+      E('text', { x: bx, y: sy + 26, 'font-size': 24, 'font-weight': 700, fill: C.f2 }, swapG, 'Texas −1× + California +0.5×');
+      E('text', { x: bx, y: sy + 60, 'font-size': 24, fill: C.ink }, swapG, 'P(" Sacramento") = 0.135, tied for top');
+    }
+    function render(step, p) {
+      rows.forEach(r => {
+        const v = r.step < step ? 1 : r.step === step ? (step === 0 ? 1 : seg(p, .2, 1)) : 0;
+        r.g.setAttribute('opacity', v > 0 ? 1 : 0);
+        const w = r.BW * Math.min(1, r.p / r.MAXP) * v;
+        r.bar.setAttribute('width', w);
+        r.val.setAttribute('x', r.bx + Math.max(w, 2) + 10);
+        r.val.textContent = v > 0 ? (r.p < 0.005 ? '≈ 0.00' : r.p.toFixed(2)) : '';
+      });
+      swapG.setAttribute('opacity', step >= 2 ? (step === 2 ? seg(p, .3, 1) : 1) : 0);
+      const k = step === 0 ? 0 : step === 1 ? seg(p, 0, .4) : 1;
+      if (step <= 1) {
+        tx.tt.textContent = 'Texas'; tx.r.setAttribute('stroke', C.f1); tx.r.setAttribute('fill', mix('#FFFFFF', C.f1, .14)); tx.tt.setAttribute('fill', C.f1);
+        tx.g.setAttribute('opacity', 1 - .6 * k); cross.setAttribute('opacity', k);
+        sa.tt.textContent = 'say Austin'; sa.g.setAttribute('opacity', 1 - .6 * k);
+        tag.textContent = step === 1 ? 'steer −1×' : ''; tag.setAttribute('fill', C.bad);
+      } else {
+        const q = seg(p, 0, .4);
+        cross.setAttribute('opacity', 1 - q); tx.g.setAttribute('opacity', .4 + .6 * q); sa.g.setAttribute('opacity', .4 + .6 * q);
+        tx.tt.textContent = 'California'; tx.r.setAttribute('stroke', C.f2); tx.r.setAttribute('fill', mix('#FFFFFF', C.f2, .14)); tx.tt.setAttribute('fill', C.f2);
+        sa.tt.textContent = 'say Sacramento'; tag.textContent = '+0.5×'; tag.setAttribute('fill', C.f2);
+      }
+    }
+    stepAnim('p2-validate', init, render, 1.4);
+  })();
+})();
+</script>

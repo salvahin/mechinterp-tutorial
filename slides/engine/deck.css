@@ -1,0 +1,242 @@
+/* ==========================================================================
+   MICAI 2026 · Mech Interp Tutorial — shared deck stylesheet
+   Stage: fixed 1600×900 canvas, scaled to the window. Designed for projectors:
+   light paper background, high-contrast ink, minimum 22px type.
+   ========================================================================== */
+
+:root {
+  /* paper & ink */
+  /* MICAI 2026 brand (from micai.org: navy #0C198D text, blue #3339D4, pink #F757BC,
+     cyan #26C9FF, warm off-white #F2F0EC; Sora headings, Inter body) */
+  --micai-navy: #0C198D;
+  --micai-deep: #0B0673;
+  --micai-blue: #3339D4;
+  --micai-pink: #F757BC;
+  --micai-cyan: #26C9FF;
+
+  --bg: #F2F0EC;
+  --bg-2: #E7E4DD;
+  --card: #FFFFFF;
+  --ink: #0C198D;
+  --ink-2: #3A4170;
+  --muted: #6B7090;
+  --rule: #D6D2C8;
+
+  /* semantic colours — the same meaning on every slide and in every animation */
+  --resid: #0E7C74;        /* residual stream (the bus) */
+  --resid-soft: #D3EEEA;
+  --attn: #D9480F;         /* attention heads */
+  --attn-soft: #FBE3D6;
+  --mlp: #5F3DC4;          /* MLP layers */
+  --mlp-soft: #E5DEFA;
+  --feat-1: #1C6FC2;       /* features / SAE latents (categorical) */
+  --feat-2: #E8590C;
+  --feat-3: #2B8A3E;
+  --feat-4: #C2255C;
+  --feat-5: #E09F00;
+  --good: #2B8A3E;
+  --good-soft: #DCF2E0;
+  --bad: #D6332F;
+  --bad-soft: #FADBDA;
+  --warn: #D97A00;
+  --warn-soft: #FCEBD0;
+
+  /* presenters */
+  --miguel: #3339D4;
+  --salvador: #0C198D;
+  --victor: #C2187E;
+
+  /* type */
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --fs-hero: 84px;
+  --fs-title: 50px;
+  --fs-sub: 34px;
+  --fs-body: 30px;
+  --fs-small: 24px;
+  --fs-tiny: 22px;   /* never go below this on a slide */
+
+  --pad-x: 96px;
+  --pad-top: 72px;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #1d1f24; overflow: hidden; }
+body { font-family: var(--font-sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+/* ---------- stage & slides ---------- */
+.viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+.stage {
+  position: relative; width: 1600px; height: 900px;
+  transform-origin: center center; background: var(--bg);
+  box-shadow: 0 10px 60px rgba(0,0,0,.35); overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0; padding: var(--pad-top) var(--pad-x) 110px;
+  display: none; flex-direction: column; gap: 28px;
+  font-size: var(--fs-body); line-height: 1.32;
+}
+.slide.active { display: flex; }
+.slide > * { margin: 0; }
+
+/* builds: anything with data-step="k" appears when the slide reaches step k */
+.slide [data-step] { opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .45s ease; }
+.slide [data-step].shown { opacity: 1; transform: none; }
+.slide [data-step].dim-after.shown.dimmed { opacity: .32; }
+
+/* ---------- typography ---------- */
+.kicker {
+  font-size: var(--fs-small); letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 600; color: var(--muted);
+}
+.slide h1 { font-family: var(--font-display); font-size: var(--fs-hero); line-height: 1.04; font-weight: 700; letter-spacing: -.025em; }
+.slide h2 { font-family: var(--font-display); font-size: var(--fs-title); line-height: 1.12; font-weight: 700; letter-spacing: -.02em; }
+.slide h3 { font-family: var(--font-display); font-size: var(--fs-sub); line-height: 1.2; font-weight: 600; letter-spacing: -.01em; }
+.kicker, .slide.section-slide .block-num { font-family: var(--font-display); }
+.slide p { max-width: 1250px; }
+.lead { font-size: 36px; color: var(--ink-2); line-height: 1.35; }
+.small { font-size: var(--fs-small); color: var(--ink-2); }
+.tiny { font-size: var(--fs-tiny); color: var(--muted); }
+.mono, code { font-family: var(--font-mono); font-size: .9em; }
+.serif { font-family: var(--font-serif); }
+em.hl, .hl { font-style: normal; background: linear-gradient(transparent 58%, var(--warn-soft) 58%); padding: 0 .1em; }
+.slide ul, .slide ol { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 14px; }
+.slide li::marker { color: var(--muted); }
+a { color: var(--feat-1); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+/* semantic text colours */
+.c-resid { color: var(--resid); } .c-attn { color: var(--attn); } .c-mlp { color: var(--mlp); }
+.c-good { color: var(--good); } .c-bad { color: var(--bad); } .c-warn { color: var(--warn); } .c-muted { color: var(--muted); }
+
+/* ---------- layout helpers ---------- */
+.row { display: flex; gap: 40px; align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 20px; flex: 1; min-width: 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.grow { flex: 1; min-height: 0; }
+.center { align-items: center; justify-content: center; text-align: center; }
+.spacer { flex: 1; }
+
+.card {
+  background: var(--card); border: 1.5px solid var(--rule); border-radius: var(--radius);
+  padding: 28px 32px; display: flex; flex-direction: column; gap: 12px;
+}
+.card h3 { font-size: 32px; }
+.card.resid { border-color: var(--resid); background: var(--resid-soft); }
+.card.attn { border-color: var(--attn); background: var(--attn-soft); }
+.card.mlp { border-color: var(--mlp); background: var(--mlp-soft); }
+.card.good { border-color: var(--good); background: var(--good-soft); }
+.card.bad { border-color: var(--bad); background: var(--bad-soft); }
+.card.warn { border-color: var(--warn); background: var(--warn-soft); }
+
+/* "Predict first" box — the pedagogical signature of this tutorial */
+.predict {
+  border: 3px dashed var(--warn); background: var(--warn-soft); border-radius: var(--radius);
+  padding: 22px 30px; display: flex; gap: 22px; align-items: flex-start;
+}
+.predict::before {
+  content: "PREDICT"; font-weight: 700; letter-spacing: .12em; font-size: 22px; color: #fff;
+  background: var(--warn); padding: 6px 12px; border-radius: 8px; white-space: nowrap; margin-top: 4px;
+}
+
+/* callout with a left rule */
+.callout { border-left: 8px solid var(--ink); padding: 8px 0 8px 28px; font-size: 34px; line-height: 1.3; }
+.callout.resid { border-color: var(--resid); } .callout.attn { border-color: var(--attn); }
+.callout.mlp { border-color: var(--mlp); } .callout.bad { border-color: var(--bad); } .callout.good { border-color: var(--good); }
+
+/* code */
+pre.code {
+  font-family: var(--font-mono); font-size: 24px; line-height: 1.45; margin: 0;
+  background: #1F2228; color: #ECEDEF; border-radius: var(--radius); padding: 24px 28px; overflow: hidden;
+}
+pre.code .k { color: #F59F80; } pre.code .s { color: #9FD8A0; } pre.code .c { color: #8A909B; } pre.code .f { color: #8CC7FF; }
+
+/* figures: animations live in .figure; svg/canvas fill it */
+.figure { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figure > svg, .figure > canvas { width: 100%; height: 100%; display: block; }
+.caption { font-size: var(--fs-tiny); color: var(--muted); }
+
+/* tag / pill */
+.pill { display: inline-block; font-size: 22px; font-weight: 600; padding: 4px 14px; border-radius: 999px; background: var(--bg-2); color: var(--ink-2); }
+.pill.resid { background: var(--resid-soft); color: var(--resid); }
+.pill.attn { background: var(--attn-soft); color: var(--attn); }
+.pill.mlp { background: var(--mlp-soft); color: var(--mlp); }
+
+/* simple table */
+table.t { border-collapse: collapse; font-size: 26px; width: 100%; }
+table.t th { text-align: left; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 10px 16px; border-bottom: 2px solid var(--ink); }
+table.t td { padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+/* ---------- special slide types ---------- */
+.slide.title-slide { justify-content: center; gap: 22px; }
+.slide.title-slide h1 { font-size: 96px; max-width: 1300px; }
+
+.slide.section-slide { justify-content: center; gap: 18px; color: #fff; }
+.slide.section-slide[data-presenter="miguel"] { background: var(--miguel); }
+.slide.section-slide[data-presenter="salvador"] { background: var(--salvador); }
+.slide.section-slide[data-presenter="victor"] { background: var(--victor); }
+.slide.section-slide .kicker { color: rgba(255,255,255,.75); }
+.slide.section-slide .block-num { font-size: 220px; font-weight: 700; line-height: .9; letter-spacing: -.04em; opacity: .95; }
+.slide.section-slide h2 { font-size: 72px; }
+.slide.section-slide .lead { color: rgba(255,255,255,.88); }
+
+.slide.handoff-slide { justify-content: center; }
+.slide.handoff-slide .question { font-family: var(--font-serif); font-style: italic; font-size: 58px; line-height: 1.2; max-width: 1300px; }
+
+/* ---------- chrome: footer, progress, notes, clock ---------- */
+.chrome-footer {
+  position: absolute; left: var(--pad-x); right: var(--pad-x); bottom: 30px; height: 40px;
+  display: flex; align-items: center; gap: 18px; font-size: 20px; color: var(--muted); z-index: 5; pointer-events: none;
+}
+.chrome-footer .who { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: var(--ink-2); }
+.chrome-footer .who::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--dot, var(--muted)); }
+.chrome-footer .num { margin-left: auto; font-variant-numeric: tabular-nums; }
+.stage.on-section .chrome-footer, .stage.on-section .chrome-footer .who { color: rgba(255,255,255,.8); }
+.stage.on-title .chrome-footer { display: none; }
+
+.progress { position: absolute; left: 0; bottom: 0; height: 6px; background: var(--ink); transition: width .3s ease; z-index: 6; }
+
+.notes-panel {
+  position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 20;
+  background: rgba(16,17,20,.94); color: #E9EAEC; font: 18px/1.5 var(--font-sans); padding: 18px 28px; display: none;
+}
+.notes-panel.open { display: block; }
+.notes-panel h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #9AA0AA; }
+.slide aside.notes { display: none; }
+
+.clock { position: fixed; top: 12px; right: 16px; z-index: 21; font: 600 18px var(--font-mono); color: #fff; background: rgba(16,17,20,.85); padding: 6px 12px; border-radius: 8px; display: none; }
+.clock.open { display: block; }
+
+.help {
+  position: fixed; inset: 0; display: none; place-items: center; z-index: 30; background: rgba(0,0,0,.6);
+}
+.help.open { display: grid; }
+.help .box { background: #fff; color: var(--ink); border-radius: 14px; padding: 28px 36px; font: 18px/1.7 var(--font-sans); }
+.help kbd { font-family: var(--font-mono); background: var(--bg-2); border: 1px solid var(--rule); border-radius: 6px; padding: 1px 8px; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .slide [data-step] { transition: none; transform: none; }
+}
+
+/* ---------- print mode (set by Deck.preparePrint): every slide laid out so figures can measure ---------- */
+body.printing { overflow: visible; height: auto; }
+body.printing .viewport { position: static; display: block; }
+body.printing .stage { transform: none !important; width: 1600px; height: auto; overflow: visible; box-shadow: none; }
+body.printing .slide { position: relative; display: flex !important; width: 1600px; height: 900px; overflow: hidden; break-after: page; }
+body.printing .chrome-footer, body.printing .progress { display: none; }
+
+/* ---------- print: one slide per page, all builds visible ---------- */
+@media print {
+  @page { size: 1600px 900px; margin: 0; }
+  html, body { background: #fff; overflow: visible; height: auto; }
+  .viewport { position: static; display: block; }
+  .stage { transform: none !important; box-shadow: none; width: auto; height: auto; overflow: visible; background: none; }
+  .slide { position: relative; display: flex !important; width: 1600px; height: 900px; page-break-after: always; background: var(--bg); }
+  .slide [data-step] { opacity: 1 !important; transform: none !important; }
+  .chrome-footer, .progress, .notes-panel, .clock, .help { display: none !important; }
+}

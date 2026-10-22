@@ -1,0 +1,1147 @@
+<!-- ==========================================================================
+     Part 3 · Víctor Macías-Terrón · 2:10–3:00
+     Block 5 · Audit: can we trust the judge?  +  Wrap
+     All styles are scoped under .p3-* classes or #p3-* ids.
+     ========================================================================== -->
+<style>
+  /* ---------- shared part-3 pieces ---------- */
+  .p3-label { display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; font-size: 22px; font-weight: 600;
+    color: var(--victor); background: #F7E3EB; border: 1.5px solid #E7B6C8; padding: 4px 14px; border-radius: 999px; }
+  .p3-label.syn { color: var(--ink-2); background: var(--bg-2); border-color: var(--rule); }
+  .p3-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+  .p3-cap { font-size: 22px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .p3-doc { font-family: var(--font-serif); font-size: 30px; line-height: 1.45; color: var(--ink); }
+  .p3-svg text { font-family: var(--font-sans); }
+  .p3-mono { font-family: var(--font-mono); }
+  .slide .p3-tight { gap: 18px; }
+  body.printing section[id^="p3-"] *, body.printing section[id^="p3-"] *::before { transition: none !important; }
+  @media (prefers-reduced-motion: reduce) { section[id^="p3-"] * { transition: none !important; } }
+  @media print { section[id^="p3-"] * { transition: none !important; } .p3-map [data-row] { opacity: 1; transform: none; } .p3-stage { opacity: 1; } }
+  section[id^="p3-"] .card > h3, section[id^="p3-"] .card > p, section[id^="p3-"] .p3-minutes p, section[id^="p3-"] .predict p { margin: 0; }
+
+  /* ---------- opener ---------- */
+  #p3-open .p3-quote { font-family: var(--font-serif); font-style: italic; font-size: 34px; color: var(--ink-2); border-left: 8px solid var(--victor); padding: 6px 0 6px 26px; max-width: 1300px; }
+  #p3-open .p3-tool { display: grid; grid-template-columns: 1fr 64px 1fr; align-items: center; gap: 0; }
+  #p3-open .p3-tool + .p3-tool { margin-top: 22px; }
+  #p3-open .p3-arrow { text-align: center; font-size: 40px; color: var(--muted); }
+  #p3-open .card h3 { font-size: 32px; }
+  #p3-open .card p { font-size: 26px; color: var(--ink-2); }
+
+  /* ---------- R-PM-07 ---------- */
+  .p3-rule-text .cl { border-radius: 6px; padding: 0 .12em; transition: background .4s ease, box-shadow .4s ease; }
+  #p3-rule.s1 .p3-rule-text .cl { background: var(--warn-soft); box-shadow: inset 0 -3px 0 var(--warn); }
+  .p3-num { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--warn); color: #fff;
+    font: 700 22px var(--font-sans); vertical-align: 4px; margin-right: 4px; opacity: 0; transition: opacity .4s ease; }
+  #p3-rule.s1 .p3-num { opacity: 1; }
+  .p3-minutes { background: #FFFDF7; border: 1.5px solid var(--rule); border-radius: var(--radius); padding: 28px 32px; box-shadow: 0 2px 0 var(--rule); }
+  .p3-minutes .hdr { font: 600 22px var(--font-mono); color: var(--muted); letter-spacing: .04em; margin-bottom: 10px; }
+
+  .p3-verdict { border-radius: var(--radius); padding: 24px 30px; border: 2px solid var(--rule); background: var(--card); display: flex; flex-direction: column; gap: 10px; }
+  .p3-verdict .who { font-size: 22px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .p3-verdict .v { font-size: 40px; font-weight: 700; }
+  .p3-verdict .why { font-size: 28px; color: var(--ink-2); font-family: var(--font-serif); }
+  .p3-verdict.good { border-color: var(--good); } .p3-verdict.good .v { color: var(--good); }
+  .p3-verdict.bad { border-color: var(--bad); } .p3-verdict.bad .v { color: var(--bad); }
+  .p3-conf { display: flex; align-items: center; gap: 16px; font-size: 26px; color: var(--ink-2); }
+  .p3-conf .bar { flex: 1; height: 20px; border-radius: 10px; background: var(--bg-2); overflow: hidden; }
+  .p3-conf .bar i { display: block; height: 100%; width: 0; background: var(--ink-2); border-radius: 10px; transition: width 1s cubic-bezier(.2,.8,.2,1); }
+  #p3-verdict.active .p3-conf .bar i { width: 90%; }
+  .p3-checks { display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: 26px; align-items: center; }
+  .p3-checks .ok, .p3-checks .no { font: 700 22px var(--font-sans); padding: 2px 12px; border-radius: 8px; text-align: center; }
+  .p3-checks .ok { background: var(--good-soft); color: var(--good); }
+  .p3-checks .no { background: var(--bad-soft); color: var(--bad); }
+  .p3-stamp { align-self: flex-start; font-size: 34px; font-weight: 700; color: var(--bad); border: 3px solid var(--bad); border-radius: 10px; padding: 6px 22px; letter-spacing: .02em; }
+
+  /* grounding */
+  #p3-ground .p3-minutes .sent { border-radius: 6px; padding: 0 .1em; transition: background .4s ease, color .4s ease, opacity .4s ease; }
+  #p3-ground .sent.key { background: var(--warn-soft); }
+  #p3-ground.g1 .sent.key { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--bad); color: var(--muted); background: var(--bad-soft); }
+  #p3-ground .sent.add { display: inline; background: var(--bg-2); color: var(--ink); box-shadow: inset 0 -3px 0 var(--ink-2); font-weight: 600; opacity: 0; }
+  #p3-ground.g2 .sent.add, #p3-ground.g3 .sent.add { opacity: 1; }
+  #p3-ground .edit { font-size: 24px; font-weight: 600; min-height: 34px; color: var(--ink-2); }
+  #p3-ground .p3-verdict { transition: border-color .4s ease; }
+  #p3-ground .p3-verdict .v { transition: color .4s ease; }
+  #p3-ground .trial { display: grid; grid-template-columns: 1fr auto; gap: 10px 18px; font-size: 26px; align-items: center; }
+  #p3-ground .trial .r { font-weight: 700; font-size: 24px; padding: 2px 12px; border-radius: 8px; opacity: 0; transition: opacity .4s ease; }
+  #p3-ground .trial .r.on { opacity: 1; }
+
+  /* ---------- A10 ---------- */
+  #p3-a10 .figure { align-items: stretch; }
+  #p3-a10 .p3-slider { cursor: ew-resize; touch-action: none; }
+  #p3-a10 .p3-slider .knob { cursor: grab; }
+  #p3-a10 .p3-slider.drag .knob { cursor: grabbing; }
+
+  /* ---------- LegalBench mapping ---------- */
+  #p3-legal table.t td:first-child { font-weight: 600; width: 34%; }
+  #p3-legal table.t td { font-size: 26px; padding: 12px 16px; }
+  #p3-legal table.t td.ex { font-family: var(--font-serif); color: var(--ink-2); }
+
+  /* ---------- NB5 ---------- */
+  #p3-nb5 ol { counter-reset: s; list-style: none; padding: 0; gap: 12px; }
+  #p3-nb5 ol li { counter-increment: s; display: grid; grid-template-columns: 52px 1fr; align-items: baseline; font-size: 28px; }
+  #p3-nb5 ol li::before { content: counter(s); display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+    background: var(--resid); color: #fff; font: 700 22px var(--font-sans); }
+  #p3-nb5 .side { display: flex; flex-direction: column; gap: 16px; width: 380px; flex: none; }
+  #p3-nb5 .big { font-size: 96px; font-weight: 700; line-height: 1; letter-spacing: -.03em; color: var(--resid); }
+
+  #p3-nb5 .p3-gloss { display: flex; flex-direction: column; gap: 4px; font-size: 23px; color: var(--ink-2); border-top: 1.5px solid var(--rule); padding-top: 12px; }
+  #p3-nb5 .p3-gloss b { display: inline-block; width: 92px; color: var(--ink); }
+
+  /* ---------- method map (A8) ---------- */
+  .p3-map { display: grid; grid-template-columns: 1.25fr 48px 1fr 48px 1.15fr; row-gap: 12px; align-items: stretch; }
+  .p3-map .h { font-size: 22px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 0 20px 6px; }
+  .p3-map .r { display: contents; }
+  .p3-map .c { background: var(--card); border: 1.5px solid var(--rule); padding: 14px 20px; font-size: 27px; display: flex; align-items: center;
+    transition: background .45s ease, border-color .45s ease, opacity .45s ease, transform .45s ease; }
+  .p3-map .c.q { border-radius: 12px 0 0 12px; font-family: var(--font-serif); font-style: italic; }
+  .p3-map .c.m { font-weight: 700; }
+  .p3-map .c.v { border-radius: 0 12px 12px 0; color: var(--ink-2); }
+  .p3-map .a { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 30px;
+    transition: opacity .45s ease, transform .45s ease; }
+  .p3-map [data-row] { opacity: 0; transform: translateY(10px); }
+  .p3-map [data-row].on { opacity: 1; transform: none; }
+  .p3-map.p3-hlon [data-row].on { opacity: .3; }
+  .p3-map.p3-hlon [data-row].used { opacity: 1; }
+  .p3-map.p3-hlon .c.used { background: var(--resid-soft); border-color: var(--resid); }
+  .p3-map .tag { margin-left: auto; font: 700 22px var(--font-sans); color: #fff; background: var(--resid); border-radius: 8px; padding: 3px 10px;
+    letter-spacing: .06em; opacity: 0; transition: opacity .45s ease; white-space: nowrap; }
+  .p3-map.p3-hlon .tag { opacity: 1; }
+
+  /* ---------- transfer canvas ---------- */
+  .p3-canvas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .p3-canvas .f { border: 2px dashed var(--rule); border-radius: 12px; padding: 18px 22px 54px; background: var(--card); display: flex; flex-direction: column; gap: 6px; }
+  .p3-canvas .f b { font-size: 27px; }
+  .p3-canvas .f span { font-size: 23px; color: var(--muted); }
+  .p3-canvas .f i { font-style: normal; font-size: 22px; font-weight: 700; color: var(--victor); }
+
+  /* ---------- A9 field ---------- */
+  .p3-field { position: relative; height: 210px; }
+  .p3-field svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .p3-stages { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+  .p3-stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 104px; gap: 2px;
+    opacity: .22; transition: opacity .5s ease; }
+  .p3-stage.on { opacity: 1; }
+  .p3-stage b { font-size: 30px; }
+  .p3-stage span { font-size: 23px; color: var(--ink-2); }
+  .p3-field-cols .card { padding: 20px 26px; gap: 8px; }
+  .p3-field-cols .card h3 { font-size: 28px; }
+  .p3-field-cols ul { gap: 6px; font-size: 25px; }
+
+  /* ---------- resources ---------- */
+  .p3-res { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 56px; }
+  .p3-res .colh { font-size: 22px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+  .p3-res div:not(.colh) { display: flex; flex-direction: column; border-bottom: 1px solid var(--rule); padding: 4px 0 5px; }
+  .p3-res b { font-size: 24px; }
+  .p3-res a { font: 22px var(--font-mono); color: var(--feat-1); text-decoration: none; overflow-wrap: anywhere; }
+  .p3-res .what { font-size: 22px; color: var(--ink-2); }
+
+  /* ---------- exit & thanks ---------- */
+  .p3-exit { display: grid; grid-template-columns: 1fr 1fr 300px; gap: 32px; align-items: stretch; }
+  .p3-exit .card .n { font-size: 72px; font-weight: 700; line-height: 1; color: var(--victor); }
+  .p3-exit .card p { font-size: 34px; font-family: var(--font-serif); line-height: 1.25; }
+  .p3-qr { border: 3px dashed var(--rule); border-radius: var(--radius); display: grid; place-items: center; text-align: center; color: var(--muted); font-size: 24px; padding: 20px; }
+  #p3-thanks .people { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 48px; margin-top: 18px; }
+  #p3-thanks .people div { display: flex; flex-direction: column; gap: 4px; border-top: 6px solid var(--c); padding-top: 14px; }
+  #p3-thanks .people b { font-size: 34px; }
+  #p3-thanks .people span { font-size: 24px; color: var(--ink-2); }
+  #p3-thanks .mat { margin-top: 26px; font-size: 28px; color: var(--ink-2); display: flex; gap: 18px; align-items: center; }
+  #p3-thanks .mat .ph { border: 2px dashed var(--rule); border-radius: 10px; padding: 6px 18px; font-family: var(--font-mono); font-size: 24px; color: var(--muted); }
+</style>
+
+<!-- ====================================================================== 1 -->
+<section class="slide section-slide" id="p3-section" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">2:10 – 2:50 · Víctor Macías-Terrón</p>
+  <div class="block-num">5</div>
+  <h2>Audit: can we trust the judge?</h2>
+  <p class="lead">Mechanistic interpretability as a confidence proxy for LLM-assisted audits.</p>
+  <aside class="notes">
+    <b>2:10:00 → 2:10:15.</b> No talking needed beyond the title. "Block 5. One question: when an LLM judges, which of its verdicts do we trust?"
+  </aside>
+</section>
+
+<!-- ====================================================================== 2 -->
+<section class="slide" id="p3-open" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit</p>
+  <h2>Two tools you already have, one new subject: an LLM judge</h2>
+  <p class="p3-quote">“A plain probe can match an SAE feature, and patching tests what a model relies on.”</p>
+  <div>
+    <div class="p3-tool" data-step="1">
+      <div class="card resid"><h3>Linear probe</h3><p>reads what the hidden state represents</p></div>
+      <div class="p3-arrow">→</div>
+      <div class="card"><h3>Is this verdict likely wrong?</h3><p>a confidence signal read from inside, not from what the judge says</p></div>
+    </div>
+    <div class="p3-tool" data-step="2">
+      <div class="card resid"><h3>Intervention</h3><p>here: editing the evidence text</p></div>
+      <div class="p3-arrow">→</div>
+      <div class="card"><h3>Does it rest on the right evidence?</h3><p>a grounding check for one verdict</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>2:10:15 → 2:11:15.</b> Pick up Salvador's last line word for word (it is on screen).
+    "Those two sentences are the whole toolkit for the next 40 minutes. We point them at a different kind of model output: a verdict from an LLM acting as a judge."
+    → Step 1: the probe becomes a confidence signal. "Not the confidence the judge says, the confidence its hidden state carries." It is a learned correlate, not a lie detector: it can be wrong, and you will see it fail under shift.
+    → Step 2: Block 2's idea — intervene and watch the output — becomes a grounding check. "Did the verdict rest on the evidence that matters?" Today we intervene on the input text (remove or replace evidence), the simplest form of it; patching the hidden states of those tokens is the natural next step.
+  </aside>
+</section>
+
+<!-- ====================================================================== 3 -->
+<section class="slide" id="p3-grid" data-presenter="victor" data-block="Block 5 · Audit" data-steps="2">
+  <p class="kicker">Block 5 · Audit</p>
+  <h2>An LLM-assisted audit is a grid: every rule against every piece of evidence</h2>
+  <div class="figure"><svg class="p3-svg" data-minfs="27" viewBox="0 0 1408 560" aria-label="Rules by evidence grid of verdicts"></svg></div>
+  <p class="tiny">Illustrative sizes. A real audit: tens of rules × hundreds of documents = thousands of verdicts.</p>
+  <aside class="notes">
+    <b>2:11:15 → 2:12:15.</b> Two bodies of text: a rule set (rows) and an auditable corpus (columns: plans, minutes, change logs, commits).
+    → Step 1: the judge fills every cell with a verdict. "Fast, cheap, and tireless."
+    → Step 2: "Nobody reviews all of these. So the real question is not 'is the judge accurate on average' — it is <i>which verdicts need a human?</i>"
+    Ask: "How would you decide which cells to check?" Take one or two answers (random sample, low-confidence ones…).
+  </aside>
+</section>
+
+<!-- ====================================================================== 4 -->
+<section class="slide" id="p3-iso" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · context</p>
+  <h2>Our motivating case: process audits of very small software teams</h2>
+  <div class="grid-2">
+    <div class="card"><h3>ISO/IEC 29110</h3><p class="small" style="font-size:27px">Lifecycle profiles for <b>very small entities</b>: teams of up to 25 people. Covers project management and software implementation.</p></div>
+    <div class="card"><h3>TR 29110-3-1</h3><p class="small" style="font-size:27px">Guidelines for <b>assessing</b> those processes: check each expected practice against the project's own records.</p></div>
+  </div>
+  <p class="callout resid">An assessor reads plans, minutes and change logs, rule by rule. That is the grid an LLM judge could help fill.</p>
+  <p class="tiny">Paraphrased. The standard's text is licensed, so we never quote it; the rule on the next slides is invented.</p>
+  <aside class="notes">
+    <b>2:12:15 → 2:13:00.</b> Keep it short; the standard is context, not content.
+    ISO/IEC 29110 targets organisations of up to 25 people; the technical report 29110-3-1 gives process assessment guidelines.
+    Small teams cannot afford a full-time auditor, which is exactly why LLM assistance is attractive — and why trust matters.
+    Say explicitly: "We will not quote the standard; its text is licensed. Our rule is invented, written in its style."
+  </aside>
+</section>
+
+<!-- ====================================================================== 5 -->
+<section class="slide" id="p3-rule" data-presenter="victor" data-block="Block 5 · Audit" data-steps="1">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · R-PM-07</p><span class="p3-label">Invented example, in the style of ISO/IEC 29110 · numbers illustrative</span></div>
+  <h2>One rule, one piece of evidence: is the project compliant?</h2>
+  <div class="grid-2" style="align-items:stretch">
+    <div class="card mlp">
+      <span class="p3-cap" style="color:var(--mlp)">Rule R-PM-07</span>
+      <p class="p3-doc p3-rule-text">Every change request is <span class="cl"><span class="p3-num">1</span>recorded</span>, its <span class="cl"><span class="p3-num">2</span>impact on schedule and cost is assessed</span>, and <span class="cl"><span class="p3-num">3</span>the customer approves it before work on it starts</span>.</p>
+    </div>
+    <div class="p3-minutes">
+      <div class="hdr">EVIDENCE · MEETING MINUTES</div>
+      <p class="p3-doc">“12 Mar status meeting. Client asked to add CSV export to the reports module. Dev lead estimates 3 extra days; added to Sprint 4. Action: update the project plan.”</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>2:13:00 → 2:13:45.</b> Read the rule and the minutes aloud, slowly.
+    Ask the room: "Hands up: compliant? Non-compliant?" Let them commit before the reveal.
+    → Step 1: the rule has three clauses — recorded; schedule <i>and</i> cost assessed; customer approval <i>before</i> work starts. "Keep these three in mind."
+  </aside>
+</section>
+
+<!-- ====================================================================== 6 -->
+<section class="slide" id="p3-verdict" data-presenter="victor" data-block="Block 5 · Audit">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · R-PM-07</p><span class="p3-label">Invented example · numbers illustrative</span></div>
+  <h2>The judge is confident — and wrong</h2>
+  <div class="grid-2" style="align-items:start">
+    <div class="p3-verdict good">
+      <span class="who">LLM judge</span>
+      <span class="v">Compliant</span>
+      <span class="why">“The request was recorded and its schedule impact assessed.”</span>
+      <div class="p3-conf"><span>Verbalized confidence</span><div class="bar"><i></i></div><b>90%</b></div>
+    </div>
+    <div class="col">
+      <div class="p3-verdict bad" data-step="1">
+        <span class="who">Human auditor (gold)</span>
+        <span class="v">Non-compliant</span>
+        <div class="p3-checks">
+          <span class="ok">met</span><span>1 · recorded</span>
+          <span class="no">missing</span><span>2 · cost impact not assessed</span>
+          <span class="no">missing</span><span>3 · no customer approval before scheduling</span>
+        </div>
+      </div>
+      <span class="p3-stamp" data-step="2">90% confident · wrong</span>
+    </div>
+  </div>
+  <aside class="notes">
+    <b>2:13:45 → 2:14:45.</b> The judge's reasoning sounds right: it checks clause 1 and half of clause 2.
+    → Step 1: the human auditor's gold label. Cost was never assessed; the work was scheduled with no customer approval.
+    → Step 2: "This is the dangerous case: a confident, fluent, wrong verdict. If we route by the judge's own 90%, this one is never reviewed."
+  </aside>
+</section>
+
+<!-- ====================================================================== 7 -->
+<section class="slide" id="p3-probe" data-presenter="victor" data-block="Block 5 · Audit" data-steps="2">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · R-PM-07</p><span class="p3-label">Invented example · numbers illustrative</span></div>
+  <h2>A probe on the judge's residual stream disagrees, so a human gets the case</h2>
+  <div class="figure"><svg class="p3-svg" data-minfs="25" viewBox="0 0 1408 520" aria-label="Probe gauge and routing"></svg></div>
+  <aside class="notes">
+    <b>2:14:45 → 2:15:30.</b> The probe is a linear read-out on the judge's residual stream at the answer position — the last prompt token, where the next token will be Yes or No (that is what NB5 caches) — trained to predict "is this verdict correct?" — Block 3's tool, new target.
+    → Step 1: needle settles at P(correct) ≈ 0.4. The judge said 0.9. Threshold for automatic acceptance: 0.7 (illustrative).
+    → Step 2: below threshold → routed to a human auditor. "The model's words said 90%; its hidden state did not."
+  </aside>
+</section>
+
+<!-- ====================================================================== 8 -->
+<section class="slide" id="p3-ground" data-presenter="victor" data-block="Block 5 · Audit" data-steps="3">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · R-PM-07 · grounding check</p><span class="p3-label">Invented example · numbers illustrative</span></div>
+  <h2>Editing the evidence shows the verdict rests on one clue and ignores another</h2>
+  <div class="row" style="gap:36px; align-items:stretch">
+    <div class="col" style="flex:1.35">
+      <div class="p3-minutes">
+        <div class="hdr">EVIDENCE · MEETING MINUTES</div>
+        <p class="p3-doc">12 Mar status meeting. Client asked to add CSV export to the reports module. <span class="sent key">Dev lead estimates 3 extra days; added to Sprint 4.</span> Action: update the project plan. <span class="sent add">The customer rejected the change.</span></p>
+      </div>
+      <div class="edit"></div>
+    </div>
+    <div class="col" style="flex:1">
+      <div class="p3-verdict good"><span class="who">Judge verdict</span><span class="v">Compliant</span></div>
+      <div class="trial">
+        <span>Remove the schedule sentence</span><span class="r" data-r="1">flips</span>
+        <span>Add a customer rejection</span><span class="r" data-r="2">no change</span>
+      </div>
+    </div>
+  </div>
+  <p class="callout bad" data-step="3" style="font-size:30px">The judge relies on the schedule clue and ignores the approval clause.</p>
+  <aside class="notes">
+    <b>2:15:30 → 2:16:45.</b> Block 2's idea applied to the input text: change one piece of evidence, keep everything else, and watch the verdict. This is a text-level intervention — exactly what NB5 does (replace the excerpt with irrelevant boilerplate, or drop one segment; precomputed so it runs without a GPU). Patching the hidden states of those sentence tokens is the natural next step (Block 2's tool) and would localize where the clue is read; we do not do it today.
+    → Step 1: remove "3 extra days" → verdict flips to Non-compliant. So that sentence carries the decision.
+    → Step 2: restore it, and add "The customer rejected the change." → still Compliant. A rejection should make it non-compliant immediately.
+    → Step 3: "The schedule estimate is relevant evidence — for clause 2. The problem is that the verdict depends on it alone and ignores clause 3, the approval. An auditor would never accept a verdict grounded like this."
+  </aside>
+</section>
+
+<!-- ====================================================================== 9 -->
+<section class="slide" id="p3-why" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · why not just ask the judge?</p>
+  <h2>In one study, a judge's hidden states predicted its errors better than its words</h2>
+  <div class="grid-3">
+    <div class="card"><h3>Better calibrated</h3><p class="small" style="font-size:26px">Brier-trained linear probes beat verbalized and multi-sample confidence, at about 10× less compute.</p></div>
+    <div class="card"><h3>Transfers — there</h3><p class="small" style="font-size:26px">On their reasoning judges, it held up on unseen domains. You will test that on ours.</p></div>
+    <div class="card warn"><h3>Conservative</h3><p class="small" style="font-size:26px">Under-confident on easy sets — a fair price when a missed error costs more than a review.</p></div>
+  </div>
+  <p class="callout" style="font-size:30px">LLM judges are overconfident in words. The cheap baseline every probe must beat: the judge's own Yes/No token probability.</p>
+  <p class="tiny">Brier score = mean squared gap between confidence and the 0/1 outcome (lower is better). Radharapu et al., “Calibrating LLM Judges: Linear Probes for Fast and Reliable Uncertainty Estimation”, ACL 2026 Industry, arXiv 2512.22245. Related: semantic entropy probes, Kossen, Han et al. 2024, arXiv 2406.15927.</p>
+  <aside class="notes">
+    <b>2:16:45 → 2:17:30.</b> The R-PM-07 story is invented; this result is not.
+    Radharapu et al. train linear probes on reasoning judges' hidden states with a Brier-score loss. Compared with verbalized confidence and multi-generation methods: better calibration, ≈10× cheaper, and in their experiments it generalized to unseen evaluation domains. Do not sell transfer as a general fact: in our own test run (NB5 fallback judge) the probe did NOT transfer to held-out assertions — foreshadow: "you will test whether it transfers". Their honest caveat: probes are conservative and underperform on easier datasets — which suits safety-critical settings that prioritise low false positives. Audits are such a setting.
+    Token probability: for a Yes/No judge, P(Yes) from the output logits is free and often well-ranked; in NB5 it is the baseline to beat, alongside verbalized confidence. A probe is only interesting if it carries information beyond the output probability (higher AUROC, since recalibration can fix ECE but not ranking).
+    Semantic entropy probes (Kossen, Han et al.) do the same trick for hallucination: predict uncertainty from one forward pass instead of many samples.
+  </aside>
+</section>
+
+<!-- ====================================================================== 10 -->
+<section class="slide" id="p3-a10" data-presenter="victor" data-block="Block 5 · Audit" data-steps="4">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · calibration and routing</p><span class="p3-label syn">Synthetic illustration · not measured</span></div>
+  <h2>A calibrated score turns review into a dial</h2>
+  <div class="figure"><svg class="p3-svg" data-minfs="28" viewBox="0 0 1408 560" aria-label="Reliability diagram and risk-coverage curve"></svg></div>
+  <p class="caption">Synthetic: 3,000 simulated verdicts. ECE = average gap between stated confidence and actual accuracy. Escape = wrong and auto-accepted, over all verdicts.</p>
+  <aside class="notes">
+    <b>2:17:30 → 2:19:30.</b> Centrepiece. Synthetic data (say so): 3,000 simulated verdicts, judge accuracy ≈ 74%. Nothing on this slide is measured.
+    Left = reliability diagram: x = stated confidence, y = how often the verdict is actually correct; the diagonal is perfect calibration.
+    Step 0: verbalized confidence piles up at 0.8–1.0 but accuracy stays near 0.75 → bars far below the diagonal = overconfident.
+    → Step 1: the probe's bars hug the diagonal.
+    → Step 2: right = risk–coverage. Auto-accept every verdict whose probe score ≥ τ. Coverage = share accepted automatically; y = error rate among accepted. Threshold low: accept nearly everything, every error escapes.
+    → Step 3 and 4: raise τ. Fewer automatic acceptances, far fewer escaped errors. Read the line under the chart aloud: 'escaped errors' = verdicts that are wrong AND auto-accepted, as a share of all verdicts (NB5's definition, and the escape rate of the next slide). The dashed line is NB5's routing target: at most 10% error among auto-accepted verdicts. In the synthetic data the probe curve meets the 10% target at about 38–40% coverage (step 4, τ = 0.83: auto-accept 38%, error among accepted ≈ 9.9%, escaped errors 3.8% of all verdicts). Routing by verbalized confidence only gets under 10% at tiny coverage (below ~8%), because its scores barely separate right from wrong. Step 3 (τ = 0.62): 74% coverage but ≈ 18% error among accepted — above target.
+    Point at the grey curve: "Same coverage, routing by verbalized confidence lets more errors through."
+    The slider is draggable with the mouse if someone asks "what about 90%?" — clicks on the chart do not advance slides.
+  </aside>
+</section>
+
+<!-- ====================================================================== 11 -->
+<section class="slide" id="p3-conformal" data-presenter="victor" data-block="Block 5 · Audit" data-steps="3">
+  <div class="p3-head"><p class="kicker">Block 5 · Audit · from score to guarantee</p><span class="p3-label">Research direction · not a published result</span></div>
+  <h2>A conformal threshold could bound how many wrong verdicts escape review</h2>
+  <div class="figure" style="flex:0 0 330px"><svg class="p3-svg" viewBox="0 0 1408 350" aria-label="Conformal risk-control threshold on calibration verdicts"></svg></div>
+  <div class="row" style="gap:40px; align-items:center">
+    <p class="callout resid" style="flex:1.3; font-size:27px; line-height:1.25" data-step="2">Lowest τ with (n/(n+1))·escape(τ) + 1/(n+1) ≤ α on calibration data → expected escape rate ≤ α.</p>
+    <p class="small" style="flex:0.75" data-step="3">Holds only if new cases look like calibration cases. A new process breaks that: test it.</p>
+  </div>
+  <aside class="notes">
+    <b>2:19:30 → 2:20:15.</b> Say clearly: "This is a research direction — my thesis line, LLM-assisted quality and security audits of software projects — not a published result."
+    → Step 1: a calibration set with gold labels: n = 60 synthetic verdicts, placed by probe score. Grey = the judge was right, red = wrong. Most red dots sit at low scores, but not all.
+    → Step 2: an escape is a verdict that is wrong AND auto-accepted (score ≥ τ); the escape rate is escapes over ALL verdicts (NB5's definition, same as the A10 readout). Rule, exactly NB5's crc_threshold: scan thresholds from low to high and take the first (lowest) τ with (n/(n+1))·escape_cal(τ) + 1/(n+1) ≤ α. The 1/(n+1) term is the finite-sample price; with n = 60 it already uses 1.6 of the 10 points, so the empirical escape budget is about 8.5%. Read the line under the axis: how many red dots are ringed (escape), the bound, and how many verdicts are auto-accepted. This is conformal risk control with the probe score: if new verdicts are exchangeable with calibration verdicts, the EXPECTED escape rate on new verdicts is ≤ α (in expectation over calibration sets, not for every audit). Same recipe as the optional stretch at the end of NB5.
+    Note for experts: this bounds escapes over all verdicts, not the share of errors that escape (a miss rate). With a ~74%-accurate judge, α = 10% of all verdicts can still be a large share of the errors; choose α with the auditor.
+    → Step 3: the guarantee needs exchangeability. A new 29110 process, or a held-out assertion in NB5, is exactly where it can fail. That is the distribution-shift test you will run.
+  </aside>
+</section>
+
+<!-- ====================================================================== 12 -->
+<section class="slide" id="p3-legal" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · hands-on stand-in</p>
+  <h2>In the notebook, contracts stand in for project records</h2>
+  <table class="t">
+    <tr><th>Audit (R-PM-07)</th><th>LegalBench contract-NLI</th></tr>
+    <tr><td>Rule</td><td>Assertion — one of 14 contract-NLI tasks</td></tr>
+    <tr><td>Evidence</td><td class="ex">Contract excerpt from an NDA</td></tr>
+    <tr><td>Verdict</td><td>Does this clause state that … ? Yes / No</td></tr>
+    <tr><td>A new 29110 process</td><td>3 held-out assertions (distribution shift)</td></tr>
+    <tr><td>Judge</td><td>Gemma 3 4B IT · cached hidden states, no GPU needed</td></tr>
+  </table>
+  <p class="tiny">LegalBench contract_nli_* tasks (CC BY 4.0): Guha et al., NeurIPS 2023 (Datasets &amp; Benchmarks); derived from ContractNLI, Koreeda &amp; Manning 2021.</p>
+  <aside class="notes">
+    <b>2:20:15 → 2:21:00.</b> We cannot share real audit records, so we use a public analogue with the same shape.
+    LegalBench has 14 contract_nli_* tasks (CC BY 4.0), each one assertion from ContractNLI applied to NDA clauses, e.g. "the Receiving Party may share some Confidential Information with some third-parties"; gold labels come from ContractNLI's annotations (binarized by LegalBench).
+    Exact prompt: system "You are a compliance auditor."; user "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." The verdict is read from the Yes/No next-token logits (that also gives the token-probability baseline); verbalized confidence comes from a follow-up question asking for 0–100.
+    Splits: 11 assertions split by NDA document into train / cal / test (no test NDA seen in training). 3 assertions are held out entirely — notice on compelled disclosure, return of confidential information, survival of obligations — standing in for a new 29110 process.
+    The judge is Gemma 3 4B IT; its verdicts and residual-stream activations (at the last prompt token) are cached, so NB5 runs on a CPU runtime. CHECK BEFORE THE SESSION: if the Gemma cache is not published, NB5 falls back to Qwen2.5-0.5B — then say so and change this row.
+  </aside>
+</section>
+
+<!-- ====================================================================== 13 -->
+<section class="slide" id="p3-predict" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · before you run</p>
+  <h2>Commit to a prediction first</h2>
+  <div class="predict"><p style="font-size:36px; line-height:1.3">Will the probe beat the judge's own confidence at flagging its wrong verdicts — and will it still work on assertions it never saw?</p></div>
+  <p class="small">“The judge's own confidence” = two signals: what it says (0–100) and its Yes/No token probability.</p>
+  <div class="grid-3" style="grid-template-columns:repeat(4,1fr); gap:24px; font-size:27px">
+    <div class="card"><b>A</b>Beats both, and transfers</div>
+    <div class="card"><b>B</b>Beats both, not on unseen assertions</div>
+    <div class="card"><b>C</b>Beats words, only ties token probability</div>
+    <div class="card"><b>D</b>Neither: token probability wins</div>
+  </div>
+  <aside class="notes">
+    <b>2:21:00 → 2:21:30.</b> Hands up for A, B, C, D. Write the counts on the whiteboard; we return to them in the debrief.
+    Ask them to write their own prediction in the notebook's Predict cell before running anything.
+    Options C and D matter: token probability is free and often strong; a probe that only ties it adds cost, not information.
+  </aside>
+</section>
+
+<!-- ====================================================================== 14 -->
+<section class="slide" id="p3-nb5" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · hands-on</p>
+  <h2>NB5: measure whether the judge's hidden state knows when it is wrong</h2>
+  <div class="row" style="gap:56px">
+    <ol class="col" style="flex:1">
+      <li>Run the judge on a few pairs</li>
+      <li>Train a probe to predict wrong verdicts</li>
+      <li>Compare with verbalized and token probability: AUROC, ECE</li>
+      <li>Pick a threshold: ≤ 10% error among accepted</li>
+      <li>Test on 3 held-out assertions</li>
+      <li>Remove the evidence behind confident verdicts</li>
+    </ol>
+    <div class="side">
+      <div class="card resid"><span class="big">22</span><span style="font-size:28px">minutes, in pairs</span></div>
+      <div class="card"><span style="font-size:26px"><b>NB5 judge confidence</b><br>Colab · CPU is fine (cached activations)</span></div>
+    </div>
+  </div>
+  <div class="p3-gloss">
+    <span><b>AUROC</b> chance a wrong verdict scores lower than a right one (0.5 = useless)</span>
+    <span><b>ECE</b> average gap between stated confidence and actual accuracy</span>
+    <span><b>Brier</b> mean squared gap between confidence and the 0/1 outcome</span>
+  </div>
+  <aside class="notes">
+    <b>2:21:30 → 2:43:30</b> (22 min). If the room is mid-flow, take 2–3 more minutes from the debrief, not from the wrap.
+    Pairs: one drives, one reads the cells and predicts. Steps 1–4 are core; 5 is the key result; 6 is the grounding check; the conformal threshold is an optional stretch.
+    Three confidence signals, compared on the test split: verbalized 0–100, Yes/No token probability (confidence in the chosen answer), and the probe (fitted on train, layer chosen and Platt-calibrated on cal). Stress that token probability is the strong, cheap baseline; recalibration fixes ECE but cannot change AUROC, so AUROC is where the probe must win.
+    Routing target is 10% error among auto-accepted verdicts (5% left almost no coverage with the small test judge; with the Gemma cache they can try 0.05).
+    Step 6 is text-level: the evidence is replaced by irrelevant boilerplate or one segment is removed (precomputed). Hidden-state patching would be the next step, not done today.
+    Circulate. Common snag: the target is "is the verdict wrong", not "is the answer Yes" — confidence must be in the chosen answer, max(P(Yes), P(No)).
+    Time checks at 2:30 (should be at step 3) and 2:37 (step 5).
+  </aside>
+</section>
+
+<!-- ====================================================================== 15 -->
+<section class="slide" id="p3-debrief" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · debrief</p>
+  <h2>What would an auditor accept as evidence that a verdict is safe to skip?</h2>
+  <div class="grid-3">
+    <div class="card good"><h3>Where did the probe win?</h3><p class="small" style="font-size:26px">Against words, and against token probability?</p></div>
+    <div class="card bad"><h3>Where did it fail?</h3><p class="small" style="font-size:26px">Held-out assertions. Ungrounded verdicts that are still correct.</p></div>
+    <div class="card"><h3>What counts as evidence?</h3><p class="small" style="font-size:26px">A score, a bound, a grounding check — or all three?</p></div>
+  </div>
+  <aside class="notes">
+    <b>2:43:30 → 2:48:00.</b> Go back to the A/B/C/D counts. Ask two pairs for their AUROC/ECE numbers from the cache (Gemma 3 4B if published; otherwise the Qwen fallback — say which) — those are the session's real numbers.
+    What we saw in testing (fallback judge Qwen2.5-0.5B, NOT the session's Gemma 3 4B; say "in our test run", never present as a result): judge accuracy 75% on test, 64% on held-out assertions. AUROC for flagging wrong verdicts on test: verbalized 0.43 (worse than chance — it only ever answered 75, 80, 85 or 95), token probability 0.63, probe 0.71. On the held-out assertions the probe did NOT transfer: with its cal threshold 17.5% of verdicts escaped vs 8% for token probability. Grounding: of the 40 most confident Yes verdicts, 70% stayed Yes when the evidence was replaced by irrelevant boilerplate, even though these verdicts were correct.
+    Lessons to draw out: (1) words are useless as a gate, token probability is a real baseline; (2) a probe can win in-distribution and fail on a new rule — it may learn "which rule is hard" rather than the judge's uncertainty; (3) a correct verdict can still be ungrounded, and neither accuracy nor a confidence score reveals it.
+    Close with the auditor question: a calibrated score alone is not evidence; a threshold with a stated escape bound plus a grounding check on sampled verdicts starts to look like something an assessor could sign.
+  </aside>
+</section>
+
+<!-- ====================================================================== 16 -->
+<section class="slide" id="p3-map" data-presenter="victor" data-block="Block 5 · Audit" data-steps="6">
+  <p class="kicker">Block 5 · Audit · method map</p>
+  <h2>Pick the method from your question, and the validation from the method</h2>
+  <div class="p3-map">
+    <div class="h">Your research question</div><div></div><div class="h">Method</div><div></div><div class="h">Validate with</div>
+    <div class="r" data-r="1"><div class="c q" data-row="1">Is concept X represented?</div><div class="a" data-row="1">→</div><div class="c m" data-row="1">Linear probe</div><div class="a" data-row="1">→</div><div class="c v" data-row="1">Held-out and OOD splits<span class="tag">BLOCK 5</span></div></div>
+    <div class="r" data-r="2"><div class="c q" data-row="2">Which component causes Y?</div><div class="a" data-row="2">→</div><div class="c m" data-row="2">Activation patching</div><div class="a" data-row="2">→</div><div class="c v" data-row="2">Other corruptions, path patching<span class="tag">BLOCK 5 · TEXT</span></div></div>
+    <div class="r" data-r="3"><div class="c q" data-row="3">Which features does it use?</div><div class="a" data-row="3">→</div><div class="c m" data-row="3">SAE / transcoder</div><div class="a" data-row="3">→</div><div class="c v" data-row="3">Beat a plain probe baseline</div></div>
+    <div class="r" data-r="4"><div class="c q" data-row="4">How is one prompt computed?</div><div class="a" data-row="4">→</div><div class="c m" data-row="4">Attribution graph</div><div class="a" data-row="4">→</div><div class="c v" data-row="4">Intervene on graph features</div></div>
+    <div class="r" data-r="5"><div class="c q" data-row="5">Can I control behaviour Z?</div><div class="a" data-row="5">→</div><div class="c m" data-row="5">Steering vector</div><div class="a" data-row="5">→</div><div class="c v" data-row="5">Try orthogonal directions</div></div>
+  </div>
+  <aside class="notes">
+    <b>2:48:00 → 2:49:30.</b> The whole tutorial in one table. Rows appear one per →.
+    Row 1 probe (Blocks 3, 5) — validate on held-out and out-of-distribution splits, as you just did. Row 2 patching (Block 2) — check the effect survives other corruptions, and use path patching to separate direct from indirect routes. Row 3 SAEs (Block 3) — if a plain probe matches it, the SAE added nothing (Kantamneni et al., ICML 2025). Row 4 attribution graphs (Block 4) — a graph is a hypothesis until you intervene. Row 5 steering — a 2026 workshop paper (ICLR 2026 Representational Alignment workshop, arXiv 2602.06801) reports that steering directions are not identifiable: orthogonal perturbations can reach much of the effect, so test them.
+    → Step 6: highlight. "Block 5 used only the first two rows — and the second only in its simplest form: we intervened on the input text, not on hidden states. The simplest tools did the auditing work; hidden-state patching is the obvious next step."
+  </aside>
+</section>
+
+<!-- ====================================================================== 17 -->
+<section class="slide" id="p3-transfer" data-presenter="victor" data-block="Block 5 · Audit">
+  <p class="kicker">Block 5 · Audit · your turn</p>
+  <h2>Your turn: map one LLM-judged task from your own research</h2>
+  <div class="p3-canvas">
+    <div class="f"><i>1</i><b>LLM-judged task</b><span>What does the model decide?</span></div>
+    <div class="f"><i>2</i><b>Ground truth</b><span>Who or what gives the gold label?</span></div>
+    <div class="f"><i>3</i><b>Confidence signal</b><span>Probe on which layer, which token?</span></div>
+    <div class="f"><i>4</i><b>Threshold policy</b><span>What escape rate can you tolerate?</span></div>
+    <div class="f"><i>5</i><b>Grounding check</b><span>Which evidence should flip the verdict?</span></div>
+    <div class="f"><i>6</i><b>Shift test</b><span>What is your “unseen assertion”?</span></div>
+  </div>
+  <p class="small">2 minutes in pairs · printed transfer canvas on your table</p>
+  <aside class="notes">
+    <b>2:49:30 → 2:51:30.</b> Hand out the printed transfer canvas (printables/transfer_canvas.pdf).
+    Two minutes, pairs: each person fills boxes 1–3 for their own work; if time, 4–6. Examples to unblock: code-review bots, grading rubrics, clinical note triage, retrieval relevance judges.
+    Take one example from the room before moving on.
+  </aside>
+</section>
+
+<!-- ====================================================================== 18 -->
+<section class="slide" id="p3-field" data-presenter="victor" data-block="Wrap" data-steps="7">
+  <p class="kicker">Wrap · where the field is going</p>
+  <h2>From observing models to auditing them — with tools that are still young</h2>
+  <div class="p3-field">
+    <svg viewBox="0 0 1408 210" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="p3-stages">
+      <div class="p3-stage" data-k="1"><b>Observe</b><span>logit lens</span></div>
+      <div class="p3-stage" data-k="2"><b>Intervene</b><span>patching</span></div>
+      <div class="p3-stage" data-k="3"><b>Decompose</b><span>SAEs, transcoders</span></div>
+      <div class="p3-stage" data-k="4"><b>Trace</b><span>attribution graphs</span></div>
+      <div class="p3-stage" data-k="5"><b>Audit</b><span>probes on judges</span></div>
+    </div>
+  </div>
+  <div class="grid-2 p3-field-cols">
+    <div class="card warn" data-step="6"><h3>Open problems</h3><ul>
+      <li>Global circuits, not one prompt at a time</li>
+      <li>Are replacement models faithful?</li>
+      <li>Agents that do interpretability</li>
+      <li>Shared evaluation standards</li></ul></div>
+    <div class="card resid" data-step="7"><h3>Implications</h3><ul>
+      <li>Assurance and audits of AI systems</li>
+      <li>Evidence for regulation</li>
+      <li>Scientific discovery inside models</li></ul></div>
+  </div>
+  <aside class="notes">
+    <b>2:51:30 → 2:55:00.</b> Steps 1–5 walk the arc of the afternoon: Miguel observed, Salvador intervened, decomposed and traced, we audited.
+    → Step 6, open problems (Sharkey et al., "Open Problems in Mechanistic Interpretability", TMLR 2025): most circuit results explain one prompt, not a global mechanism; attribution graphs explain a replacement model, and how faithful that is to the real model is open; automating interpretability with agents; no agreed evaluation standards.
+    → Step 7, implications: assurance and audits (today's block), evidence regulators could ask for, and using models as objects of science.
+    Honesty line: "These tools are young. Most results are on small models or single prompts. Treat every interpretation as a hypothesis with a test attached."
+  </aside>
+</section>
+
+<!-- ====================================================================== 19 -->
+<section class="slide" id="p3-res" data-presenter="victor" data-block="Wrap">
+  <p class="kicker">Wrap · resources</p>
+  <h2>Everything we used today is open</h2>
+  <div class="p3-res">
+    <div class="colh">Tools and courses</div><div class="colh">Papers behind today</div>
+    <div><b>TransformerLens</b><a href="https://transformerlensorg.github.io/TransformerLens/">transformerlensorg.github.io/TransformerLens</a></div>
+    <div><b>Interpretability in the Wild (IOI) · Wang et al. 2022</b><a href="https://arxiv.org/abs/2211.00593">arxiv.org/abs/2211.00593</a></div>
+    <div><b>SAELens · Gemma Scope 2</b><a href="https://decoderesearch.github.io/SAELens/">decoderesearch.github.io/SAELens</a></div>
+    <div><b>Toy Models of Superposition · Monosemanticity</b><a href="https://transformer-circuits.pub/">transformer-circuits.pub (2022, 2023)</a></div>
+    <div><b>nnsight · circuit-tracer</b><a href="https://nnsight.net">nnsight.net · pypi.org/project/circuit-tracer</a></div>
+    <div><b>Circuit Tracing · Biology of an LLM</b><a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html">transformer-circuits.pub/2025/attribution-graphs</a></div>
+    <div><b>Neuronpedia</b><a href="https://www.neuronpedia.org">neuronpedia.org</a></div>
+    <div><b>Are SAEs Useful? · Kantamneni et al. 2025</b><a href="https://arxiv.org/abs/2502.16681">arxiv.org/abs/2502.16681</a></div>
+    <div><b>Transformer Explainer</b><a href="https://poloclub.github.io/transformer-explainer/">poloclub.github.io/transformer-explainer</a></div>
+    <div><b>Open Problems · Sharkey et al., TMLR 2025</b><a href="https://arxiv.org/abs/2501.16496">arxiv.org/abs/2501.16496</a></div>
+    <div><b>ARENA · chapter 1</b><a href="https://learn.arena.education">learn.arena.education</a></div>
+    <div><b>Calibrating LLM Judges · Radharapu et al. 2026</b><a href="https://arxiv.org/abs/2512.22245">arxiv.org/abs/2512.22245</a></div>
+    <div><b>LegalBench · Guha et al. 2023</b><a href="https://hazyresearch.stanford.edu/legalbench/">hazyresearch.stanford.edu/legalbench</a></div>
+    <div><b>Gemma Scope 2 docs</b><a href="https://ai.google.dev/gemma/docs/gemma_scope">ai.google.dev/gemma/docs/gemma_scope</a></div>
+  </div>
+  <aside class="notes">
+    <b>2:55:00 → 2:56:00.</b> Don't read the list. "Left column: the tools from the notebooks and where to learn more — ARENA chapter 1 is the best free follow-up course. Right column: the papers today's blocks were built on; the Open Problems review is the map of what nobody knows yet."
+    Toy Models of Superposition: transformer-circuits.pub/2022/toy_model · Towards Monosemanticity: transformer-circuits.pub/2023/monosemantic-features · Circuit Tracing methods: transformer-circuits.pub/2025/attribution-graphs/methods.html.
+    All links are also in the materials folder (see last slide).
+  </aside>
+</section>
+
+<!-- ====================================================================== 20 -->
+<section class="slide" id="p3-exit" data-presenter="victor" data-block="Wrap">
+  <p class="kicker">Wrap · exit ticket</p>
+  <h2>Two answers before you leave, two minutes</h2>
+  <div class="p3-exit">
+    <div class="card"><span class="n">1</span><p>One thing you will try in your own research.</p></div>
+    <div class="card"><span class="n">2</span><p>One thing that confused you.</p></div>
+    <div class="p3-qr">Form link and QR code</div>
+  </div>
+  <p class="small">Anonymous. We read every answer and use them to fix the materials.</p>
+  <aside class="notes">
+    <b>2:56:00 → 2:58:00.</b> TODO: insert the exit-ticket form link and QR code in the dashed box before the session.
+    Give them the full two minutes in silence. Question 2 is the one we learn the most from.
+  </aside>
+</section>
+
+<!-- ====================================================================== 21 -->
+<section class="slide title-slide" id="p3-thanks" data-presenter="victor" data-block="Wrap">
+  <p class="kicker">MICAI 2026 · Mechanistic Interpretability, Hands-on</p>
+  <h1>Thank you</h1>
+  <div class="people">
+    <div style="--c:var(--miguel)"><b>Miguel González</b><span>Tecnológico de Monterrey</span></div>
+    <div style="--c:var(--salvador)"><b>Salvador Hinojosa</b><span>Tecnológico de Monterrey</span></div>
+    <div style="--c:var(--victor)"><b>Víctor Macías-Terrón</b><span>Tecnológico de Monterrey</span></div>
+  </div>
+  <div class="mat">Slides, notebooks and printables: <span class="ph">materials link</span></div>
+  <aside class="notes">
+    <b>2:58:00 → 3:00:00.</b> TODO: replace the "materials link" placeholder with the repository / Drive URL (and a QR if possible).
+    Thank the student assistant by name. Invite people to stay for questions; the notebooks keep working after today.
+  </aside>
+</section>
+
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function S(tag, attrs, parent) {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(el);
+    return el;
+  }
+  function T(parent, x, y, str, attrs) {
+    const a = Object.assign({ x, y, 'font-size': 24, fill: 'var(--ink)' }, attrs || {});
+    const root = parent.ownerSVGElement || parent;            // per-figure minimum so projected text stays >= 22px
+    const minfs = +(root.dataset && root.dataset.minfs || 0);
+    if (minfs && +a['font-size'] < minfs) a['font-size'] = minfs;
+    const t = S('text', a, parent);
+    t.textContent = str; return t;
+  }
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  // tween helper: animates from current value to target, jumps when reduced motion
+  function tweener(slide, apply) {
+    let cur = 0, stop = null;
+    return {
+      set(v) { if (stop) stop(); cur = v; apply(v); },
+      to(v, dur) {
+        if (stop) stop();
+        if (Deck.reducedMotion || !dur) { cur = v; apply(v); return; }
+        const from = cur;
+        stop = Deck.raf(slide, t => {
+          const k = clamp(t / dur, 0, 1);
+          cur = lerp(from, v, ease(k)); apply(cur);
+          return k < 1;
+        });
+      },
+      get value() { return cur; }
+    };
+  }
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  /* ================= slide 3: rules × evidence grid ================= */
+  (function () {
+    const slide = document.getElementById('p3-grid');
+    const svg = slide.querySelector('svg');
+    const R = 5, C = 8, x0 = 380, y0 = 120, cw = 116, ch = 66, gap = 8;
+    const rules = ['R-PM-01', 'R-PM-04', 'R-PM-07', 'R-SI-02', 'R-SI-05'];
+    const docs = ['plan', 'minutes', 'memo', 'log', 'commits', 'tests', 'minutes', 'report'];
+    T(svg, 0, 34, 'RULES', { 'font-size': 22, 'font-weight': 700, 'letter-spacing': '.12em', fill: 'var(--mlp)' });
+    T(svg, x0, 34, 'EVIDENCE (AUDITABLE CORPUS)', { 'font-size': 22, 'font-weight': 700, 'letter-spacing': '.12em', fill: 'var(--ink-2)' });
+    rules.forEach((r, i) => {
+      const y = y0 + i * (ch + gap);
+      S('rect', { x: 0, y, width: 330, height: ch, rx: 10, fill: 'var(--mlp-soft)', stroke: 'var(--mlp)', 'stroke-width': 1.5 }, svg);
+      T(svg, 22, y + 42, r, { 'font-size': 26, 'font-weight': 700, fill: 'var(--mlp)', 'font-family': 'var(--font-mono)' });
+      for (let k = 0; k < 3; k++) S('rect', { x: 160, y: y + 18 + k * 12, width: 140 - k * 30, height: 5, rx: 2.5, fill: 'var(--mlp)', opacity: .35 }, svg);
+    });
+    docs.forEach((d, j) => {
+      const x = x0 + j * (cw + gap);
+      S('rect', { x: x + 30, y: 50, width: 56, height: 50, rx: 6, fill: 'var(--card)', stroke: 'var(--ink-2)', 'stroke-width': 1.5 }, svg);
+      for (let k = 0; k < 3; k++) S('rect', { x: x + 38, y: 62 + k * 11, width: 40 - k * 8, height: 4, rx: 2, fill: 'var(--muted)' }, svg);
+      T(svg, x + cw / 2 - 4, y0 + R * (ch + gap) + 30, d, { 'font-size': 22, fill: 'var(--muted)', 'text-anchor': 'middle' });
+    });
+    const rnd = mulberry32(11), cells = [];
+    for (let i = 0; i < R; i++) for (let j = 0; j < C; j++) {
+      const x = x0 + j * (cw + gap), y = y0 + i * (ch + gap);
+      const ok = rnd() < 0.68;
+      const g = S('g', {}, svg);
+      const bg = S('rect', { x, y, width: cw, height: ch, rx: 8, fill: 'var(--bg-2)', stroke: 'var(--rule)', 'stroke-width': 1.5 }, g);
+      const tx = T(g, x + cw / 2, y + 43, ok ? 'C' : 'NC', { 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle', fill: ok ? 'var(--good)' : 'var(--bad)', opacity: 0 });
+      const ring = S('rect', { x: x - 4, y: y - 4, width: cw + 8, height: ch + 8, rx: 11, fill: 'none', stroke: 'var(--warn)', 'stroke-width': 4, 'stroke-dasharray': '10 7', opacity: 0 }, g);
+      cells.push({ i, j, ok, bg, tx, ring, order: i + j + rnd() * 1.5 });
+    }
+    const pick = new Set([2 * C + 1, 0 * C + 5, 3 * C + 3, 4 * C + 6, 1 * C + 2, 2 * C + 7]);
+    // legend / question
+    const q = S('g', { opacity: 0 }, svg);
+    T(q, x0 + C * (cw + gap) - gap, 552, 'Which verdicts need a human?', { 'font-size': 28, 'font-weight': 700, fill: 'var(--warn)', 'text-anchor': 'end' });
+    const judge = S('g', { opacity: 0 }, svg);
+    T(judge, x0 + C * (cw + gap) - gap, 552, 'LLM judge: one verdict per (rule, evidence) pair', { 'font-size': 24, 'font-weight': 600, fill: 'var(--ink-2)', 'text-anchor': 'end' });
+    T(svg, 0, 552, 'C = compliant · NC = non-compliant', { 'font-size': 22, fill: 'var(--muted)' });
+    const maxO = Math.max(...cells.map(c => c.order));
+    const fill = tweener(slide, v => {
+      cells.forEach(c => {
+        const k = clamp((v * (maxO + 2) - c.order) / 2, 0, 1);
+        c.tx.setAttribute('opacity', k);
+        c.bg.setAttribute('fill', k > .5 ? (c.ok ? 'var(--good-soft)' : 'var(--bad-soft)') : 'var(--bg-2)');
+      });
+    });
+    const ask = tweener(slide, v => {
+      q.setAttribute('opacity', v); judge.setAttribute('opacity', 1 - v);
+      cells.forEach((c, n) => {
+        const p = pick.has(n);
+        c.ring.setAttribute('opacity', p ? v : 0);
+        c.bg.parentNode.setAttribute('opacity', 1 - (p ? 0 : .45 * v));
+      });
+    });
+    let entered = false;
+    Deck.on('p3-grid', 'enter', (s, st) => { entered = true; fill.set(st >= 1 ? 1 : 0); ask.set(st >= 2 ? 1 : 0); judge.setAttribute('opacity', st === 1 ? 1 : 0); });
+    Deck.on('p3-grid', 'step', (s, st) => {
+      if (st >= 1) { judge.setAttribute('opacity', st === 1 ? 1 : 0); fill.value < 1 ? fill.to(1, 1.8) : fill.set(1); } else fill.set(0);
+      if (st >= 2) ask.to(1, .7); else ask.set(0);
+      if (st === 1) judge.setAttribute('opacity', 1);
+    });
+  })();
+
+  /* ================= slide 5: rule clauses ================= */
+  Deck.on('p3-rule', 'step', (s, st) => s.classList.toggle('s1', st >= 1));
+
+  /* ================= slide 7: probe gauge + routing ================= */
+  (function () {
+    const slide = document.getElementById('p3-probe');
+    const svg = slide.querySelector('svg');
+    // left: residual stream -> probe
+    T(svg, 0, 40, 'JUDGE · RESIDUAL STREAM', { 'font-size': 22, 'font-weight': 700, 'letter-spacing': '.1em', fill: 'var(--resid)' });
+    S('rect', { x: 0, y: 70, width: 360, height: 56, rx: 28, fill: 'var(--resid-soft)', stroke: 'var(--resid)', 'stroke-width': 2 }, svg);
+    for (let k = 0; k < 12; k++) S('rect', { x: 26 + k * 26, y: 84, width: 16, height: 28, rx: 4, fill: 'var(--resid)', opacity: .25 + .6 * ((k * 37) % 11) / 11 }, svg);
+    T(svg, 0, 162, 'hidden state h at the answer position', { 'font-size': 25, fill: 'var(--ink-2)' });
+    T(svg, 0, 192, '(last prompt token)', { 'font-size': 25, fill: 'var(--muted)' });
+    S('path', { d: 'M180 204 L180 244', stroke: 'var(--ink-2)', 'stroke-width': 3, 'marker-end': 'url(#p3-ah)' }, svg);
+    const defs = S('defs', {}, svg);
+    const mk = S('marker', { id: 'p3-ah', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
+    S('path', { d: 'M0 0 L10 5 L0 10 z', fill: 'var(--ink-2)' }, mk);
+    const mk2 = S('marker', { id: 'p3-ah2', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, defs);
+    S('path', { d: 'M0 0 L10 5 L0 10 z', fill: 'var(--muted)' }, mk2);
+    S('rect', { x: 40, y: 250, width: 280, height: 84, rx: 12, fill: 'var(--card)', stroke: 'var(--resid)', 'stroke-width': 2 }, svg);
+    T(svg, 180, 286, 'Linear probe', { 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle' });
+    T(svg, 180, 318, 'σ(w·h + b)', { 'font-size': 24, 'text-anchor': 'middle', 'font-family': 'var(--font-mono)', fill: 'var(--ink-2)' });
+    S('path', { d: 'M320 292 L420 292', stroke: 'var(--ink-2)', 'stroke-width': 3, 'marker-end': 'url(#p3-ah)' }, svg);
+
+    // gauge
+    const cx = 640, cy = 360, r = 190;
+    const ang = v => Math.PI * (1 - v);       // 0 -> left, 1 -> right
+    const pt = (v, rr) => [cx + rr * Math.cos(ang(v)), cy - rr * Math.sin(ang(v))];
+    const arc = (a, b, rr) => { const [x1, y1] = pt(a, rr), [x2, y2] = pt(b, rr); return `M${x1} ${y1} A${rr} ${rr} 0 0 1 ${x2} ${y2}`; };
+    const thr = 0.7;
+    S('path', { d: arc(0, thr, r), stroke: 'var(--bad-soft)', 'stroke-width': 34, fill: 'none' }, svg);
+    S('path', { d: arc(thr, 1, r), stroke: 'var(--good-soft)', 'stroke-width': 34, fill: 'none' }, svg);
+    for (let k = 0; k <= 10; k++) {
+      const [a1, b1] = pt(k / 10, r - 22), [a2, b2] = pt(k / 10, r + (k % 5 ? -10 : 0) + 18);
+      S('line', { x1: a1, y1: b1, x2: a2, y2: b2, stroke: 'var(--muted)', 'stroke-width': k % 5 ? 1.5 : 2.5 }, svg);
+    }
+    [[0, '0'], [0.5, '0.5'], [1, '1']].forEach(([v, s]) => { const [x, y] = pt(v, r + 46); T(svg, x, y + 8, s, { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--muted)' }); });
+    T(svg, cx, cy + 118, 'probe: P(verdict correct)', { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--ink-2)' });
+    // threshold tick
+    const [tx1, ty1] = pt(thr, r - 30), [tx2, ty2] = pt(thr, r + 30);
+    S('line', { x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: 'var(--ink)', 'stroke-width': 4 }, svg);
+    const [tlx, tly] = pt(thr, r + 50);
+    T(svg, tlx + 14, tly - 14, 'review threshold 0.7', { 'font-size': 22, 'font-weight': 600 });
+    // ghost verbalized marker
+    const [gx, gy] = pt(0.9, r + 2);
+    const ghost = S('g', { opacity: 0 }, svg);
+    S('circle', { cx: gx, cy: gy, r: 12, fill: 'var(--card)', stroke: 'var(--ink-2)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, ghost);
+    T(ghost, gx + 18, gy - 10, 'said 0.9', { 'font-size': 22, fill: 'var(--ink-2)' });
+    const needle = S('line', { x1: cx, y1: cy, x2: cx - r + 40, y2: cy, stroke: 'var(--ink)', 'stroke-width': 6, 'stroke-linecap': 'round' }, svg);
+    S('circle', { cx, cy, r: 14, fill: 'var(--ink)' }, svg);
+    const val = T(svg, cx, cy + 76, '', { 'font-size': 52, 'font-weight': 700, 'text-anchor': 'middle', fill: 'var(--bad)' });
+
+    // routing
+    const rx = 1050;
+    const autoBox = S('g', {}, svg);
+    S('rect', { x: 1150, y: 90, width: 258, height: 92, rx: 12, fill: 'var(--card)', stroke: 'var(--rule)', 'stroke-width': 2 }, autoBox);
+    T(autoBox, 1279, 128, 'Auto-accept', { 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle' });
+    T(autoBox, 1279, 160, 'score ≥ 0.7', { 'font-size': 22, 'text-anchor': 'middle', fill: 'var(--muted)' });
+    const humBox = S('rect', { x: 1150, y: 360, width: 258, height: 92, rx: 12, fill: 'var(--card)', stroke: 'var(--rule)', 'stroke-width': 2 }, svg);
+    const humT = T(svg, 1279, 398, 'Human auditor', { 'font-size': 26, 'font-weight': 700, 'text-anchor': 'middle' });
+    const humSub = T(svg, 1279, 430, 'score < 0.7', { 'font-size': 22, 'text-anchor': 'middle', fill: 'var(--muted)' });
+    S('path', { d: `M${rx + 40} 272 C 1125 272, 1120 136, 1146 136`, stroke: 'var(--muted)', 'stroke-width': 3, fill: 'none', 'stroke-dasharray': '6 6', 'marker-end': 'url(#p3-ah2)' }, svg);
+    const lower = S('path', { d: `M${rx + 40} 272 C 1125 272, 1120 406, 1146 406`, stroke: 'var(--muted)', 'stroke-width': 3, fill: 'none', 'stroke-dasharray': '6 6', 'marker-end': 'url(#p3-ah2)' }, svg);
+    const lowerLen = lower.getTotalLength ? 0 : 0;
+    const chip = S('g', {}, svg);
+    S('rect', { x: -72, y: -24, width: 144, height: 48, rx: 24, fill: 'var(--good-soft)', stroke: 'var(--good)', 'stroke-width': 2 }, chip);
+    T(chip, 0, 8, 'R-PM-07', { 'font-size': 22, 'font-weight': 700, 'text-anchor': 'middle', fill: 'var(--good)', 'font-family': 'var(--font-mono)' });
+    T(svg, 920, 340, 'verdict:', { 'font-size': 22, fill: 'var(--muted)' });
+    T(svg, 920, 368, 'Compliant', { 'font-size': 22, 'font-weight': 600, fill: 'var(--good)' });
+
+    const needleT = tweener(slide, v => {
+      const [x, y] = pt(v, r - 40);
+      needle.setAttribute('x2', x); needle.setAttribute('y2', y);
+      val.textContent = v > 0.001 ? v.toFixed(2) : '';
+      val.setAttribute('fill', v < thr ? 'var(--bad)' : 'var(--good)');
+      ghost.setAttribute('opacity', clamp(v / 0.4, 0, 1));
+    });
+    const routeT = tweener(slide, v => {
+      let x, y;
+      if (lower.getTotalLength) {
+        const L = lower.getTotalLength(); const p = lower.getPointAtLength(L * v);
+        x = lerp(rx, p.x, Math.min(1, v * 4)); y = p.y;
+        if (v === 0) { x = rx; y = 272; }
+      } else { x = rx; y = 272; }
+      chip.setAttribute('transform', `translate(${v > 0 ? lerp(rx, 1279, v) : rx},${v > 0 ? lerp(272, 406, ease(v)) : 272}) scale(${1 - .15 * v})`);
+      humBox.setAttribute('stroke', v > .95 ? 'var(--warn)' : 'var(--rule)');
+      humBox.setAttribute('stroke-width', v > .95 ? 4 : 2);
+      humBox.setAttribute('fill', v > .95 ? 'var(--warn-soft)' : 'var(--card)');
+      chip.setAttribute('opacity', v > .97 ? 0 : 1);
+      humSub.textContent = v > .95 ? 'R-PM-07 is here' : 'score < 0.7';
+      humSub.setAttribute('fill', v > .95 ? 'var(--warn)' : 'var(--muted)');
+      humSub.setAttribute('font-weight', v > .95 ? 700 : 400);
+    });
+    void lowerLen;
+    Deck.on('p3-probe', 'enter', (s, st) => { needleT.set(st >= 1 ? .4 : 0); routeT.set(st >= 2 ? 1 : 0); });
+    Deck.on('p3-probe', 'step', (s, st) => {
+      if (st >= 1) { if (needleT.value !== .4) needleT.to(.4, 1.6); } else needleT.set(0);
+      if (st >= 2) { if (routeT.value !== 1) routeT.to(1, 1.1); } else routeT.set(0);
+    });
+  })();
+
+  /* ================= slide 8: grounding ================= */
+  (function () {
+    const slide = document.getElementById('p3-ground');
+    const v = slide.querySelector('.p3-verdict'), vt = v.querySelector('.v'), edit = slide.querySelector('.edit');
+    const r1 = slide.querySelector('[data-r="1"]'), r2 = slide.querySelector('[data-r="2"]');
+    function render(st) {
+      slide.classList.toggle('g1', st === 1);
+      slide.classList.toggle('g2', st === 2);
+      slide.classList.toggle('g3', st >= 3);
+      const nc = st === 1;
+      v.classList.toggle('good', !nc); v.classList.toggle('bad', nc);
+      vt.textContent = nc ? 'Non-compliant' : 'Compliant';
+      edit.innerHTML = st === 0 ? 'Original evidence' : st === 1 ? '<span class="c-bad">Edit 1: schedule sentence removed</span>'
+        : '<span>Edit 2: schedule restored, rejection added</span>';
+      r1.classList.toggle('on', st >= 1); r1.className = 'r' + (st >= 1 ? ' on' : '');
+      r1.style.background = 'var(--bad-soft)'; r1.style.color = 'var(--bad)';
+      r2.classList.toggle('on', st >= 2);
+      r2.style.background = 'var(--warn-soft)'; r2.style.color = 'var(--warn)';
+    }
+    Deck.on('p3-ground', 'step', (s, st) => render(st));
+  })();
+
+  /* ================= slide 10: A10 reliability + risk–coverage ================= */
+  (function () {
+    const slide = document.getElementById('p3-a10');
+    const svg = slide.querySelector('svg');
+    // ---- synthetic data (deterministic) ----
+    const rnd = mulberry32(2026), N = 3000, data = [];
+    for (let i = 0; i < N; i++) {
+      const p = 0.3 + 0.69 * Math.pow(rnd(), 0.55);          // probe P(correct), calibrated by construction
+      const correct = rnd() < p;
+      const probe = clamp(p + (rnd() - .5) * 0.04, 0.3, 0.995);
+      let verb = 0.8 + 0.2 * (0.35 * (p - 0.3) / 0.69 + 0.65 * rnd());   // overconfident, weakly informative
+      verb = clamp(Math.round(verb * 20) / 20, 0.5, 1.0);
+      if (verb >= 1) verb = 0.99;
+      data.push({ correct, probe, verb, tie: rnd() });
+    }
+    const bins = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+    function rel(key) {
+      const out = [];
+      let ece = 0;
+      for (let b = 0; b < bins.length - 1; b++) {
+        const xs = data.filter(d => d[key] >= bins[b] && d[key] < bins[b + 1]);
+        if (xs.length < 15) { out.push(null); continue; }
+        const acc = xs.filter(d => d.correct).length / xs.length;
+        const conf = xs.reduce((s, d) => s + d[key], 0) / xs.length;
+        ece += xs.length / N * Math.abs(acc - conf);
+        out.push({ acc, conf, n: xs.length });
+      }
+      return { bins: out, ece };
+    }
+    const RV = rel('verb'), RP = rel('probe');
+    function rc(key) {
+      const s = data.slice().sort((a, b) => (b[key] - a[key]) || (a.tie - b.tie));
+      const pts = []; let err = 0;
+      s.forEach((d, k) => { if (!d.correct) err++; const n = k + 1; if (n >= 50) pts.push([n / N, err / n]); });
+      return pts;
+    }
+    const RCV = rc('verb'), RCP = rc('probe');
+
+    // ---- layout ----
+    const L = { x: 90, y: 50, w: 520, h: 330 };   // reliability plot area
+    const Rr = { x: 840, y: 50, w: 540, h: 330 };  // risk–coverage plot area
+    const defs = S('defs', {}, svg);
+    const clip = S('clipPath', { id: 'p3-a10-clip' }, defs); S('rect', { x: Rr.x, y: Rr.y - 4, width: Rr.w + 4, height: Rr.h + 8 }, clip);
+    const lx = v => L.x + (v - 0.3) / 0.7 * L.w, ly = v => L.y + L.h - (v - 0.3) / 0.7 * L.h;
+    const YMAX = 0.30;
+    const rxs = v => Rr.x + v * Rr.w, rys = v => Rr.y + Rr.h - v / YMAX * Rr.h;
+
+    // left axes
+    T(svg, L.x - 90, 26, 'RELIABILITY DIAGRAM', { 'font-size': 22, 'font-weight': 700, 'letter-spacing': '.1em', fill: 'var(--muted)' });
+    S('rect', { x: L.x, y: L.y, width: L.w, height: L.h, fill: 'var(--card)', stroke: 'var(--rule)' }, svg);
+    [0.3, 0.5, 0.7, 0.9].forEach(v => {
+      S('line', { x1: L.x, x2: L.x + L.w, y1: ly(v), y2: ly(v), stroke: 'var(--bg-2)', 'stroke-width': 1.5 }, svg);
+      T(svg, L.x - 12, ly(v) + 8, v.toFixed(1), { 'font-size': 22, 'text-anchor': 'end', fill: 'var(--muted)' });
+      if (v > 0.3) T(svg, lx(v), L.y + L.h + 30, v.toFixed(1), { 'font-size': 22, 'text-anchor': 'middle', fill: 'var(--muted)' });
+    });
+    T(svg, L.x + L.w / 2, L.y + L.h + 62, 'stated confidence', { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--ink-2)' });
+    const yl = T(svg, 0, 0, 'actual accuracy', { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--ink-2)' });
+    yl.setAttribute('transform', `translate(${L.x - 62},${L.y + L.h / 2}) rotate(-90)`);
+    const gL = S('g', {}, svg);
+    S('line', { x1: lx(0.3), y1: ly(0.3), x2: lx(1), y2: ly(1), stroke: 'var(--ink)', 'stroke-width': 2.5, 'stroke-dasharray': '8 6' }, svg);
+    const bw = L.w / 7;
+    const barsV = [], barsP = [], gaps = [];
+    for (let b = 0; b < 7; b++) {
+      const x = L.x + b * bw;
+      const gap = S('rect', { x: x + 6, y: 0, width: bw / 2 - 8, height: 0, fill: 'var(--bad-soft)', stroke: 'var(--bad)', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, gL);
+      const bv = S('rect', { x: x + 6, y: ly(.3), width: bw / 2 - 8, height: 0, fill: 'var(--ink-2)' }, gL);
+      const bp = S('rect', { x: x + bw / 2 + 2, y: ly(.3), width: bw / 2 - 8, height: 0, fill: 'var(--resid)' }, gL);
+      barsV.push(bv); barsP.push(bp); gaps.push(gap);
+    }
+    // legend (left)
+    const legV = S('g', {}, svg), legP = S('g', {}, svg);
+    S('rect', { x: L.x - 90, y: 462, width: 22, height: 22, fill: 'var(--ink-2)' }, legV);
+    const tV = T(legV, L.x - 58, 482, '', { 'font-size': 24 });
+    S('rect', { x: L.x - 90, y: 502, width: 22, height: 22, fill: 'var(--resid)' }, legP);
+    const tP = T(legP, L.x - 58, 522, '', { 'font-size': 24 });
+    tV.innerHTML = `Verbalized confidence <tspan fill="var(--bad)" font-weight="700">· ECE ${RV.ece.toFixed(2)}</tspan>`;
+    tP.innerHTML = `Probe on hidden state <tspan fill="var(--resid)" font-weight="700">· ECE ${RP.ece.toFixed(2)}</tspan>`;
+    S('rect', { x: L.x + 16, y: L.y + 14, width: 22, height: 22, fill: 'var(--bad-soft)', stroke: 'var(--bad)', 'stroke-dasharray': '4 3' }, legV);
+    T(legV, L.x + 48, L.y + 34, 'overconfidence', { 'font-size': 24, fill: 'var(--bad)' });
+    S('line', { x1: L.x + 16, x2: L.x + 38, y1: L.y + 60, y2: L.y + 60, stroke: 'var(--ink)', 'stroke-width': 2.5, 'stroke-dasharray': '6 4' }, svg);
+    T(svg, L.x + 48, L.y + 70, 'perfect calibration', { 'font-size': 24, fill: 'var(--ink-2)' });
+
+    // right axes
+    const gR = S('g', {}, svg);
+    T(gR, Rr.x - 90, 26, 'RISK–COVERAGE', { 'font-size': 22, 'font-weight': 700, 'letter-spacing': '.1em', fill: 'var(--muted)' });
+    S('rect', { x: Rr.x, y: Rr.y, width: Rr.w, height: Rr.h, fill: 'var(--card)', stroke: 'var(--rule)' }, gR);
+    [0, 0.1, 0.2, 0.3].forEach(v => {
+      S('line', { x1: Rr.x, x2: Rr.x + Rr.w, y1: rys(v), y2: rys(v), stroke: 'var(--bg-2)', 'stroke-width': 1.5 }, gR);
+      T(gR, Rr.x - 12, rys(v) + 8, Math.round(v * 100) + '%', { 'font-size': 22, 'text-anchor': 'end', fill: 'var(--muted)' });
+    });
+    [0, 0.25, 0.5, 0.75, 1].forEach(v => T(gR, rxs(v), Rr.y + Rr.h + 30, Math.round(v * 100) + '%', { 'font-size': 22, 'text-anchor': 'middle', fill: 'var(--muted)' }));
+    T(gR, Rr.x + Rr.w / 2, Rr.y + Rr.h + 62, 'coverage: verdicts accepted automatically', { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--ink-2)' });
+    const yr = T(gR, 0, 0, 'error among accepted', { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--ink-2)' });
+    yr.setAttribute('transform', `translate(${Rr.x - 92},${Rr.y + Rr.h / 2}) rotate(-90)`);
+    const path = pts => pts.map((p, k) => (k ? 'L' : 'M') + rxs(p[0]).toFixed(1) + ' ' + rys(p[1]).toFixed(1)).join(' ');
+    const cg = S('g', { 'clip-path': 'url(#p3-a10-clip)' }, gR);
+    const curveV = S('path', { d: path(RCV), stroke: 'var(--ink-2)', 'stroke-width': 3.5, fill: 'none', opacity: .7 }, cg);
+    const curveP = S('path', { d: path(RCP), stroke: 'var(--resid)', 'stroke-width': 4.5, fill: 'none' }, cg);
+    T(gR, rxs(0.06), rys(0.268), 'routing by verbalized', { 'font-size': 22, fill: 'var(--ink-2)' });
+    T(gR, rxs(0.52), rys(0.035), 'routing by probe', { 'font-size': 22, fill: 'var(--resid)', 'font-weight': 600 });
+    S('line', { x1: Rr.x, x2: Rr.x + Rr.w, y1: rys(0.10), y2: rys(0.10), stroke: 'var(--warn)', 'stroke-width': 2.5, 'stroke-dasharray': '10 6' }, gR);
+    T(gR, Rr.x + Rr.w - 8, rys(0.10) + 28, 'target: 10% error', { 'font-size': 22, 'font-weight': 600, fill: 'var(--warn)', 'text-anchor': 'end' });
+    const vline = S('line', { y1: Rr.y, y2: Rr.y + Rr.h, stroke: 'var(--ink)', 'stroke-width': 2, 'stroke-dasharray': '5 5' }, gR);
+    const dotV = S('circle', { r: 9, fill: 'var(--card)', stroke: 'var(--ink-2)', 'stroke-width': 3.5 }, gR);
+    const dotP = S('circle', { r: 11, fill: 'var(--resid)', stroke: '#fff', 'stroke-width': 3 }, gR);
+
+    // slider (τ on probe score)
+    const SX = Rr.x + 40, SW = Rr.w - 40, SY = 468, TMIN = 0.3, TMAX = 0.98;
+    const sl = S('g', { class: 'p3-slider', 'data-interactive': '' }, gR);
+    S('rect', { x: SX - 20, y: SY - 30, width: SW + 40, height: 60, fill: 'transparent' }, sl);
+    S('line', { x1: SX, x2: SX + SW, y1: SY, y2: SY, stroke: 'var(--rule)', 'stroke-width': 8, 'stroke-linecap': 'round' }, sl);
+    const slFill = S('line', { x1: SX, y1: SY, y2: SY, stroke: 'var(--bad)', 'stroke-width': 8, 'stroke-linecap': 'round', opacity: .5 }, sl);
+    const knob = S('circle', { class: 'knob', cy: SY, r: 17, fill: 'var(--ink)', stroke: '#fff', 'stroke-width': 4 }, sl);
+    const tauT = T(gR, Rr.x - 90, SY + 8, '', { 'font-size': 24, 'font-weight': 700 });
+    T(gR, SX, SY + 44, 'review threshold τ on probe score · drag or press →', { 'font-size': 22, fill: 'var(--muted)' });
+    // readout + stacked bar
+    const RB = { x: Rr.x - 90, y: 528, w: SW + 90 };
+    const read = T(gR, RB.x, RB.y + 24, '', { 'font-size': 26 });
+
+    function stats(tau) {
+      let acc = 0, accWrong = 0, wrong = 0;
+      data.forEach(d => { if (!d.correct) wrong++; if (d.probe >= tau) { acc++; if (!d.correct) accWrong++; } });
+      return { cov: acc / N, risk: acc ? accWrong / acc : 0, esc: accWrong / N, accWrong, acc, wrong };
+    }
+    function riskAt(curve, cov) {
+      let best = curve[0];
+      for (const p of curve) if (Math.abs(p[0] - cov) < Math.abs(best[0] - cov)) best = p;
+      return best[1];
+    }
+    function setTau(tau) {
+      const st = stats(tau);
+      const cov = Math.max(st.cov, 0.05);
+      vline.setAttribute('x1', rxs(cov)); vline.setAttribute('x2', rxs(cov));
+      dotP.setAttribute('cx', rxs(cov)); dotP.setAttribute('cy', rys(Math.min(st.risk, YMAX)));
+      dotV.setAttribute('cx', rxs(cov)); dotV.setAttribute('cy', rys(Math.min(riskAt(RCV, cov), YMAX)));
+      const kx = SX + (tau - TMIN) / (TMAX - TMIN) * SW;
+      knob.setAttribute('cx', kx); slFill.setAttribute('x1', SX); slFill.setAttribute('x2', kx);
+      tauT.textContent = 'τ = ' + tau.toFixed(2);
+      read.innerHTML = `<tspan font-weight="700">auto-accept ${Math.round(st.cov * 100)}%</tspan>`
+        + `<tspan fill="var(--muted)"> · </tspan><tspan font-weight="700" fill="var(--warn)">${Math.round((1 - st.cov) * 100)}% to a human</tspan>`
+        + `<tspan fill="var(--muted)"> · </tspan><tspan font-weight="700" fill="var(--bad)">${(st.esc * 100).toFixed(1)}% escape</tspan>`;
+    }
+    const PRESETS = [0.3, 0.62, 0.83];   // steps 2, 3, 4 (0.83 = where the probe curve meets the 10% target)
+    const tauTw = tweener(slide, setTau);
+
+    // reveal tweens
+    const barsVT = tweener(slide, v => {
+      RV.bins.forEach((b, k) => {
+        if (!b) { barsV[k].setAttribute('height', 0); gaps[k].setAttribute('height', 0); return; }
+        const top = ly(0.3 + (b.acc - 0.3) * v);
+        barsV[k].setAttribute('y', top); barsV[k].setAttribute('height', ly(0.3) - top);
+        const ideal = ly(Math.max(b.conf, b.acc));
+        gaps[k].setAttribute('y', ideal); gaps[k].setAttribute('height', Math.max(0, top - ideal) * (v > .98 ? 1 : 0));
+        gaps[k].setAttribute('opacity', v > .98 ? 1 : 0);
+      });
+    });
+    const barsPT = tweener(slide, v => {
+      RP.bins.forEach((b, k) => {
+        if (!b) { barsP[k].setAttribute('height', 0); return; }
+        const top = ly(0.3 + (b.acc - 0.3) * v);
+        barsP[k].setAttribute('y', top); barsP[k].setAttribute('height', ly(0.3) - top);
+      });
+      legP.setAttribute('opacity', v > 0 ? 1 : 0);
+    });
+    const rightT = tweener(slide, v => {
+      gR.setAttribute('opacity', v);
+      const len = 2000;
+      [curveV, curveP].forEach(c => { c.setAttribute('stroke-dasharray', len); c.setAttribute('stroke-dashoffset', len * (1 - v)); });
+    });
+
+    // drag (mouse / touch)
+    let dragging = false;
+    function tauFromEvent(e) {
+      const m = svg.getScreenCTM(); if (!m) return null;
+      const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+      const q = p.matrixTransform(m.inverse());
+      return clamp(TMIN + (q.x - SX) / SW * (TMAX - TMIN), TMIN, TMAX);
+    }
+    sl.addEventListener('pointerdown', e => {
+      if (Deck.step < 2) return;
+      dragging = true; sl.classList.add('drag'); sl.setPointerCapture(e.pointerId);
+      const t = tauFromEvent(e); if (t !== null) tauTw.set(t); e.preventDefault();
+    });
+    sl.addEventListener('pointermove', e => { if (!dragging) return; const t = tauFromEvent(e); if (t !== null) tauTw.set(t); });
+    const end = () => { dragging = false; sl.classList.remove('drag'); };
+    sl.addEventListener('pointerup', end); sl.addEventListener('pointercancel', end);
+
+    function render(st, animate) {
+      const d = animate ? 1 : 0;
+      if (st >= 0) (animate && barsVT.value < 1) ? barsVT.to(1, 1.0) : barsVT.set(1);
+      if (st >= 1) (animate && barsPT.value < 1) ? barsPT.to(1, 1.0) : barsPT.set(1); else barsPT.set(0);
+      if (st >= 2) {
+        (animate && rightT.value < 1) ? rightT.to(1, 1.2) : rightT.set(1);
+        const target = PRESETS[Math.min(st, 4) - 2];
+        if (animate && Math.abs(tauTw.value - target) > 1e-6 && rightT.value > 0.5) tauTw.to(target, 1.2 * d); else tauTw.set(target);
+      } else { rightT.set(0); tauTw.set(PRESETS[0]); }
+    }
+    let last = -1;
+    Deck.on('p3-a10', 'enter', (s, st) => { barsVT.set(0); barsPT.set(0); rightT.set(0); tauTw.set(PRESETS[0]); last = -1;
+      if (st > 0) { barsVT.set(1); render(st, false); last = st; } });
+    Deck.on('p3-a10', 'step', (s, st) => { if (st === last) return; render(st, last !== -1 || st === 0); last = st; });
+  })();
+
+  /* ================= slide 11: conformal threshold (NB5 crc_threshold) ================= */
+  (function () {
+    const slide = document.getElementById('p3-conformal');
+    const svg = slide.querySelector('svg');
+    const X0 = 70, W = 1268, AX = 232;          // axis y
+    const sx = v => X0 + (v - 0.25) / 0.75 * W;  // score range 0.25 .. 1.0
+    const ALPHA = 0.10;
+    // synthetic calibration set: n verdicts, probe score ~ calibrated P(correct)
+    const rnd = mulberry32(61), n = 60, cal = [];
+    for (let i = 0; i < n; i++) {
+      const p = 0.3 + 0.69 * Math.pow(rnd(), 0.55);
+      const correct = rnd() < p;
+      cal.push({ s: Math.round(clamp(p + (rnd() - .5) * .04, 0.3, 0.995) * 1000) / 1000, correct });
+    }
+    // NB5 crc_threshold: smallest t (ascending unique scores) with n/(n+1)*escape(t) + 1/(n+1) <= alpha,
+    // escape(t) = share of ALL calibration verdicts that are wrong AND have score >= t
+    const uniq = [...new Set(cal.map(d => d.s))].sort((x, y) => x - y);
+    let tIdx = uniq.length, esc = 0;
+    for (let k = 0; k < uniq.length; k++) {
+      const t = uniq[k];
+      const e = cal.filter(d => !d.correct && d.s >= t).length / n;
+      if (n / (n + 1) * e + 1 / (n + 1) <= ALPHA) { tIdx = k; esc = e; break; }
+    }
+    const tStar = uniq[tIdx], tPrev = tIdx > 0 ? uniq[tIdx - 1] : 0.25;
+    const tauX = (sx(tStar) + sx(tPrev)) / 2;    // draw the line between the last rejected and the first accepted score
+    const nEsc = Math.round(esc * n), nAcc = cal.filter(d => d.s >= tStar).length;
+    const bound = n / (n + 1) * esc + 1 / (n + 1);
+
+    T(svg, 0, 30, `${n} calibration verdicts with gold labels, placed by probe score (synthetic)`, { 'font-size': 26, fill: 'var(--ink-2)' });
+    const lg = S('g', {}, svg);
+    S('circle', { cx: 1000, cy: 22, r: 10, fill: 'var(--muted)' }, lg); T(lg, 1018, 30, 'right', { 'font-size': 26, fill: 'var(--ink-2)' });
+    S('circle', { cx: 1110, cy: 22, r: 10, fill: 'var(--bad)' }, lg); T(lg, 1128, 30, 'wrong verdict', { 'font-size': 26, fill: 'var(--ink-2)' });
+    const zone = S('rect', { x: tauX, y: 48, width: X0 + W - tauX + 10, height: AX - 48, fill: 'var(--bad-soft)', opacity: 0 }, svg);
+    const zoneT = T(svg, X0 + W + 4, 76, 'auto-accepted', { 'font-size': 26, 'font-weight': 600, fill: 'var(--ink-2)', 'text-anchor': 'end', opacity: 0 });
+    S('line', { x1: X0, x2: X0 + W + 10, y1: AX, y2: AX, stroke: 'var(--ink-2)', 'stroke-width': 2 }, svg);
+    [0.25, 0.5, 0.75, 1].forEach(v => { S('line', { x1: sx(v), x2: sx(v), y1: AX - 6, y2: AX + 6, stroke: 'var(--ink-2)', 'stroke-width': 2 }, svg);
+      T(svg, sx(v), AX + 34, v.toFixed(2), { 'font-size': 24, 'text-anchor': 'middle', fill: 'var(--muted)' }); });
+    T(svg, X0 + W + 10, AX + 34, '', {});
+    // stack dots in bins
+    const BW = 0.0125, stack = {}, dots = [];
+    const sorted = cal.slice().sort((x, y) => x.s - y.s);
+    let maxStack = 0;
+    sorted.forEach(d => { const b = Math.floor(d.s / BW); stack[b] = (stack[b] || 0) + 1; d.level = stack[b]; maxStack = Math.max(maxStack, stack[b]); });
+    const dy = Math.min(21, (AX - 70) / maxStack);
+    sorted.forEach((d, i) => {
+      const cx = sx((Math.floor(d.s / BW) + .5) * BW), cy = AX - 12 - (d.level - 1) * dy;
+      const c = S('circle', { cx, cy, r: 9, fill: d.correct ? 'var(--muted)' : 'var(--bad)', opacity: 0 }, svg);
+      const ring = d.correct ? null : S('circle', { cx, cy, r: 14, fill: 'none', stroke: 'var(--bad)', 'stroke-width': 3, opacity: 0 }, svg);
+      dots.push({ c, ring, d, i });
+    });
+    const tl = S('g', { opacity: 0 }, svg);
+    const tline = S('line', { y1: 44, y2: AX + 8, stroke: 'var(--ink)', 'stroke-width': 4 }, tl);
+    const tlab = T(tl, 0, AX + 66, 'τ', { 'font-size': 34, 'font-weight': 700, 'text-anchor': 'middle', 'font-family': 'var(--font-serif)', 'font-style': 'italic' });
+    const read = T(svg, 0, AX + 104, '', { 'font-size': 26, opacity: 0 });
+    read.innerHTML = `<tspan font-weight="700">α = 10%</tspan><tspan fill="var(--muted)"> · </tspan>`
+      + `<tspan fill="var(--bad)" font-weight="700">${nEsc} of ${n} escape</tspan><tspan fill="var(--muted)"> (wrong and ≥ τ) · </tspan>`
+      + `<tspan>(${n}/${n + 1})·(${nEsc}/${n}) + 1/${n + 1} = ${(bound * 100).toFixed(1)}% ≤ 10%</tspan>`
+      + `<tspan fill="var(--muted)"> · auto-accept ${nAcc} of ${n}</tspan>`;
+    const dotsT = tweener(slide, v => dots.forEach(o => o.c.setAttribute('opacity', clamp(v * (n + 8) / 8 - o.i / 8, 0, 1))));
+    const tauT = tweener(slide, v => {
+      const x = lerp(sx(0.27), tauX, v);
+      tline.setAttribute('x1', x); tline.setAttribute('x2', x); tlab.setAttribute('x', x);
+      tl.setAttribute('opacity', v > 0 ? 1 : 0);
+      const done = v > .99;
+      zone.setAttribute('x', x); zone.setAttribute('width', X0 + W + 10 - x);
+      zone.setAttribute('opacity', done ? .85 : 0); zoneT.setAttribute('opacity', done ? 1 : 0); read.setAttribute('opacity', done ? 1 : 0);
+      dots.forEach(o => { if (o.ring) o.ring.setAttribute('opacity', done && o.d.s >= tStar ? 1 : 0); });
+    });
+    window.__p3crc = { n, tStar, nEsc, bound, nAcc };     // for verification only
+    let last = -1;
+    Deck.on('p3-conformal', 'enter', (s, st) => { dotsT.set(st >= 1 ? 1 : 0); tauT.set(st >= 2 ? 1 : 0); last = st; });
+    Deck.on('p3-conformal', 'step', (s, st) => {
+      if (st === last) return;
+      if (st >= 1) (dotsT.value < 1 ? dotsT.to(1, 1.2) : dotsT.set(1)); else dotsT.set(0);
+      if (st >= 2) (tauT.value < 1 ? tauT.to(1, 1.2) : tauT.set(1)); else tauT.set(0);
+      last = st;
+    });
+  })();
+
+  /* ================= slide 16: A8 method map ================= */
+  Deck.on('p3-map', 'step', (s, st) => {
+    const map = s.querySelector('.p3-map');
+    map.querySelectorAll('[data-row]').forEach(el => {
+      const r = +el.dataset.row;
+      el.classList.toggle('on', r <= st);
+      el.classList.toggle('used', r <= 2);
+    });
+    map.classList.toggle('p3-hlon', st >= 6);
+  });
+
+  /* ================= slide 18: A9 where the field is going ================= */
+  (function () {
+    const slide = document.getElementById('p3-field');
+    const svg = slide.querySelector('svg');
+    const colW = 1408 / 5, cy = 58;
+    S('line', { x1: colW / 2, x2: 1408 - colW / 2, y1: cy, y2: cy, stroke: 'var(--rule)', 'stroke-width': 6, 'stroke-linecap': 'round' }, svg);
+    const prog = S('line', { x1: colW / 2, x2: colW / 2, y1: cy, y2: cy, stroke: 'var(--victor)', 'stroke-width': 6, 'stroke-linecap': 'round' }, svg);
+    const nodes = [], cols = ['var(--miguel)', 'var(--salvador)', 'var(--salvador)', 'var(--salvador)', 'var(--victor)'];
+    for (let k = 0; k < 5; k++) {
+      const c = S('circle', { cx: colW * (k + .5), cy, r: 16, fill: 'var(--bg)', stroke: 'var(--rule)', 'stroke-width': 5 }, svg);
+      const t = T(svg, colW * (k + .5), cy - 32, 'Block ' + (k + 1), { 'font-size': 22, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-weight': 600 });
+      nodes.push({ c, t, col: cols[k] });
+    }
+    const stages = slide.querySelectorAll('.p3-stage');
+    const tw = tweener(slide, v => {       // v in [0,4] = position along the line
+      prog.setAttribute('x2', colW / 2 + v * colW);
+      nodes.forEach((n, k) => {
+        const on = v >= k - 0.02;
+        n.c.setAttribute('fill', on ? n.col : 'var(--bg)');
+        n.c.setAttribute('stroke', on ? n.col : 'var(--rule)');
+        n.c.setAttribute('r', on ? 18 : 14);
+      });
+      prog.setAttribute('opacity', 1);
+    });
+    function apply(st, animate) {
+      const k = clamp(st, 1, 5) - 1;
+      stages.forEach((el, i) => el.classList.toggle('on', st >= 1 && i <= Math.min(st, 5) - 1));
+      if (st === 0) { tw.set(-0.5); prog.setAttribute('x2', colW / 2); return; }
+      animate ? tw.to(k, .8) : tw.set(k);
+    }
+    let last = -1;
+    Deck.on('p3-field', 'enter', (s, st) => { apply(st, false); last = st; });
+    Deck.on('p3-field', 'step', (s, st) => { if (st !== last) apply(st, true); last = st; });
+  })();
+})();
+</script>

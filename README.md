@@ -2,7 +2,7 @@
 
 **A Hands-On Introduction to Mechanistic Interpretability of Large Language Models**
 MICAI 2026 · Tec de Monterrey, Campus Chihuahua · Friday 6 November 2026
-Miguel González · Salvador Hinojosa · Víctor Macías-Terrón
+Miguel González · Salvador Hinojosa · Víctor Terrón-Macías
 
 **Website:** <https://salvahin.github.io/mechinterp-tutorial/> · **Slides:** [deck.html](https://salvahin.github.io/mechinterp-tutorial/slides/deck.html) ([PDF](slides/deck.pdf))
 
@@ -50,7 +50,7 @@ Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, 
 |---|---|---|---|
 | 0:00–0:30 | Miguel González | 1–20 (hook, primer, Block 1 Observe) | NB0, NB1 |
 | 0:30–2:10 (break 1:00–1:10) | Salvador Hinojosa | 21–50 (Blocks 2–4: cause → units → circuits) | NB2, NB3, NB4 |
-| 2:10–3:00 | Víctor Macías-Terrón | 51–71 (Block 5 Audit, wrap) | NB5 |
+| 2:10–3:00 | Víctor Terrón-Macías | 51–71 (Block 5 Audit, wrap) | NB5 |
 
 ## Rebuilding
 

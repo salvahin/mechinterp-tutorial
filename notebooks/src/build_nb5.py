@@ -169,7 +169,7 @@ instructor_cells = [
     md(f"""
 # NB5 · Instructor: prepare the judge cache
 
-**MICAI 2026 · Mechanistic Interpretability, Hands-on** · Block 5 *Audit: can we trust the judge?* (Víctor Macías-Terrón)
+**MICAI 2026 · Mechanistic Interpretability, Hands-on** · Block 5 *Audit: can we trust the judge?* (Víctor Terrón-Macías)
 **Who runs this:** a presenter, **once, before the session** (not the participants).
 **Runtime:** Colab **T4 GPU** for `gemma3-4b` (≈ 10–20 min including the ≈ 8 GB download; see the timing printouts). `qwen0.5b` runs on CPU (measured: 32 min on 2 shared cores, of which 16 min is the verbalized-confidence generation).
 
@@ -436,7 +436,7 @@ cells = [
 # NB5 · Audit: can we trust the judge?
 
 **MICAI 2026 · Mechanistic Interpretability, Hands-on**
-**Presenter:** Víctor Macías-Terrón · **Block 5 · Audit** · **Time budget:** ~25 min hands-on, in pairs
+**Presenter:** Víctor Terrón-Macías · **Block 5 · Audit** · **Time budget:** ~25 min hands-on, in pairs
 **Runtime:** CPU is fine with the cache · T4 GPU only for the optional live judging cells
 
 {SLIDES_LINK}
@@ -944,7 +944,7 @@ Discuss and note one answer each:
 2. The probe beat (or did not beat) token probability. What would convince you it reads *the judge's uncertainty* rather than *which rule is hard*?
 3. Which is more useful to the auditor: a calibrated score, or the grounding check's "this verdict depends on clause X"?
 
-**Research direction (not a published result).** Use the probe score as the (non)conformity score of a **split-conformal / conformal-risk-control** threshold: choose the smallest *t* on the calibration set such that $\\frac{n}{n+1}\\widehat{\\mathrm{escape}}_{\\mathrm{cal}}(t) + \\frac{1}{n+1} \\le \\alpha$. Under exchangeability between calibration and deployment verdicts, this bounds the **expected escape rate** by α. The guarantee is only as good as exchangeability: the shift test in section 7 shows what happens when a new rule breaks it. This is the thesis line of Víctor Macías-Terrón (LLM-assisted quality/security audits).
+**Research direction (not a published result).** Use the probe score as the (non)conformity score of a **split-conformal / conformal-risk-control** threshold: choose the smallest *t* on the calibration set such that $\\frac{n}{n+1}\\widehat{\\mathrm{escape}}_{\\mathrm{cal}}(t) + \\frac{1}{n+1} \\le \\alpha$. Under exchangeability between calibration and deployment verdicts, this bounds the **expected escape rate** by α. The guarantee is only as good as exchangeability: the shift test in section 7 shows what happens when a new rule breaks it. This is the thesis line of Víctor Terrón-Macías (LLM-assisted quality/security audits).
 """),
     md("### Stretch (optional): a conformal-style threshold on the escape rate"),
     code(r'''

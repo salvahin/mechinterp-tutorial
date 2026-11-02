@@ -1,0 +1,173 @@
+<!-- ==========================================================================
+     Slides that exist only in the one-hour solo run (deck_1h.html).
+     Built by engine/build_1h.py; parts/ is left untouched so the 4-hour deck
+     keeps building from build.py unchanged.
+
+     h-roadmap     replaces p1-goals + p1-agenda + p1-nb0
+     h-nb5-result  }
+     h-nb5-shift   } stand in for the 22-minute NB5 hands-on block
+     h-nb5-routing }
+
+     Every number on the three NB5 slides comes from the test run recorded in
+     part3_victor.html's own p3-debrief notes: fallback judge Qwen2.5-0.5B, NOT
+     the session's Gemma 3 4B. The slides say so, in the deck's existing style
+     of labelling anything that is invented, synthetic or unmeasured.
+     ========================================================================== -->
+
+<style>
+  #h-roadmap table.t td.tm { font-family: var(--font-mono); color: var(--micai-blue); white-space: nowrap; }
+  #h-roadmap table.t td.blk { font-weight: 600; white-space: nowrap; }
+  #h-roadmap tr.now td { background: var(--resid-soft); }
+
+  .h-res .tag { position: absolute; right: 64px; top: 56px; }
+  .h-res .card p { font-size: 26px; line-height: 1.35; margin: 0; }
+  .h-res .card h3 { margin: 0; }
+  .h-res .grid-3 { gap: 26px; }
+
+  /* AUROC comparison table */
+  #h-nb5-result table.t { font-size: 26px; margin-top: 4px; }
+  #h-nb5-result table.t td { padding: 11px 16px; }
+  #h-nb5-result table.t td.sc { font-family: var(--font-mono); font-size: 36px; font-weight: 600; white-space: nowrap; }
+  #h-nb5-result tr.win td { background: var(--good-soft); }
+  #h-nb5-result tr.win td.sc { color: var(--good); }
+  #h-nb5-result tr.lose td.sc { color: var(--bad); }
+
+  /* shift: two numbers side by side */
+  #h-nb5-shift .pair { display: flex; gap: 48px; margin: 2px 0 0; }
+  #h-nb5-shift .pair > div { flex: 1; }
+  #h-nb5-shift .big { font-family: var(--font-display); font-size: 50px; font-weight: 700; line-height: 1; color: var(--micai-navy); margin: 0; }
+  #h-nb5-shift .big .was { color: var(--muted); font-size: 28px; font-weight: 600; }
+  #h-nb5-shift .lbl { font-size: 24px; color: var(--ink-2); line-height: 1.3; margin: 6px 0 0; }
+</style>
+
+<!-- =============================================================== roadmap -->
+<section class="slide" id="h-roadmap" data-presenter="victor" data-block="Introduction">
+  <p class="kicker">This hour</p>
+  <h2>Four blocks compressed, the fifth in full</h2>
+
+
+  <table class="t">
+    <thead><tr><th>Time</th><th>Block</th><th>What we do</th></tr></thead>
+    <tbody>
+      <tr><td class="tm">0:00</td><td class="blk">1 &rarr; 4 &middot; speed-run</td><td>Three ideas only: directions carry meaning, one stream to read them, intervention tests them</td></tr>
+      <tr class="now"><td class="tm">0:09</td><td class="blk">5 &middot; Audit</td><td>Can we trust an LLM judge? A probe, a grounding check, a threshold</td></tr>
+      <tr><td class="tm">0:28</td><td class="blk">NB5 &middot; results</td><td>What the notebook measures, and what we measured &mdash; walked through, not run</td></tr>
+      <tr><td class="tm">0:39</td><td class="blk">Debrief</td><td>What an auditor would accept, and the method map</td></tr>
+      <tr><td class="tm">0:45</td><td class="blk">Wrap</td><td>Where the field is going &middot; open problems &middot; resources</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout resid" style="margin-top: 16px">
+    Four hours and five Colab notebooks in the full version. Today: the results.
+  </div>
+
+  <p class="tiny" style="margin-top: 16px">
+    Full tutorial at MICAI 2026 &middot; 6 November 2026 &middot; with Miguel Gonz&aacute;lez and Salvador Hinojosa.
+  </p>
+</section>
+
+<!-- ======================================================== NB5: what wins -->
+<section class="slide h-res" id="h-nb5-result" data-presenter="victor" data-block="Block 5 &middot; Audit">
+  <p class="kicker">Block 5 &middot; Audit &middot; what NB5 measures</p>
+  <p class="pill tag">Our test run &middot; Qwen2.5-0.5B fallback judge &middot; not a published result</p>
+  <h2>The judge's words are worse than chance. Its hidden state is not.</h2>
+
+  <table class="t">
+    <thead><tr><th>Confidence signal</th><th>AUROC</th><th>What it costs, and what it is</th></tr></thead>
+    <tbody>
+      <tr class="lose">
+        <td><b>Verbalized</b> &mdash; &ldquo;how confident, 0&ndash;100?&rdquo;</td>
+        <td class="sc">0.43</td>
+        <td>Worse than chance: it only ever answered 75, 80, 85 or 95.</td>
+      </tr>
+      <tr>
+        <td><b>Token probability</b> &mdash; its own <span class="mono">P(Yes/No)</span></td>
+        <td class="sc">0.63</td>
+        <td>Free, already in the logits. The baseline to beat.</td>
+      </tr>
+      <tr class="win">
+        <td><b>Probe</b> &mdash; linear read-out of the residual stream</td>
+        <td class="sc">0.71</td>
+        <td>One dot product, a few hundred labelled verdicts.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top: 20px">
+    Recalibration fixes <span class="mono">ECE</span>; it cannot fix
+    <span class="mono">AUROC</span>. Ranking is where a probe has to win.
+  </div>
+
+  <p class="tiny" style="margin-top: 16px">
+    Judge accuracy 75 % on test. AUROC = chance a wrong verdict scores below a right one.
+    NB5 sections 4&ndash;5.
+  </p>
+</section>
+
+<!-- ===================================================== NB5: where it breaks -->
+<section class="slide h-res" id="h-nb5-shift" data-presenter="victor" data-block="Block 5 &middot; Audit">
+  <p class="kicker">Block 5 &middot; Audit &middot; the test that matters</p>
+  <p class="pill tag">Our test run &middot; 3 assertions held out entirely</p>
+  <h2>On a rule it has never seen, the probe stops being the better signal</h2>
+
+  <div class="pair">
+    <div>
+      <p class="big">64 %<span class="was"> &nbsp;from 75 %</span></p>
+      <p class="lbl">Judge accuracy on the three held-out assertions.</p>
+    </div>
+    <div>
+      <p class="big">17.5 %<span class="was"> &nbsp;vs 8 %</span></p>
+      <p class="lbl">Verdicts escaping review at the probe's own threshold, against the free
+         token-probability baseline.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top: 18px">
+    <div class="card bad">
+      <h3>What the probe may have learned</h3>
+      <p>Not the judge's uncertainty, but <i>which rules are hard</i>.</p>
+    </div>
+    <div class="card warn">
+      <h3>And a correct verdict can be ungrounded</h3>
+      <p>Of the 40 most confident <i>Yes</i> verdicts, 70 % stayed <i>Yes</i> on boilerplate
+         evidence &mdash; and were <b>correct</b>.</p>
+    </div>
+  </div>
+
+  <p class="tiny" style="margin-top: 16px">
+    NB5 sections 7&ndash;8. Per held-out assertion n = 40: read the direction, not the decimals.
+  </p>
+</section>
+
+<!-- ========================================================== NB5: routing -->
+<section class="slide h-res" id="h-nb5-routing" data-presenter="victor" data-block="Block 5 &middot; Audit">
+  <p class="kicker">Block 5 &middot; Audit &middot; the number you would have to sign</p>
+  <h2>A threshold fitted on a hundred verdicts inherits their noise</h2>
+
+  <div class="grid-2" style="margin-top: 6px">
+    <div class="card resid">
+      <h3>The policy</h3>
+      <p>Auto-accept a verdict when its score &ge; <span class="mono">t</span>; otherwise it goes
+         to a human. <b>Coverage</b> is the share you accept, <b>escape</b> the share that is
+         wrong and accepted anyway.</p>
+      <p>NB5 takes the smallest <span class="mono">t</span> holding error under 10 % on
+         calibration.</p>
+    </div>
+    <div class="card warn">
+      <h3>Why that is not a guarantee</h3>
+      <p>On <span class="mono">cal</span> the target is met <i>by construction</i> &mdash; that is
+         where the threshold was fitted.</p>
+      <p>On <span class="mono">test</span> it can be exceeded: tuned on roughly a hundred
+         verdicts, it carries their sampling noise with it.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top: 16px; border-color: var(--bad)">
+    Certify &ldquo;at most 5 % of verdicts are wrong and unreviewed&rdquo;. Is a threshold tuned
+    on a hundred verdicts evidence for that?
+  </div>
+
+  <p class="tiny" style="margin-top: 4px">
+    NB5 section 6. A 5 % target left almost no coverage with this judge, hence 10 %.
+  </p>
+</section>

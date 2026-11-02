@@ -205,11 +205,30 @@ table.t td { padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-
   background: rgba(16,17,20,.94); color: #E9EAEC; font: 18px/1.5 var(--font-sans); padding: 18px 28px; display: none;
 }
 .notes-panel.open { display: block; }
+/* build-step blocks inside the notes: where you are, and what the next arrow reveals */
+.notes-panel [data-cue] { border-left: 3px solid #3A3F49; padding: 2px 0 2px 14px; margin: 0 0 .7em; }
+.notes-panel [data-cue]::before { content: attr(data-label); display: block; font-weight: 700;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8A9099; margin-bottom: 4px; }
+.notes-panel .done { opacity: .45; }
+.notes-panel .now { border-left-color: #6E9BFF; }
+.notes-panel .now::before { color: #9DB8FF; }
+.notes-panel .ref { border-left-color: #2E323A; }
+.notes-panel .ref::before { color: #61666F; }
+.notes-panel .next { border-left-color: #F2B33D; }
+.notes-panel .next::before { color: #F2B33D; }
+.notes-panel h4 b { color: #F2B33D; font-weight: 700; }
 .notes-panel h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #9AA0AA; }
 .slide aside.notes { display: none; }
 
 .clock { position: fixed; top: 12px; right: 16px; z-index: 21; font: 600 18px var(--font-mono); color: #fff; background: rgba(16,17,20,.85); padding: 6px 12px; border-radius: 8px; display: none; }
 .clock.open { display: block; }
+
+/* second-screen buttons: open the presenter and notes windows (also P / O) */
+.deck-tools { position: fixed; right: 14px; bottom: 12px; z-index: 22; display: flex; gap: 8px; }
+.deck-tools button { font: 600 13px/1 var(--font-sans); letter-spacing: .03em; color: #E9EAEC;
+  background: rgba(16,17,20,.80); border: 1px solid rgba(255,255,255,.20); border-radius: 8px;
+  padding: 8px 12px; cursor: pointer; }
+.deck-tools button:hover { background: rgba(16,17,20,.96); }
 
 .help {
   position: fixed; inset: 0; display: none; place-items: center; z-index: 30; background: rgba(0,0,0,.6);
@@ -228,7 +247,7 @@ body.printing { overflow: visible; height: auto; }
 body.printing .viewport { position: static; display: block; }
 body.printing .stage { transform: none !important; width: 1600px; height: auto; overflow: visible; box-shadow: none; }
 body.printing .slide { position: relative; display: flex !important; width: 1600px; height: 900px; overflow: hidden; break-after: page; }
-body.printing .chrome-footer, body.printing .progress { display: none; }
+body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools { display: none; }
 
 /* ---------- print: one slide per page, all builds visible ---------- */
 @media print {
@@ -238,5 +257,5 @@ body.printing .chrome-footer, body.printing .progress { display: none; }
   .stage { transform: none !important; box-shadow: none; width: auto; height: auto; overflow: visible; background: none; }
   .slide { position: relative; display: flex !important; width: 1600px; height: 900px; page-break-after: always; background: var(--bg); }
   .slide [data-step] { opacity: 1 !important; transform: none !important; }
-  .chrome-footer, .progress, .notes-panel, .clock, .help { display: none !important; }
+  .chrome-footer, .progress, .notes-panel, .clock, .help, .deck-tools { display: none !important; }
 }

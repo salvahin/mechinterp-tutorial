@@ -17,12 +17,19 @@
      Deck.raf(slideEl, fn) // requestAnimationFrame loop that auto-stops when the slide leaves;
                            // fn(tSeconds) returns false to stop early.
    Keys: → Space PgDn next · ← PgUp prev · Home/End · N notes · T clock · F fullscreen · ? help
+         P presenter window · O notes window · L switch note language (EN / ES)
+
+   Second-screen windows: the buttons at the bottom right (or P / O) open two
+   separate browser windows that follow the deck — a presenter view (clock, now /
+   next, notes, nav buttons) and a plain notes view for reading aloud. Put the deck
+   on the projector and either window on your laptop. Arrow keys work in all three.
    ========================================================================== */
 (function () {
   const W = 1600, H = 900;
   const handlers = {};      // id -> {enter:[], step:[], leave:[]}
   const loops = new Map();  // slideEl -> Set of active loop tokens
-  let slides = [], idx = 0, step = 0, stage, notesPanel, clockEl, helpEl, footer, progress, clockStart = null;
+  let slides = [], idx = 0, step = 0, stage, notesPanel, clockEl, helpEl, footer, progress, tools;
+  let clockStart = null, clockAccum = 0;   // running since / milliseconds banked across pauses
 
   const Deck = {
     reducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -98,7 +105,7 @@
     else if (idx > 0) { const p = slides[idx - 1]; show(idx - 1, maxStep(p)); }
   }
 
-  const NAMES = { miguel: 'Miguel González', salvador: 'Salvador Hinojosa', victor: 'Víctor Macías-Terrón' };
+  const NAMES = { miguel: 'Miguel González', salvador: 'Salvador Hinojosa', victor: 'Víctor Terrón-Macías' };
   function updateChrome() {
     const slide = slides[idx];
     const who = slide.dataset.presenter || '';
@@ -109,8 +116,242 @@
     stage.classList.toggle('on-section', slide.classList.contains('section-slide'));
     stage.classList.toggle('on-title', slide.classList.contains('title-slide'));
     progress.style.width = ((idx + 1) / slides.length * 100) + '%';
-    const n = slide.querySelector('aside.notes');
-    notesPanel.innerHTML = `<h4>Notes · slide ${idx + 1}${slide.dataset.block ? ' · ' + slide.dataset.block : ''} · step ${step}/${maxStep(slide)}</h4>` + (n ? n.innerHTML : '<em>No notes.</em>');
+    const n = notesOf(slide);
+    notesPanel.innerHTML = `<h4>Notes · ${langTag(slide)} · slide ${idx + 1}${slide.dataset.block ? ' · ' + slide.dataset.block : ''} · step ${step}/${maxStep(slide)} · <b>${cueText(slide, step)}</b></h4>` + (n || '<em>No notes.</em>');
+    markCues(notesPanel, step, maxStep(slide));
+    syncAux();
+  }
+
+  /* ---- clock: counts up, pausable, shared by the overlay and the windows ---- */
+  function clockMs() { return clockAccum + (clockStart ? Date.now() - clockStart : 0); }
+  function clockToggle() {
+    if (clockStart) { clockAccum += Date.now() - clockStart; clockStart = null; }
+    else clockStart = Date.now();
+  }
+  function clockReset() { clockStart = null; clockAccum = 0; }
+  function hms(ms) {
+    const s = Math.floor(ms / 1000);
+    return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  }
+
+  /* ---- presenter and notes windows ---------------------------------------
+     Opened from a click so popup blockers allow them. Each is an about:blank
+     window we write once and then update in place; same-origin, so no
+     postMessage or BroadcastChannel is needed and it all works from file://. */
+  const AUX = {
+    presenter: { win: null, features: 'width=1180,height=820' },
+    notes: { win: null, features: 'width=820,height=940' },
+  };
+  const AUX_CSS = `
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; height: 100vh; display: flex; flex-direction: column;
+           background: #101114; color: #E9EAEC; font: 16px/1.5 Inter, system-ui, sans-serif; }
+    .bar { display: flex; align-items: center; gap: 16px; padding: 12px 20px;
+           border-bottom: 1px solid #272A31; flex: none; }
+    .clock { font: 700 34px/1 ui-monospace, "IBM Plex Mono", monospace; letter-spacing: .02em; }
+    .meta { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: #9AA0AA; }
+    .spacer { margin-left: auto; }
+    button { font: 600 13px/1 Inter, system-ui, sans-serif; color: #E9EAEC; cursor: pointer;
+             background: #1C1E23; border: 1px solid #343842; border-radius: 8px; padding: 9px 13px; }
+    button:hover { background: #262A31; }
+    .now { padding: 16px 20px 0; flex: none; }
+    .label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #6F7681; }
+    h1 { margin: 4px 0 0; font: 700 27px/1.25 Sora, Inter, system-ui, sans-serif; color: #fff; }
+    #notes { flex: 1; overflow: auto; padding: 16px 20px 24px; font-size: var(--fs, 19px); }
+    #notes p { margin: 0 0 .75em; }
+    #notes b { color: #fff; }
+    #notes i { color: #B9BFC9; }
+    .next { flex: none; padding: 12px 20px; border-top: 1px solid #272A31; background: #15171B; }
+    .next h1 { font-size: 19px; color: #C7CCD4; }
+    /* what the right arrow will do from here */
+    .cue-bar { font: 700 12px/1 Inter, system-ui, sans-serif; letter-spacing: .08em;
+               text-transform: uppercase; color: #0F1115; background: #F2B33D;
+               padding: 7px 11px; border-radius: 7px; white-space: nowrap; }
+    /* one block per build step, so you can see where you are in the animation */
+    #notes [data-cue] { border-left: 3px solid #343842; padding: 2px 0 2px 15px; margin: 0 0 .8em; }
+    #notes [data-cue]::before { content: attr(data-label); display: block;
+      font: 700 11px/1 Inter, system-ui, sans-serif; letter-spacing: .14em;
+      color: #6F7681; margin-bottom: 5px; }
+    #notes .done { opacity: .4; }
+    #notes .now { border-left-color: #5B8CFF; }
+    #notes .now::before { color: #8FB0FF; }
+    /* a step of a notebook, not a build of this slide: no bar, no press cue */
+    #notes .ref { border-left-color: #272A31; }
+    #notes .ref::before { color: #5A606B; }
+    #notes .next { border-left-color: #F2B33D; }
+    #notes .next::before { color: #F2B33D; }
+  `;
+  function auxDoc(kind) {
+    const langBtn = '<button data-act="lang" id="langbtn" title="English / Español (L)"></button>';
+    const nav = kind === 'presenter'
+      ? `<span class="spacer"></span>${langBtn}
+         <button data-act="prev">&larr; Prev</button>
+         <button data-act="next">Next &rarr;</button>
+         <button data-act="clock">Start / pause</button>
+         <button data-act="reset">Reset</button>`
+      : `<span class="spacer"></span>${langBtn}
+         <button data-act="smaller">A&minus;</button>
+         <button data-act="bigger">A+</button>`;
+    const nextBlock = kind === 'presenter'
+      ? `<div class="next"><p class="label">Next</p><h1 id="next"></h1></div>` : '';
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8">
+      <title>${kind === 'presenter' ? 'Presenter' : 'Notes'} · deck</title>
+      <style>${AUX_CSS}</style></head><body>
+      <div class="bar"><span class="clock" id="clock">0:00:00</span>
+        <span class="meta" id="meta"></span><span class="cue-bar" id="cue"></span>${nav}</div>
+      <div class="now"><p class="label" id="block"></p><h1 id="title"></h1></div>
+      <div id="notes"></div>${nextBlock}</body></html>`;
+  }
+  function openAux(kind) {
+    const a = AUX[kind];
+    if (a.win && !a.win.closed) { a.win.focus(); return; }
+    const w = window.open('', 'deck-' + kind, a.features);
+    if (!w) { alert('The browser blocked the window. Allow pop-ups for this page and click again.'); return; }
+    w.document.open(); w.document.write(auxDoc(kind)); w.document.close();
+    a.win = w;
+    a.fs = 19;
+    w.document.addEventListener('keydown', relayKey);
+    w.document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      const act = b.dataset.act;
+      if (act === 'next') next();
+      else if (act === 'prev') prev();
+      else if (act === 'clock') clockToggle();
+      else if (act === 'reset') clockReset();
+      else if (act === 'lang') toggleLang();
+      else if (act === 'bigger' || act === 'smaller') {
+        a.fs = Math.max(14, Math.min(34, a.fs + (act === 'bigger' ? 2 : -2)));
+        w.document.getElementById('notes').style.setProperty('--fs', a.fs + 'px');
+      }
+      tickClocks();
+    });
+    lastAuxIdx = -1;       // force a scroll-to-top on the first sync
+    syncAux();
+  }
+  function relayKey(e) {
+    const k = e.key;
+    if (['ArrowRight', ' ', 'PageDown'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') show(0, 0);
+    else if (k === 'End') show(slides.length - 1, 0);
+    else if (k === 'l' || k === 'L') toggleLang();
+  }
+  /* ---- speaker-note language ---------------------------------------------
+     A note may carry one block per language:
+       <aside class="notes"><div data-lang="en">…</div><div data-lang="es">…</div></aside>
+     Notes without data-lang blocks are used as-is, so single-language decks and
+     any slide whose translation is not written yet keep working. */
+  let lang = (() => { try { return localStorage.getItem('deck-lang') || 'en'; } catch (e) { return 'en'; } })();
+  function notesOf(slide) {
+    const a = slide.querySelector('aside.notes');
+    if (!a) return null;
+    const blocks = a.querySelectorAll(':scope > [data-lang]');
+    if (!blocks.length) return a.innerHTML;
+    const pick = a.querySelector(`:scope > [data-lang="${lang}"]`)
+              || a.querySelector(':scope > [data-lang="en"]') || blocks[0];
+    return pick.innerHTML;
+  }
+  function langsOf(slide) {
+    return Array.from(slide.querySelectorAll('aside.notes > [data-lang]'), el => el.dataset.lang);
+  }
+  /* which language is actually on screen — may differ from the chosen one */
+  function shownLang(slide) {
+    const have = langsOf(slide);
+    if (!have.length || have.includes(lang)) return lang;
+    return have.includes('en') ? 'en' : have[0];
+  }
+  function langTag(slide) {
+    const s = shownLang(slide);
+    return s === lang ? s.toUpperCase() : s.toUpperCase() + ' (fallback)';
+  }
+  function setLang(l) {
+    lang = l;
+    try { localStorage.setItem('deck-lang', l); } catch (e) { /* file:// with storage off */ }
+    lastAuxIdx = -1;          // the text changed under us: scroll back to the top
+    updateChrome();
+  }
+  function toggleLang() {
+    const have = langsOf(slides[idx]);
+    setLang(lang === 'en' ? (have.includes('es') ? 'es' : 'en') : 'en');
+  }
+  Deck.setLang = setLang;
+  Deck.get = { get lang() { return lang; } };
+
+  /* Label every build-step block in the notes and show which one is on screen,
+     which one the next → will reveal, and which are already spent. */
+  const CUE_WORDS = {
+    en: { arrival: 'on arrival', one: 'step ', many: 'steps ', now: ' · on screen now', press: 'press → · ' },
+    es: { arrival: 'al entrar', one: 'paso ', many: 'pasos ', now: ' · en pantalla', press: 'pulsa → · ' },
+  };
+  function markCues(root, cur, max) {
+    const w = CUE_WORDS[lang] || CUE_WORDS.en;
+    root.querySelectorAll('[data-cue]').forEach(el => {
+      const k = parseInt(el.dataset.cue, 10);
+      const r = el.dataset.range, s = el.dataset.suffix;
+      let base = r ? w.many + r : k === 0 ? w.arrival : w.one + k;
+      if (s) base += ' · ' + s;
+      // Some notes number the steps of a notebook, not builds of this slide.
+      // Those must never say "press ->": flatten them instead.
+      const build = k <= max;
+      el.classList.toggle('ref', !build);
+      el.classList.toggle('done', build && k < cur);
+      el.classList.toggle('now', build && k === cur);
+      el.classList.toggle('next', build && k === cur + 1);
+      el.dataset.label = !build ? base
+        : k === cur ? base + w.now
+        : k === cur + 1 ? w.press + base
+        : base;
+    });
+  }
+  function cueText(slide, cur) {
+    const max = maxStep(slide);
+    if (cur < max) return `→ reveals step ${cur + 1} of ${max}`;
+    return idx < slides.length - 1 ? '→ next slide' : '→ end of deck';
+  }
+  let lastAuxIdx = -1;
+  function eachAux(fn) {
+    for (const kind of ['presenter', 'notes']) {
+      const w = AUX[kind].win;
+      if (w && !w.closed && w.document.getElementById('clock')) fn(w, kind);
+    }
+  }
+  function syncAux() {
+    const slide = slides[idx];
+    const titleOf = (s) => s ? (s.querySelector('h1, h2')?.textContent || s.id).trim() : '— end of deck —';
+    const html = notesOf(slide) || '<em>No notes for this slide.</em>';
+    const have = langsOf(slide);
+    const meta = `${langTag(slide)} · slide ${idx + 1} / ${slides.length} · step ${step} / ${maxStep(slide)}`;
+    const fresh = idx !== lastAuxIdx;
+    eachAux((w, kind) => {
+      const d = w.document, set = (id, v) => { const el = d.getElementById(id); if (el) el.innerHTML = v; };
+      set('meta', meta);
+      set('block', slide.dataset.block || '');
+      set('title', titleOf(slide));
+      set('notes', html);
+      set('cue', cueText(slide, step));
+      if (kind === 'presenter') set('next', titleOf(slides[idx + 1]));
+      const lb = d.getElementById('langbtn');
+      if (lb) {
+        // show the language you would switch TO, and say when there is nothing to switch to
+        const other = lang === 'en' ? 'es' : 'en';
+        const can = have.includes(other);
+        lb.textContent = can ? other.toUpperCase() : 'no ' + other.toUpperCase();
+        lb.disabled = !can;
+        lb.style.opacity = can ? '' : '.45';
+        lb.title = can ? 'English / Español (L)' : 'No translation for this slide yet';
+      }
+      const box = d.getElementById('notes');
+      markCues(box, step, maxStep(slide));
+      if (fresh) box.scrollTop = 0;                          // keep the scroll while stepping
+      box.style.setProperty('--fs', (AUX[kind].fs || 19) + 'px');
+    });
+    lastAuxIdx = idx;
+  }
+  function tickClocks() {
+    const t = hms(clockMs());
+    clockEl.textContent = t;
+    eachAux((w) => { w.document.getElementById('clock').textContent = t; });
   }
 
   function fit() {
@@ -131,8 +372,16 @@
     notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel';
     clockEl = document.createElement('div'); clockEl.className = 'clock';
     helpEl = document.createElement('div'); helpEl.className = 'help';
-    helpEl.innerHTML = '<div class="box"><b>Keys</b><br><kbd>→</kbd> <kbd>Space</kbd> next &nbsp; <kbd>←</kbd> previous<br><kbd>Home</kbd>/<kbd>End</kbd> first/last &nbsp; <kbd>N</kbd> notes &nbsp; <kbd>T</kbd> clock &nbsp; <kbd>F</kbd> fullscreen<br>Type a number + <kbd>Enter</kbd> to jump &nbsp; <kbd>?</kbd> this help</div>';
-    document.body.append(notesPanel, clockEl, helpEl);
+    helpEl.innerHTML = '<div class="box"><b>Keys</b><br><kbd>→</kbd> <kbd>Space</kbd> next &nbsp; <kbd>←</kbd> previous<br><kbd>Home</kbd>/<kbd>End</kbd> first/last &nbsp; <kbd>N</kbd> notes &nbsp; <kbd>T</kbd> clock &nbsp; <kbd>F</kbd> fullscreen<br><kbd>P</kbd> presenter window &nbsp; <kbd>O</kbd> notes window &nbsp; <kbd>L</kbd> EN / ES notes<br>Type a number + <kbd>Enter</kbd> to jump &nbsp; <kbd>?</kbd> this help</div>';
+
+    tools = document.createElement('div'); tools.className = 'deck-tools';
+    tools.innerHTML = '<button type="button" data-open="presenter">Presenter</button>'
+                    + '<button type="button" data-open="notes">Notes</button>';
+    tools.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-open]');
+      if (b) { e.stopPropagation(); openAux(b.dataset.open); }
+    });
+    document.body.append(notesPanel, clockEl, helpEl, tools);
 
     window.addEventListener('resize', fit); fit();
 
@@ -148,7 +397,10 @@
       else if (k === 'Home') show(0, 0);
       else if (k === 'End') show(slides.length - 1, 0);
       else if (k === 'n' || k === 'N') notesPanel.classList.toggle('open');
-      else if (k === 't' || k === 'T') { clockEl.classList.toggle('open'); if (!clockStart) clockStart = Date.now(); }
+      else if (k === 'p' || k === 'P') openAux('presenter');
+      else if (k === 'o' || k === 'O') openAux('notes');
+      else if (k === 'l' || k === 'L') toggleLang();
+      else if (k === 't' || k === 'T') { clockEl.classList.toggle('open'); if (!clockStart && !clockAccum) clockToggle(); }
       else if (k === 'f' || k === 'F') { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
       else if (k === '?') helpEl.classList.toggle('open');
       else if (k === 'Escape') { helpEl.classList.remove('open'); notesPanel.classList.remove('open'); }
@@ -164,11 +416,7 @@
       if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
       if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
     });
-    setInterval(() => {
-      if (!clockStart) return;
-      const s = Math.floor((Date.now() - clockStart) / 1000);
-      clockEl.textContent = `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-    }, 500);
+    setInterval(tickClocks, 500);
 
     const m = location.hash.match(/^#\/(\d+)(?:\.(\d+))?/);
     show(m ? parseInt(m[1], 10) - 1 : 0, m && m[2] ? parseInt(m[2], 10) : 0);

@@ -11,6 +11,8 @@ CSS and JS from slides/engine/ are inlined, so the output works offline (fonts f
 back to system fonts when offline).
 """
 import sys, pathlib, re, html
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import notes_build, notes_es          # step-labelled, bilingual speaker notes
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]          # slides/
 ENGINE = ROOT / "engine"
@@ -58,23 +60,27 @@ def inline_assets(doc):
 
 
 def build(part_names=None, out=None, title="Opening the Black Box — Mechanistic Interpretability of LLMs · MICAI 2026"):
-    css = (ENGINE / "deck.css").read_text()
-    js = (ENGINE / "deck.js").read_text()
+    css = (ENGINE / "deck.css").read_text(encoding="utf-8")
+    js = (ENGINE / "deck.js").read_text(encoding="utf-8")
     files = sorted(PARTS.glob("*.html"))
     if part_names:
         files = [f for f in files if any(f.stem.startswith(p) for p in part_names)]
     if not files:
         sys.exit("no parts found")
     body = []
+    n_en = n_es = 0
     for f in files:
+        part, a, b = notes_build.wrap(f.read_text(encoding="utf-8"), notes_es.ES)
+        n_en += a; n_es += b
         body.append(f"\n<!-- ===== {f.name} ===== -->\n")
-        body.append(f.read_text())
+        body.append(part)
     doc = HEAD.format(title=html.escape(title), css=css, js=js) + "".join(body) + TAIL
     doc = inline_assets(doc)
     out = out or (ROOT / ("deck.html" if not part_names else f"preview_{'_'.join(part_names)}.html"))
-    out.write_text(doc)
+    out.write_text(doc, encoding="utf-8")
     n = len(re.findall(r'<section\s+class="[^"]*\bslide\b', "".join(body)))
     print(f"wrote {out}  ({n} slides, {len(doc)//1024} KB)")
+    print(f"  notes: {n_en} EN · {n_es} ES · {n_en - n_es} still English-only")
     return out
 
 

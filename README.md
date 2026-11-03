@@ -40,6 +40,7 @@ Solutions are in [`notebooks/solutions/`](notebooks/solutions/).
 | `notebooks/instructor/NB5_prepare_cache.ipynb` | Builds NB5's judge cache (Gemma 3 4B on a T4). |
 | `data/nb5/` | Small fallback cache built with Qwen2.5-0.5B (lets NB5 run if the Gemma cache is missing). |
 | `printables/` | Cheat sheet, transfer canvas, Colab troubleshooting (PDF + HTML source). |
+| `printables/block5_notes.pdf`, `printables/block5_speech.pdf` | Block 5 (slides 51–71), bilingual: the presenter notes, and the word-for-word script. |
 | `slides/parts/`, `slides/engine/`, `notebooks/src/` | Sources. Edit these, then rebuild (below). |
 
 ## Presenting
@@ -60,6 +61,7 @@ Every slide has bilingual notes (`slides/engine/notes_es.py` holds the Spanish).
 python3 slides/engine/build.py                         # -> slides/deck.html
 python3 slides/engine/make_pdf.py slides/deck.html slides/deck.pdf
 python3 slides/engine/overflow.py slides/deck.html     # layout check
+python3 slides/engine/handout.py                       # -> printables/block5_{notes,speech}.pdf
 cd notebooks/src && for n in 0 1 2 3 4 5; do python3 build_nb$n.py; done
 ```
 

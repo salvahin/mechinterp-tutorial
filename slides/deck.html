@@ -3574,6 +3574,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   .p3-doc { font-family: var(--font-serif); font-size: 30px; line-height: 1.45; color: var(--ink); }
   .p3-svg text { font-family: var(--font-sans); }
   .p3-mono { font-family: var(--font-mono); }
+  .p3-link { font-family: var(--font-mono); font-weight: 600; color: var(--victor); }
   .slide .p3-tight { gap: 18px; }
   body.printing section[id^="p3-"] *, body.printing section[id^="p3-"] *::before { transition: none !important; }
   @media (prefers-reduced-motion: reduce) { section[id^="p3-"] * { transition: none !important; } }
@@ -4448,6 +4449,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     <p>Exact prompt: system "You are a compliance auditor."; user "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." The verdict is read from the Yes/No next-token logits (that also gives the token-probability baseline); verbalized confidence comes from a follow-up question asking for 0–100.</p>
     <p>Splits: 11 assertions split by NDA document into train / cal / test (no test NDA seen in training). 3 assertions are held out entirely — notice on compelled disclosure, return of confidential information, survival of obligations — standing in for a new 29110 process.</p>
     <p>The judge is Gemma 3 4B IT; its verdicts and residual-stream activations (at the last prompt token) are cached, so NB5 runs on a CPU runtime. CHECK BEFORE THE SESSION: if the Gemma cache is not published, NB5 falls back to Qwen2.5-0.5B — then say so and change this row.</p>
+    <p>TELL THE ROOM TO OPEN NB5 HERE, while this slide is up: "Open <code>bit.ly/micai-mi-nb5</code> (or NB5 from the materials link) and run the first cell — Runtime &gt; CPU is fine, no GPU, and it downloads the cache while I finish this slide." TODO before the event: create that short link and test it. The assistant helps anyone who is not open yet; one laptop per pair is enough.</p>
   </div>
   <div data-lang="es">
     <p><b>2:20:15 → 2:21:00.</b> No podemos compartir registros de auditoría reales, así que usamos un análogo público con la misma forma.</p>
@@ -4455,6 +4457,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     <p>Prompt exacto: sistema "You are a compliance auditor."; usuario "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." El veredicto se lee de los logits del siguiente token Yes/No (lo que también da la línea base de probabilidad del token); la confianza verbalizada viene de una pregunta de seguimiento que pide un 0–100.</p>
     <p>Particiones: 11 aserciones repartidas por documento en train / cal / test (ningún NDA de test se vio en entrenamiento). 3 aserciones se reservan por completo — aviso sobre divulgación obligada, devolución de información confidencial y supervivencia de obligaciones — como sustituto de un proceso 29110 nuevo.</p>
     <p>El juez es Gemma 3 4B IT; sus veredictos y activaciones del residual stream (en el último token del prompt) están cacheados, así que NB5 corre en un runtime de CPU. COMPROBAR ANTES DE LA SESIÓN: si la caché de Gemma no está publicada, NB5 cae a Qwen2.5-0.5B; en ese caso dilo y cambia esta fila.</p>
+    <p>AQUÍ ES DONDE SE LES DICE QUE ABRAN NB5, con esta slide en pantalla: "Abran <code>bit.ly/micai-mi-nb5</code> (o NB5 desde el enlace de materiales) y corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU, y descarga la caché mientras termino esta slide." TODO antes del evento: crear ese enlace corto y probarlo. El asistente ayuda a quien no lo tenga abierto; con una laptop por pareja alcanza.</p>
   </div>
   </aside>
 <aside class="speech">
@@ -4476,9 +4479,15 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     token-probability baseline comes from, and the hidden states at the last prompt token are
     cached &mdash; which is why the notebook runs on a free CPU runtime and nobody needs a
     GPU.</p>
-    <i>[Check before the session which judge the published cache actually uses: this row says
-    Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B fallback. Say which one the
-    room is running.]</i>
+    <p>And this is the moment to open it. The notebook is NB5, at
+    <b>bit.ly/micai-mi-nb5</b> &mdash; the link is on the next slide as well. Open it now and run
+    the first cell: a CPU runtime is fine, you do not need a GPU, and it will fetch the cache
+    while I finish here. If your neighbour is not open yet, share a laptop; one per pair is
+    plenty.</p>
+    <i>[Say the link slowly, twice, and leave this slide up until most screens show Colab. The
+    assistant helps whoever is stuck. Check before the session which judge the published cache
+    actually uses: this row says Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B
+    fallback. Say which one the room is running.]</i>
   </div>
   <div data-lang="es">
     <b>2:20:15 &rarr; 2:21:00.</b>
@@ -4500,9 +4509,15 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     línea base de probabilidad del token, y los estados internos en el último token del prompt
     están cacheados &mdash; por eso el notebook corre en un runtime de CPU gratuito y nadie
     necesita GPU.</p>
-    <i>[Verifica antes de la sesión qué juez usa de verdad la caché publicada: esta fila dice
-    Gemma 3 4B IT, y los números del debrief son del fallback Qwen2.5-0.5B. Di cuál está
-    corriendo la sala.]</i>
+    <p>Y este es el momento de abrirlo. El notebook es NB5, en
+    <b>bit.ly/micai-mi-nb5</b>; el enlace también está en la siguiente slide. Ábranlo ahora y
+    corran la primera celda: con un runtime de CPU basta, no necesitan GPU, y mientras yo termino
+    aquí va a descargar la caché. Si alguien de al lado no lo tiene abierto, compartan laptop: con
+    una por pareja sobra.</p>
+    <i>[Di el enlace despacio, dos veces, y deja esta slide hasta que la mayoría de las pantallas
+    muestren Colab. El asistente ayuda a quien se atore. Verifica antes de la sesión qué juez usa
+    de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief son del
+    fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
   </div>
   </aside>
 </section>
@@ -4522,11 +4537,13 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   <aside class="notes">
   <div data-lang="en">
     <p><b>2:21:00 → 2:21:30.</b> Hands up for A, B, C, D. Write the counts on the whiteboard; we return to them in the debrief.</p>
+    <p>Everyone should have NB5 open by now (you told them on the LegalBench slide); if some do not, give them 20 seconds and pair them up — <code>bit.ly/micai-mi-nb5</code>.</p>
     <p>Ask them to write their own prediction in the notebook's Predict cell before running anything.</p>
     <p>Options C and D matter: token probability is free and often strong; a probe that only ties it adds cost, not information.</p>
   </div>
   <div data-lang="es">
     <p><b>2:21:00 → 2:21:30.</b> Que levanten la mano por A, B, C y D. Apunta los conteos en la pizarra; volvemos a ellos en el debrief.</p>
+    <p>A estas alturas todos deberían tener NB5 abierto (se los dijiste en la slide de LegalBench); si alguien no, dales 20 segundos y empareja: <code>bit.ly/micai-mi-nb5</code>.</p>
     <p>Pídeles que escriban su propia predicción en la celda Predict del notebook antes de correr nada.</p>
     <p>Las opciones C y D importan: la probabilidad del token es gratis y a menudo fuerte; un probe que solo la empata añade costo, no información.</p>
   </div>
@@ -4542,6 +4559,8 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     the logits, and a probe that merely ties it has added cost and no information. Now write
     your own prediction in the Predict cell of the notebook, before the first result appears.
     Being wrong here is the point of the exercise.</p>
+    <p>If NB5 is not open on your screen yet, open it now &mdash; <b>bit.ly/micai-mi-nb5</b>
+    &mdash; or look over at your neighbour's.</p>
   </div>
   <div data-lang="es">
     <b>2:21:00 &rarr; 2:21:30.</b> <i>[Compromiso previo. No reveles la respuesta.]</i>
@@ -4553,13 +4572,15 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     los logits, y un probe que apenas la empata agregó costo y ninguna información. Ahora
     escriban su propia predicción en la celda Predict del notebook, antes de que aparezca el
     primer resultado. Equivocarse aquí es justamente el punto del ejercicio.</p>
+    <p>Si todavía no tienen NB5 abierto en la pantalla, ábranlo ahora
+    &mdash; <b>bit.ly/micai-mi-nb5</b> &mdash; o asómense a la laptop de al lado.</p>
   </div>
   </aside>
 </section>
 
 <!-- ====================================================================== 14 -->
 <section class="slide" id="p3-nb5" data-presenter="victor" data-block="Block 5 · Audit">
-  <p class="kicker">Block 5 · Audit · hands-on</p>
+  <p class="kicker">Block 5 · Audit · hands-on · <span class="p3-link">bit.ly/micai-mi-nb5</span></p>
   <h2>NB5: measure whether the judge's hidden state knows when it is wrong</h2>
   <div class="row" style="gap:56px">
     <ol class="col" style="flex:1">
@@ -4583,6 +4604,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   <aside class="notes">
   <div data-lang="en">
     <p><b>2:21:30 → 2:43:30</b> (22 min). If the room is mid-flow, take 2–3 more minutes from the debrief, not from the wrap.</p>
+    <p>Say the link again and leave this slide up: <code>bit.ly/micai-mi-nb5</code> — it is the only place the NB5 link is on screen (also <code>notebooks/student/NB5_judge_confidence.ipynb</code> in the materials). Nobody needs a GPU or NB0 for this one.</p>
     <p>Pairs: one drives, one reads the cells and predicts. Steps 1–4 are core; 5 is the key result; 6 is the grounding check; the conformal threshold is an optional stretch.</p>
     <p>Three confidence signals, compared on the test split: verbalized 0–100, Yes/No token probability (confidence in the chosen answer), and the probe (fitted on train, layer chosen and Platt-calibrated on cal). Stress that token probability is the strong, cheap baseline; recalibration fixes ECE but cannot change AUROC, so AUROC is where the probe must win.</p>
     <p>Routing target is 10% error among auto-accepted verdicts (5% left almost no coverage with the small test judge; with the Gemma cache they can try 0.05).</p>
@@ -4592,6 +4614,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   </div>
   <div data-lang="es">
     <p><b>2:21:30 → 2:43:30 (22 min).</b> Si la sala está en pleno flujo, toma 2 o 3 minutos más del debrief, no del cierre.</p>
+    <p>Repite el enlace y deja esta slide en pantalla: <code>bit.ly/micai-mi-nb5</code>; es el único lugar donde el enlace de NB5 aparece proyectado (también <code>notebooks/student/NB5_judge_confidence.ipynb</code> en los materiales). Para este nadie necesita GPU ni haber hecho NB0.</p>
     <p>En parejas: una persona conduce, la otra lee las celdas y predice. Los pasos 1–4 son el núcleo; el 5 es el resultado clave; el 6 es la comprobación de fundamento; el umbral conforme es una ampliación opcional.</p>
     <p>Tres señales de confianza, comparadas en la partición de test: la verbalizada 0–100, la probabilidad del token Yes/No (confianza en la respuesta elegida) y el probe (ajustado en train, con la capa elegida y calibrado por Platt en cal). Insiste en que la probabilidad del token es la línea base fuerte y barata; recalibrar arregla el ECE pero no puede cambiar el AUROC, así que el AUROC es donde el probe tiene que ganar.</p>
     <p>El objetivo de enrutamiento es 10 % de error entre los veredictos aceptados automáticamente (con el 5 % casi no quedaba cobertura con el juez pequeño de prueba; con la caché de Gemma pueden intentar 0,05).</p>
@@ -4604,8 +4627,10 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   <div data-lang="en">
     <b>2:21:30 &rarr; 2:43:30 (22 minutes).</b> <i>[Hands-on. Say the frame, then stop talking
     and circulate.]</i>
-    <p>Notebook five. Twenty-two minutes, in pairs: one person drives, the other reads the
-    cells out loud and predicts before each run.</p>
+    <p>Notebook five, the link on the slide: <b>bit.ly/micai-mi-nb5</b>. Twenty-two minutes, in
+    pairs: one person drives, the other reads the cells out loud and predicts before each run.
+    One laptop per pair is all you need, a CPU runtime is enough, and it does not matter whether
+    you got NB0 working this morning &mdash; this notebook runs on cached activations.</p>
     <p>Six steps. Run the judge on a few pairs, so you have seen it work. Train a probe to
     predict which of its verdicts are wrong. Compare that probe against the two cheap
     baselines &mdash; the verbalized number and the token probability &mdash; on AUROC and on
@@ -4630,8 +4655,11 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   <div data-lang="es">
     <b>2:21:30 &rarr; 2:43:30 (22 minutos).</b> <i>[Manos a la obra. Di el encuadre, luego deja
     de hablar y circula.]</i>
-    <p>Notebook cinco. Veintidós minutos, en parejas: uno maneja el teclado y el otro lee las
-    celdas en voz alta y predice antes de cada corrida.</p>
+    <p>Notebook cinco, el enlace está en la slide: <b>bit.ly/micai-mi-nb5</b>. Veintidós
+    minutos, en parejas: uno maneja el teclado y el otro lee las celdas en voz alta y predice
+    antes de cada corrida. Con una laptop por pareja basta, con runtime de CPU alcanza, y da
+    igual si en la mañana NB0 no les funcionó: este notebook corre sobre activaciones
+    cacheadas.</p>
     <p>Seis pasos. Correr el juez en unos cuantos pares, para haberlo visto funcionar. Entrenar
     un probe que prediga cuáles de sus veredictos están mal. Comparar ese probe contra las dos
     líneas base baratas &mdash; el número verbalizado y la probabilidad del token &mdash; en

@@ -13,6 +13,7 @@
   .p3-doc { font-family: var(--font-serif); font-size: 30px; line-height: 1.45; color: var(--ink); }
   .p3-svg text { font-family: var(--font-sans); }
   .p3-mono { font-family: var(--font-mono); }
+  .p3-link { font-family: var(--font-mono); font-weight: 600; color: var(--victor); }
   .slide .p3-tight { gap: 18px; }
   body.printing section[id^="p3-"] *, body.printing section[id^="p3-"] *::before { transition: none !important; }
   @media (prefers-reduced-motion: reduce) { section[id^="p3-"] * { transition: none !important; } }
@@ -383,6 +384,7 @@
     Exact prompt: system "You are a compliance auditor."; user "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." The verdict is read from the Yes/No next-token logits (that also gives the token-probability baseline); verbalized confidence comes from a follow-up question asking for 0–100.
     Splits: 11 assertions split by NDA document into train / cal / test (no test NDA seen in training). 3 assertions are held out entirely — notice on compelled disclosure, return of confidential information, survival of obligations — standing in for a new 29110 process.
     The judge is Gemma 3 4B IT; its verdicts and residual-stream activations (at the last prompt token) are cached, so NB5 runs on a CPU runtime. CHECK BEFORE THE SESSION: if the Gemma cache is not published, NB5 falls back to Qwen2.5-0.5B — then say so and change this row.
+    TELL THE ROOM TO OPEN NB5 HERE, while this slide is up: "Open <code>bit.ly/micai-mi-nb5</code> (or NB5 from the materials link) and run the first cell — Runtime &gt; CPU is fine, no GPU, and it downloads the cache while I finish this slide." TODO before the event: create that short link and test it. The assistant helps anyone who is not open yet; one laptop per pair is enough.
   </aside>
 </section>
 
@@ -400,6 +402,7 @@
   </div>
   <aside class="notes">
     <b>2:21:00 → 2:21:30.</b> Hands up for A, B, C, D. Write the counts on the whiteboard; we return to them in the debrief.
+    Everyone should have NB5 open by now (you told them on the LegalBench slide); if some do not, give them 20 seconds and pair them up — <code>bit.ly/micai-mi-nb5</code>.
     Ask them to write their own prediction in the notebook's Predict cell before running anything.
     Options C and D matter: token probability is free and often strong; a probe that only ties it adds cost, not information.
   </aside>
@@ -407,7 +410,7 @@
 
 <!-- ====================================================================== 14 -->
 <section class="slide" id="p3-nb5" data-presenter="victor" data-block="Block 5 · Audit">
-  <p class="kicker">Block 5 · Audit · hands-on</p>
+  <p class="kicker">Block 5 · Audit · hands-on · <span class="p3-link">bit.ly/micai-mi-nb5</span></p>
   <h2>NB5: measure whether the judge's hidden state knows when it is wrong</h2>
   <div class="row" style="gap:56px">
     <ol class="col" style="flex:1">
@@ -430,6 +433,7 @@
   </div>
   <aside class="notes">
     <b>2:21:30 → 2:43:30</b> (22 min). If the room is mid-flow, take 2–3 more minutes from the debrief, not from the wrap.
+    Say the link again and leave this slide up: <code>bit.ly/micai-mi-nb5</code> — it is the only place the NB5 link is on screen (also <code>notebooks/student/NB5_judge_confidence.ipynb</code> in the materials). Nobody needs a GPU or NB0 for this one.
     Pairs: one drives, one reads the cells and predicts. Steps 1–4 are core; 5 is the key result; 6 is the grounding check; the conformal threshold is an optional stretch.
     Three confidence signals, compared on the test split: verbalized 0–100, Yes/No token probability (confidence in the chosen answer), and the probe (fitted on train, layer chosen and Platt-calibrated on cal). Stress that token probability is the strong, cheap baseline; recalibration fixes ECE but cannot change AUROC, so AUROC is where the probe must win.
     Routing target is 10% error among auto-accepted verdicts (5% left almost no coverage with the small test judge; with the Gemma cache they can try 0.05).

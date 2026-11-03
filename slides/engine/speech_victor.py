@@ -247,9 +247,15 @@ EN = {
     token-probability baseline comes from, and the hidden states at the last prompt token are
     cached &mdash; which is why the notebook runs on a free CPU runtime and nobody needs a
     GPU.</p>
-    <i>[Check before the session which judge the published cache actually uses: this row says
-    Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B fallback. Say which one the
-    room is running.]</i>
+    <p>And this is the moment to open it. The notebook is NB5, at
+    <b>bit.ly/micai-mi-nb5</b> &mdash; the link is on the next slide as well. Open it now and run
+    the first cell: a CPU runtime is fine, you do not need a GPU, and it will fetch the cache
+    while I finish here. If your neighbour is not open yet, share a laptop; one per pair is
+    plenty.</p>
+    <i>[Say the link slowly, twice, and leave this slide up until most screens show Colab. The
+    assistant helps whoever is stuck. Check before the session which judge the published cache
+    actually uses: this row says Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B
+    fallback. Say which one the room is running.]</i>
 """,
 
 "p3-predict": """
@@ -262,13 +268,17 @@ EN = {
     the logits, and a probe that merely ties it has added cost and no information. Now write
     your own prediction in the Predict cell of the notebook, before the first result appears.
     Being wrong here is the point of the exercise.</p>
+    <p>If NB5 is not open on your screen yet, open it now &mdash; <b>bit.ly/micai-mi-nb5</b>
+    &mdash; or look over at your neighbour's.</p>
 """,
 
 "p3-nb5": """
     <b>2:21:30 &rarr; 2:43:30 (22 minutes).</b> <i>[Hands-on. Say the frame, then stop talking
     and circulate.]</i>
-    <p>Notebook five. Twenty-two minutes, in pairs: one person drives, the other reads the
-    cells out loud and predicts before each run.</p>
+    <p>Notebook five, the link on the slide: <b>bit.ly/micai-mi-nb5</b>. Twenty-two minutes, in
+    pairs: one person drives, the other reads the cells out loud and predicts before each run.
+    One laptop per pair is all you need, a CPU runtime is enough, and it does not matter whether
+    you got NB0 working this morning &mdash; this notebook runs on cached activations.</p>
     <p>Six steps. Run the judge on a few pairs, so you have seen it work. Train a probe to
     predict which of its verdicts are wrong. Compare that probe against the two cheap
     baselines &mdash; the verbalized number and the token probability &mdash; on AUROC and on
@@ -671,9 +681,15 @@ ES = {
     línea base de probabilidad del token, y los estados internos en el último token del prompt
     están cacheados &mdash; por eso el notebook corre en un runtime de CPU gratuito y nadie
     necesita GPU.</p>
-    <i>[Verifica antes de la sesión qué juez usa de verdad la caché publicada: esta fila dice
-    Gemma 3 4B IT, y los números del debrief son del fallback Qwen2.5-0.5B. Di cuál está
-    corriendo la sala.]</i>
+    <p>Y este es el momento de abrirlo. El notebook es NB5, en
+    <b>bit.ly/micai-mi-nb5</b>; el enlace también está en la siguiente slide. Ábranlo ahora y
+    corran la primera celda: con un runtime de CPU basta, no necesitan GPU, y mientras yo termino
+    aquí va a descargar la caché. Si alguien de al lado no lo tiene abierto, compartan laptop: con
+    una por pareja sobra.</p>
+    <i>[Di el enlace despacio, dos veces, y deja esta slide hasta que la mayoría de las pantallas
+    muestren Colab. El asistente ayuda a quien se atore. Verifica antes de la sesión qué juez usa
+    de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief son del
+    fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
 """,
 
 "p3-predict": """
@@ -686,13 +702,18 @@ ES = {
     los logits, y un probe que apenas la empata agregó costo y ninguna información. Ahora
     escriban su propia predicción en la celda Predict del notebook, antes de que aparezca el
     primer resultado. Equivocarse aquí es justamente el punto del ejercicio.</p>
+    <p>Si todavía no tienen NB5 abierto en la pantalla, ábranlo ahora
+    &mdash; <b>bit.ly/micai-mi-nb5</b> &mdash; o asómense a la laptop de al lado.</p>
 """,
 
 "p3-nb5": """
     <b>2:21:30 &rarr; 2:43:30 (22 minutos).</b> <i>[Manos a la obra. Di el encuadre, luego deja
     de hablar y circula.]</i>
-    <p>Notebook cinco. Veintidós minutos, en parejas: uno maneja el teclado y el otro lee las
-    celdas en voz alta y predice antes de cada corrida.</p>
+    <p>Notebook cinco, el enlace está en la slide: <b>bit.ly/micai-mi-nb5</b>. Veintidós
+    minutos, en parejas: uno maneja el teclado y el otro lee las celdas en voz alta y predice
+    antes de cada corrida. Con una laptop por pareja basta, con runtime de CPU alcanza, y da
+    igual si en la mañana NB0 no les funcionó: este notebook corre sobre activaciones
+    cacheadas.</p>
     <p>Seis pasos. Correr el juez en unos cuantos pares, para haberlo visto funcionar. Entrenar
     un probe que prediga cuáles de sus veredictos están mal. Comparar ese probe contra las dos
     líneas base baratas &mdash; el número verbalizado y la probabilidad del token &mdash; en

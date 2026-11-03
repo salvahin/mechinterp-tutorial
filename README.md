@@ -44,7 +44,9 @@ Solutions are in [`notebooks/solutions/`](notebooks/solutions/).
 
 ## Presenting
 
-Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, **←** back, **N** speaker notes (with cumulative clock), **T** elapsed timer, type a number + **Enter** to jump. The deck works offline; with internet it loads its web fonts.
+Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, **←** back, **N** speaker notes (with cumulative clock), **T** elapsed timer, type a number + **Enter** to jump. **P** / **O** open the presenter and notes windows, **L** switches the notes between English and Spanish, and **S** switches between the director's notes and the word-for-word script. The deck works offline; with internet it loads its web fonts.
+
+Every slide has bilingual notes (`slides/engine/notes_es.py` holds the Spanish). Block 5 also has a full read-aloud script in both languages (`slides/engine/speech_victor.py`); on slides with no script, **S** leaves the notes on screen and the window's mode button reads *no script*.
 
 | Time | Presenter | Slides | Notebook |
 |---|---|---|---|

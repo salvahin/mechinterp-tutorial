@@ -228,7 +228,7 @@ table.t td { padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-
 .notes-panel .next::before { color: #F2B33D; }
 .notes-panel h4 b { color: #F2B33D; font-weight: 700; }
 .notes-panel h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #9AA0AA; }
-.slide aside.notes { display: none; }
+.slide aside.notes, .slide aside.speech { display: none; }
 
 .clock { position: fixed; top: 12px; right: 16px; z-index: 21; font: 600 18px var(--font-mono); color: #fff; background: rgba(16,17,20,.85); padding: 6px 12px; border-radius: 8px; display: none; }
 .clock.open { display: block; }
@@ -292,6 +292,12 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
                            // fn(tSeconds) returns false to stop early.
    Keys: → Space PgDn next · ← PgUp prev · Home/End · N notes · T clock · F fullscreen · ? help
          P presenter window · O notes window · L switch note language (EN / ES)
+         S switch between the director's notes and the word-for-word script
+
+   A slide may carry a second aside with the script to read out loud:
+     <aside class="speech"><div data-lang="en">…</div><div data-lang="es">…</div></aside>
+   S (or the NOTES / SPEECH button in either window) switches modes; slides with
+   no script keep showing their notes, so the mode is safe to leave on.
 
    Second-screen windows: the buttons at the bottom right (or P / O) open two
    separate browser windows that follow the deck — a presenter view (clock, now /
@@ -391,7 +397,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     stage.classList.toggle('on-title', slide.classList.contains('title-slide'));
     progress.style.width = ((idx + 1) / slides.length * 100) + '%';
     const n = notesOf(slide);
-    notesPanel.innerHTML = `<h4>Notes · ${langTag(slide)} · slide ${idx + 1}${slide.dataset.block ? ' · ' + slide.dataset.block : ''} · step ${step}/${maxStep(slide)} · <b>${cueText(slide, step)}</b></h4>` + (n || '<em>No notes.</em>');
+    notesPanel.innerHTML = `<h4>${modeTag(slide)} · ${langTag(slide)} · slide ${idx + 1}${slide.dataset.block ? ' · ' + slide.dataset.block : ''} · step ${step}/${maxStep(slide)} · <b>${cueText(slide, step)}</b></h4>` + (n || '<em>No notes.</em>');
     markCues(notesPanel, step, maxStep(slide));
     syncAux();
   }
@@ -457,7 +463,8 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     #notes .next::before { color: #F2B33D; }
   `;
   function auxDoc(kind) {
-    const langBtn = '<button data-act="lang" id="langbtn" title="English / Español (L)"></button>';
+    const langBtn = '<button data-act="lang" id="langbtn" title="English / Español (L)"></button>'
+      + '<button data-act="mode" id="modebtn" title="Director&apos;s notes / word-for-word script (S)"></button>';
     const nav = kind === 'presenter'
       ? `<span class="spacer"></span>${langBtn}
          <button data-act="prev">&larr; Prev</button>
@@ -494,6 +501,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
       else if (act === 'clock') clockToggle();
       else if (act === 'reset') clockReset();
       else if (act === 'lang') toggleLang();
+      else if (act === 'mode') toggleMode();
       else if (act === 'bigger' || act === 'smaller') {
         a.fs = Math.max(14, Math.min(34, a.fs + (act === 'bigger' ? 2 : -2)));
         w.document.getElementById('notes').style.setProperty('--fs', a.fs + 'px');
@@ -510,6 +518,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     else if (k === 'Home') show(0, 0);
     else if (k === 'End') show(slides.length - 1, 0);
     else if (k === 'l' || k === 'L') toggleLang();
+    else if (k === 's' || k === 'S') toggleMode();
   }
   /* ---- speaker-note language ---------------------------------------------
      A note may carry one block per language:
@@ -517,8 +526,33 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
      Notes without data-lang blocks are used as-is, so single-language decks and
      any slide whose translation is not written yet keep working. */
   let lang = (() => { try { return localStorage.getItem('deck-lang') || 'en'; } catch (e) { return 'en'; } })();
+
+  /* ---- notes or speech ----------------------------------------------------
+     Two kinds of text can sit on a slide: aside.notes (what to do and say, in
+     shorthand) and aside.speech (the sentences themselves). The mode is global
+     and sticky, and a slide with no script simply keeps showing its notes. */
+  let mode = (() => { try { return localStorage.getItem('deck-mode') === 'speech' ? 'speech' : 'notes'; } catch (e) { return 'notes'; } })();
+  function hasSpeech(slide) { return !!slide.querySelector('aside.speech'); }
+  /* which of the two is actually on screen — may differ from the chosen mode */
+  function shownMode(slide) { return mode === 'speech' && hasSpeech(slide) ? 'speech' : 'notes'; }
+  function modeTag(slide) {
+    if (shownMode(slide) === 'speech') return 'SPEECH';
+    return mode === 'speech' ? 'NOTES (no script)' : 'NOTES';
+  }
+  function setMode(m) {
+    mode = m;
+    try { localStorage.setItem('deck-mode', m); } catch (e) { /* file:// with storage off */ }
+    lastAuxIdx = -1;          // different text: scroll back to the top
+    updateChrome();
+  }
+  function toggleMode() { setMode(mode === 'speech' ? 'notes' : 'speech'); }
+  Deck.setMode = setMode;
+
+  function asideOf(slide) {
+    return slide.querySelector('aside.' + shownMode(slide));
+  }
   function notesOf(slide) {
-    const a = slide.querySelector('aside.notes');
+    const a = asideOf(slide);
     if (!a) return null;
     const blocks = a.querySelectorAll(':scope > [data-lang]');
     if (!blocks.length) return a.innerHTML;
@@ -527,7 +561,8 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     return pick.innerHTML;
   }
   function langsOf(slide) {
-    return Array.from(slide.querySelectorAll('aside.notes > [data-lang]'), el => el.dataset.lang);
+    const a = asideOf(slide);
+    return a ? Array.from(a.querySelectorAll(':scope > [data-lang]'), el => el.dataset.lang) : [];
   }
   /* which language is actually on screen — may differ from the chosen one */
   function shownLang(slide) {
@@ -595,7 +630,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     const titleOf = (s) => s ? (s.querySelector('h1, h2')?.textContent || s.id).trim() : '— end of deck —';
     const html = notesOf(slide) || '<em>No notes for this slide.</em>';
     const have = langsOf(slide);
-    const meta = `${langTag(slide)} · slide ${idx + 1} / ${slides.length} · step ${step} / ${maxStep(slide)}`;
+    const meta = `${modeTag(slide)} · ${langTag(slide)} · slide ${idx + 1} / ${slides.length} · step ${step} / ${maxStep(slide)}`;
     const fresh = idx !== lastAuxIdx;
     eachAux((w, kind) => {
       const d = w.document, set = (id, v) => { const el = d.getElementById(id); if (el) el.innerHTML = v; };
@@ -614,6 +649,17 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
         lb.disabled = !can;
         lb.style.opacity = can ? '' : '.45';
         lb.title = can ? 'English / Español (L)' : 'No translation for this slide yet';
+      }
+      const mb = d.getElementById('modebtn');
+      if (mb) {
+        // show the mode you would switch TO, and say when this slide has no script
+        const other = mode === 'speech' ? 'notes' : 'speech';
+        const can = mode === 'speech' || hasSpeech(slide);
+        mb.textContent = other === 'speech' ? (hasSpeech(slide) ? 'SPEECH' : 'no script') : 'NOTES';
+        mb.disabled = !can;
+        mb.style.opacity = can ? '' : '.45';
+        mb.title = can ? "Director's notes / word-for-word script (S)"
+                       : 'No word-for-word script for this slide';
       }
       const box = d.getElementById('notes');
       markCues(box, step, maxStep(slide));
@@ -646,7 +692,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
     notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel';
     clockEl = document.createElement('div'); clockEl.className = 'clock';
     helpEl = document.createElement('div'); helpEl.className = 'help';
-    helpEl.innerHTML = '<div class="box"><b>Keys</b><br><kbd>→</kbd> <kbd>Space</kbd> next &nbsp; <kbd>←</kbd> previous<br><kbd>Home</kbd>/<kbd>End</kbd> first/last &nbsp; <kbd>N</kbd> notes &nbsp; <kbd>T</kbd> clock &nbsp; <kbd>F</kbd> fullscreen<br><kbd>P</kbd> presenter window &nbsp; <kbd>O</kbd> notes window &nbsp; <kbd>L</kbd> EN / ES notes<br>Type a number + <kbd>Enter</kbd> to jump &nbsp; <kbd>?</kbd> this help</div>';
+    helpEl.innerHTML = '<div class="box"><b>Keys</b><br><kbd>→</kbd> <kbd>Space</kbd> next &nbsp; <kbd>←</kbd> previous<br><kbd>Home</kbd>/<kbd>End</kbd> first/last &nbsp; <kbd>N</kbd> notes &nbsp; <kbd>T</kbd> clock &nbsp; <kbd>F</kbd> fullscreen<br><kbd>P</kbd> presenter window &nbsp; <kbd>O</kbd> notes window &nbsp; <kbd>L</kbd> EN / ES notes<br><kbd>S</kbd> notes / word-for-word script<br>Type a number + <kbd>Enter</kbd> to jump &nbsp; <kbd>?</kbd> this help</div>';
 
     tools = document.createElement('div'); tools.className = 'deck-tools';
     tools.innerHTML = '<button type="button" data-open="presenter">Presenter</button>'
@@ -674,6 +720,7 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
       else if (k === 'p' || k === 'P') openAux('presenter');
       else if (k === 'o' || k === 'O') openAux('notes');
       else if (k === 'l' || k === 'L') toggleLang();
+      else if (k === 's' || k === 'S') toggleMode();
       else if (k === 't' || k === 'T') { clockEl.classList.toggle('open'); if (!clockStart && !clockAccum) clockToggle(); }
       else if (k === 'f' || k === 'F') { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
       else if (k === '?') helpEl.classList.toggle('open');

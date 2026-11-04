@@ -242,6 +242,7 @@ ES = {
 
 "p2-handoff": """
     <b>2:08–2:10.</b> Lee la frase literalmente y luego presenta a Víctor: va a usar exactamente estas dos herramientas, un probe y el patching, para preguntarse si podemos confiar en un juez LLM.
+    Lo último antes de sentarte, para que Colab esté listo cuando el Bloque 5 lo necesite: "Abran ya el último notebook y déjenlo cargando: <code>bit.ly/micai-mi-nb5</code>. Con runtime de CPU basta, no hace falta GPU ni instalar nada." Víctor lo repite en su slide de LegalBench, así que no te detengas en ello. (TODO antes del evento: el enlace corto de NB5 tiene que existir y estar probado.)
 """,
 
 # ========================================================= PART 3 · Víctor
@@ -328,7 +329,7 @@ ES = {
     Prompt exacto: sistema "You are a compliance auditor."; usuario "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." El veredicto se lee de los logits del siguiente token Yes/No (lo que también da la línea base de probabilidad del token); la confianza verbalizada viene de una pregunta de seguimiento que pide un 0–100.
     Particiones: 11 aserciones repartidas por documento en train / cal / test (ningún NDA de test se vio en entrenamiento). 3 aserciones se reservan por completo — aviso sobre divulgación obligada, devolución de información confidencial y supervivencia de obligaciones — como sustituto de un proceso 29110 nuevo.
     El juez es Gemma 3 4B IT; sus veredictos y activaciones del residual stream (en el último token del prompt) están cacheados, así que NB5 corre en un runtime de CPU. COMPROBAR ANTES DE LA SESIÓN: si la caché de Gemma no está publicada, NB5 cae a Qwen2.5-0.5B; en ese caso dilo y cambia esta fila.
-    AQUÍ ES DONDE SE LES DICE QUE ABRAN NB5, con esta slide en pantalla: "Abran <code>bit.ly/micai-mi-nb5</code> (o NB5 desde el enlace de materiales) y corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU, y descarga la caché mientras termino esta slide." TODO antes del evento: crear ese enlace corto y probarlo. El asistente ayuda a quien no lo tenga abierto; con una laptop por pareja alcanza.
+    PUNTO DE CONTROL DE NB5, con esta slide en pantalla. Salvador ya les pidió abrirlo en el handoff (2:08), así que aquí se confirma, no se anuncia: "¿Todos con NB5 abierto? Corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU ni instalar nada." A quien no lo tenga: <code>bit.ly/micai-mi-nb5</code>, dicho despacio, dos veces; el asistente va con esa persona; con una laptop por pareja alcanza. No sueltes esta slide hasta que la mayoría de las pantallas muestren Colab. TODO antes del evento: crear ese enlace corto y probarlo (la nota del handoff de Salvador también depende de él).
 """,
 
 "p3-predict": """

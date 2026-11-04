@@ -2894,9 +2894,11 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
   <aside class="notes">
   <div data-lang="en">
     <p><b>2:08–2:10.</b> Read the line verbatim, then introduce Víctor: he will use exactly these two tools, a probe and patching, to ask whether we can trust an LLM judge.</p>
+    <p>Last thing before you sit down, so Colab is ready when Block 5 needs it: "Open the last notebook now and leave it loading — <code>bit.ly/micai-mi-nb5</code>. CPU runtime is fine, no GPU, nothing to install." Víctor says it again on his LegalBench slide, so do not labour it. (TODO before the event: the NB5 short link has to exist and be tested.)</p>
   </div>
   <div data-lang="es">
     <p><b>2:08–2:10.</b> Lee la frase literalmente y luego presenta a Víctor: va a usar exactamente estas dos herramientas, un probe y el patching, para preguntarse si podemos confiar en un juez LLM.</p>
+    <p>Lo último antes de sentarte, para que Colab esté listo cuando el Bloque 5 lo necesite: "Abran ya el último notebook y déjenlo cargando: <code>bit.ly/micai-mi-nb5</code>. Con runtime de CPU basta, no hace falta GPU ni instalar nada." Víctor lo repite en su slide de LegalBench, así que no te detengas en ello. (TODO antes del evento: el enlace corto de NB5 tiene que existir y estar probado.)</p>
   </div>
   </aside>
 </section>
@@ -4449,7 +4451,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     <p>Exact prompt: system "You are a compliance auditor."; user "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." The verdict is read from the Yes/No next-token logits (that also gives the token-probability baseline); verbalized confidence comes from a follow-up question asking for 0–100.</p>
     <p>Splits: 11 assertions split by NDA document into train / cal / test (no test NDA seen in training). 3 assertions are held out entirely — notice on compelled disclosure, return of confidential information, survival of obligations — standing in for a new 29110 process.</p>
     <p>The judge is Gemma 3 4B IT; its verdicts and residual-stream activations (at the last prompt token) are cached, so NB5 runs on a CPU runtime. CHECK BEFORE THE SESSION: if the Gemma cache is not published, NB5 falls back to Qwen2.5-0.5B — then say so and change this row.</p>
-    <p>TELL THE ROOM TO OPEN NB5 HERE, while this slide is up: "Open <code>bit.ly/micai-mi-nb5</code> (or NB5 from the materials link) and run the first cell — Runtime &gt; CPU is fine, no GPU, and it downloads the cache while I finish this slide." TODO before the event: create that short link and test it. The assistant helps anyone who is not open yet; one laptop per pair is enough.</p>
+    <p>NB5 CHECKPOINT, while this slide is up. Salvador asked them to open it at the handoff (2:08), so this is the confirmation, not the first mention: "Everyone with NB5 open? Run the first cell — Runtime &gt; CPU is fine, no GPU, nothing to install." For anyone who is not: <code>bit.ly/micai-mi-nb5</code>, said slowly, twice; the assistant goes to them; one laptop per pair is enough. Do not leave this slide until most screens show Colab. TODO before the event: create that short link and test it (Salvador's handoff note depends on it too).</p>
   </div>
   <div data-lang="es">
     <p><b>2:20:15 → 2:21:00.</b> No podemos compartir registros de auditoría reales, así que usamos un análogo público con la misma forma.</p>
@@ -4457,7 +4459,7 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     <p>Prompt exacto: sistema "You are a compliance auditor."; usuario "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." El veredicto se lee de los logits del siguiente token Yes/No (lo que también da la línea base de probabilidad del token); la confianza verbalizada viene de una pregunta de seguimiento que pide un 0–100.</p>
     <p>Particiones: 11 aserciones repartidas por documento en train / cal / test (ningún NDA de test se vio en entrenamiento). 3 aserciones se reservan por completo — aviso sobre divulgación obligada, devolución de información confidencial y supervivencia de obligaciones — como sustituto de un proceso 29110 nuevo.</p>
     <p>El juez es Gemma 3 4B IT; sus veredictos y activaciones del residual stream (en el último token del prompt) están cacheados, así que NB5 corre en un runtime de CPU. COMPROBAR ANTES DE LA SESIÓN: si la caché de Gemma no está publicada, NB5 cae a Qwen2.5-0.5B; en ese caso dilo y cambia esta fila.</p>
-    <p>AQUÍ ES DONDE SE LES DICE QUE ABRAN NB5, con esta slide en pantalla: "Abran <code>bit.ly/micai-mi-nb5</code> (o NB5 desde el enlace de materiales) y corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU, y descarga la caché mientras termino esta slide." TODO antes del evento: crear ese enlace corto y probarlo. El asistente ayuda a quien no lo tenga abierto; con una laptop por pareja alcanza.</p>
+    <p>PUNTO DE CONTROL DE NB5, con esta slide en pantalla. Salvador ya les pidió abrirlo en el handoff (2:08), así que aquí se confirma, no se anuncia: "¿Todos con NB5 abierto? Corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU ni instalar nada." A quien no lo tenga: <code>bit.ly/micai-mi-nb5</code>, dicho despacio, dos veces; el asistente va con esa persona; con una laptop por pareja alcanza. No sueltes esta slide hasta que la mayoría de las pantallas muestren Colab. TODO antes del evento: crear ese enlace corto y probarlo (la nota del handoff de Salvador también depende de él).</p>
   </div>
   </aside>
 <aside class="speech">
@@ -4479,13 +4481,13 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     token-probability baseline comes from, and the hidden states at the last prompt token are
     cached &mdash; which is why the notebook runs on a free CPU runtime and nobody needs a
     GPU.</p>
-    <p>And this is the moment to open it. The notebook is NB5, at
-    <b>bit.ly/micai-mi-nb5</b> &mdash; the link is on the next slide as well. Open it now and run
-    the first cell: a CPU runtime is fine, you do not need a GPU, and it will fetch the cache
-    while I finish here. If your neighbour is not open yet, share a laptop; one per pair is
-    plenty.</p>
-    <i>[Say the link slowly, twice, and leave this slide up until most screens show Colab. The
-    assistant helps whoever is stuck. Check before the session which judge the published cache
+    <p>Which is the notebook Salvador asked you to open when he handed over. Let me check that
+    here: everyone with NB5 on screen? Run the first cell while I finish this slide &mdash; a CPU
+    runtime is fine, you do not need a GPU and there is nothing to install. If you do not have it,
+    it is <b>bit.ly/micai-mi-nb5</b>, and the link is on the hands-on slide in a moment too. If your
+    neighbour is not open either, share a laptop; one per pair is plenty.</p>
+    <i>[Say the link slowly, twice, and do not leave this slide until most screens show Colab. The
+    assistant goes to whoever is stuck. Check before the session which judge the published cache
     actually uses: this row says Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B
     fallback. Say which one the room is running.]</i>
   </div>
@@ -4509,15 +4511,16 @@ sae = SAE.<span class="f">from_pretrained</span>(<span class="s">"gemma-scope-2-
     línea base de probabilidad del token, y los estados internos en el último token del prompt
     están cacheados &mdash; por eso el notebook corre en un runtime de CPU gratuito y nadie
     necesita GPU.</p>
-    <p>Y este es el momento de abrirlo. El notebook es NB5, en
-    <b>bit.ly/micai-mi-nb5</b>; el enlace también está en la siguiente slide. Ábranlo ahora y
-    corran la primera celda: con un runtime de CPU basta, no necesitan GPU, y mientras yo termino
-    aquí va a descargar la caché. Si alguien de al lado no lo tiene abierto, compartan laptop: con
-    una por pareja sobra.</p>
-    <i>[Di el enlace despacio, dos veces, y deja esta slide hasta que la mayoría de las pantallas
-    muestren Colab. El asistente ayuda a quien se atore. Verifica antes de la sesión qué juez usa
-    de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief son del
-    fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
+    <p>Que es el notebook que Salvador les pidió abrir cuando me pasó el micrófono. Déjenme
+    confirmarlo aquí: ¿todos con NB5 en pantalla? Corran la primera celda mientras termino esta
+    slide: con un runtime de CPU basta, no necesitan GPU y no hay nada que instalar. Si no lo
+    tienen, es <b>bit.ly/micai-mi-nb5</b>, y el enlace también aparece en la slide del trabajo en
+    un momento. Si quien está a su lado tampoco lo tiene, compartan laptop: con una por pareja
+    sobra.</p>
+    <i>[Di el enlace despacio, dos veces, y no dejes esta slide hasta que la mayoría de las
+    pantallas muestren Colab. El asistente va con quien se atore. Verifica antes de la sesión qué
+    juez usa de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief
+    son del fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
   </div>
   </aside>
 </section>

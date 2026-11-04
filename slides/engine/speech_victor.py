@@ -247,13 +247,13 @@ EN = {
     token-probability baseline comes from, and the hidden states at the last prompt token are
     cached &mdash; which is why the notebook runs on a free CPU runtime and nobody needs a
     GPU.</p>
-    <p>And this is the moment to open it. The notebook is NB5, at
-    <b>bit.ly/micai-mi-nb5</b> &mdash; the link is on the next slide as well. Open it now and run
-    the first cell: a CPU runtime is fine, you do not need a GPU, and it will fetch the cache
-    while I finish here. If your neighbour is not open yet, share a laptop; one per pair is
-    plenty.</p>
-    <i>[Say the link slowly, twice, and leave this slide up until most screens show Colab. The
-    assistant helps whoever is stuck. Check before the session which judge the published cache
+    <p>Which is the notebook Salvador asked you to open when he handed over. Let me check that
+    here: everyone with NB5 on screen? Run the first cell while I finish this slide &mdash; a CPU
+    runtime is fine, you do not need a GPU and there is nothing to install. If you do not have it,
+    it is <b>bit.ly/micai-mi-nb5</b>, and the link is on the hands-on slide in a moment too. If your
+    neighbour is not open either, share a laptop; one per pair is plenty.</p>
+    <i>[Say the link slowly, twice, and do not leave this slide until most screens show Colab. The
+    assistant goes to whoever is stuck. Check before the session which judge the published cache
     actually uses: this row says Gemma 3 4B IT, and the debrief numbers are the Qwen2.5-0.5B
     fallback. Say which one the room is running.]</i>
 """,
@@ -681,15 +681,16 @@ ES = {
     línea base de probabilidad del token, y los estados internos en el último token del prompt
     están cacheados &mdash; por eso el notebook corre en un runtime de CPU gratuito y nadie
     necesita GPU.</p>
-    <p>Y este es el momento de abrirlo. El notebook es NB5, en
-    <b>bit.ly/micai-mi-nb5</b>; el enlace también está en la siguiente slide. Ábranlo ahora y
-    corran la primera celda: con un runtime de CPU basta, no necesitan GPU, y mientras yo termino
-    aquí va a descargar la caché. Si alguien de al lado no lo tiene abierto, compartan laptop: con
-    una por pareja sobra.</p>
-    <i>[Di el enlace despacio, dos veces, y deja esta slide hasta que la mayoría de las pantallas
-    muestren Colab. El asistente ayuda a quien se atore. Verifica antes de la sesión qué juez usa
-    de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief son del
-    fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
+    <p>Que es el notebook que Salvador les pidió abrir cuando me pasó el micrófono. Déjenme
+    confirmarlo aquí: ¿todos con NB5 en pantalla? Corran la primera celda mientras termino esta
+    slide: con un runtime de CPU basta, no necesitan GPU y no hay nada que instalar. Si no lo
+    tienen, es <b>bit.ly/micai-mi-nb5</b>, y el enlace también aparece en la slide del trabajo en
+    un momento. Si quien está a su lado tampoco lo tiene, compartan laptop: con una por pareja
+    sobra.</p>
+    <i>[Di el enlace despacio, dos veces, y no dejes esta slide hasta que la mayoría de las
+    pantallas muestren Colab. El asistente va con quien se atore. Verifica antes de la sesión qué
+    juez usa de verdad la caché publicada: esta fila dice Gemma 3 4B IT, y los números del debrief
+    son del fallback Qwen2.5-0.5B. Di cuál está corriendo la sala.]</i>
 """,
 
 "p3-predict": """

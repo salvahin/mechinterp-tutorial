@@ -12,7 +12,7 @@ cells = [
 
 **MICAI 2026 · Mechanistic Interpretability, Hands-on**
 **Presenter:** Salvador Hinojosa · **Block 2 · Intervene** · **Time budget:** ~15 min hands-on
-**Runtime:** CPU is fine (GPT-2 small; each patching sweep takes ≈1–2 min on a Colab CPU, seconds on a GPU)
+**Runtime:** CPU is fine (GPT-2 small; each patching sweep takes ≈2–4 min on a Colab CPU, seconds on a T4 GPU)
 
 {SLIDES_LINK}
 
@@ -196,7 +196,7 @@ So **attention heads in layers 7–8 move the information from `S2` to `END`**. 
     md("""
 ## 4 · Which heads? Patching each attention head's output
 
-Now we patch the output of **one attention head at a time** (`hook_z`, all positions at once) using TransformerLens's built-in helper. That is 12 × 12 = 144 forward passes (≈1 min on CPU).
+Now we patch the output of **one attention head at a time** (`hook_z`, all positions at once) using TransformerLens's built-in helper. That is 12 × 12 = 144 forward passes (≈2 min on CPU).
 
 ### ✍️ Predict
 
@@ -286,7 +286,7 @@ The correlation over all 144 heads is slightly *negative* (r ≈ −0.16).
 
 Pick your own IOI template with `{A}`, `{B}` and `{S}` (the subject repeats as `{S}`, the answer is the other name). Keep the IO at token position 2 if you want to reuse the attention analysis; otherwise only the patching part is meaningful. Predict first: **will the same heads show up?**
 
-If you leave the TODO, a default alternative template is used. (≈1 min on CPU.)
+If you leave the TODO, a default alternative template is used. (≈2 min on CPU.)
 """),
     exercise(
         student="""
@@ -327,7 +327,7 @@ print(f"Correlation of the two 12×12 maps: r = {r2:.2f}")
 
 ## Takeaway
 
-Intervening, not observing, separates the components the model **relies on** from the ones that merely **look** relevant. On IOI, patching recovers much of the Wang et al. circuit in ~2 minutes of CPU, and attention patterns alone would have misled us.
+Intervening, not observing, separates the components the model **relies on** from the ones that merely **look** relevant. On IOI, patching recovers much of the Wang et al. circuit in a few minutes of CPU, and attention patterns alone would have misled us.
 
 > **Next block:** we know *where* the information flows. *What* is it? → features and sparse autoencoders.
 """),

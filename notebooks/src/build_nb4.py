@@ -4,7 +4,7 @@ One source -> notebooks/student/NB4_circuit_tracing.ipynb
             + notebooks/solutions/NB4_circuit_tracing_solutions.ipynb
 
 PATH switch inside the notebook:
-  "gemma2"     Gemma 2 2B + Gemma Scope transcoders (session default, T4, the library's documented setup)
+  "gemma2"     Gemma 2 2B + Gemma Scope transcoders (session default, T4, nnsight backend)
   "gemma3-270m" Gemma 3 270M + Gemma Scope 2 transcoders (nnsight backend; light, runs on CPU in minutes)
   "neuronpedia" no model at all: load the pre-generated, featured graph from Neuronpedia
 Env vars for local testing: NB4_PATH, NB4_GEMMA3_REPO.
@@ -160,7 +160,7 @@ if PATH != "neuronpedia":
 
 | PATH | model | transcoders (`transcoder_set`) | backend | Neuronpedia feature pages |
 |---|---|---|---|---|
-| `gemma2` | `google/gemma-2-2b` | `"gemma"` = `mwhanna/gemma-scope-transcoders` (Gemma Scope, 16k/layer) | TransformerLens | `gemma-2-2b/<layer>-gemmascope-transcoder-16k/<id>` |
+| `gemma2` | `google/gemma-2-2b` | `"gemma"` = `mwhanna/gemma-scope-transcoders` (Gemma Scope, 16k/layer) | nnsight (TransformerLens runs out of RAM on free Colab) | `gemma-2-2b/<layer>-gemmascope-transcoder-16k/<id>` |
 | `gemma3-270m` | `google/gemma-3-270m` | `mwhanna/gemma-scope-2-270m-pt/transcoder_all/width_16k_l0_small_affine` (Gemma Scope 2) | nnsight (required for Gemma 3) | some layers only (see note below) |
 | `neuronpedia` | none | (graph precomputed with the `gemma` set) | none | as `gemma2` |
 """),
@@ -178,7 +178,9 @@ if PATH != "neuronpedia":
     t0 = time.time()
     try:
         if PATH == "gemma2":
-            model = ReplacementModel.from_pretrained("google/gemma-2-2b", "gemma", backend="transformerlens",
+            # nnsight loads the bf16 weights straight onto the GPU (~7 GB GPU, ~4 GB RAM). The TransformerLens
+            # backend upcasts every weight to float32 while converting and crashes free Colab (12.7 GB RAM).
+            model = ReplacementModel.from_pretrained("google/gemma-2-2b", "gemma", backend="nnsight",
                                                      dtype=torch.bfloat16, device=torch.device(device))
         else:
             from circuit_tracer.utils.hf_utils import load_transcoder_from_hub

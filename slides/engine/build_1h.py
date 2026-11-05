@@ -43,7 +43,7 @@ TITLE = ("Opening the Black Box — Mechanistic Interpretability of LLMs · "
 # which p1-pr-direction already gives), p2-graph (attribution graphs never come
 # back). Their speaker scripts stay in script_1h.py in case one is put back.
 PART_A = [
-    ("part1_miguel",   "p1-title"),          # retitled by PATCHES
+    ("extra_1h",       "p1-title"),          # the original title slide, not the organizers' banner
     ("extra_1h",       "h-roadmap"),         # new: what this hour is
     ("part1_miguel",   "p1-hook"),           # why read the computation
     ("part1_miguel",   "p1-pr-direction"),   # a direction can mean something -> the probe

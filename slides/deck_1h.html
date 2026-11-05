@@ -741,6 +741,31 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
 <body>
 <div class="viewport"><div class="stage">
 <style>
+  #h-roadmap table.t td.tm { font-family: var(--font-mono); color: var(--micai-blue); white-space: nowrap; }
+  #h-roadmap table.t td.blk { font-weight: 600; white-space: nowrap; }
+  #h-roadmap tr.now td { background: var(--resid-soft); }
+
+  .h-res .tag { position: absolute; right: 64px; top: 56px; }
+  .h-res .card p { font-size: 26px; line-height: 1.35; margin: 0; }
+  .h-res .card h3 { margin: 0; }
+  .h-res .grid-3 { gap: 26px; }
+
+  /* AUROC comparison table */
+  #h-nb5-result table.t { font-size: 26px; margin-top: 4px; }
+  #h-nb5-result table.t td { padding: 11px 16px; }
+  #h-nb5-result table.t td.sc { font-family: var(--font-mono); font-size: 36px; font-weight: 600; white-space: nowrap; }
+  #h-nb5-result tr.win td { background: var(--good-soft); }
+  #h-nb5-result tr.win td.sc { color: var(--good); }
+  #h-nb5-result tr.lose td.sc { color: var(--bad); }
+
+  /* shift: two numbers side by side */
+  #h-nb5-shift .pair { display: flex; gap: 48px; margin: 2px 0 0; }
+  #h-nb5-shift .pair > div { flex: 1; }
+  #h-nb5-shift .big { font-family: var(--font-display); font-size: 50px; font-weight: 700; line-height: 1; color: var(--micai-navy); margin: 0; }
+  #h-nb5-shift .big .was { color: var(--muted); font-size: 28px; font-weight: 600; }
+  #h-nb5-shift .lbl { font-size: 24px; color: var(--ink-2); line-height: 1.3; margin: 6px 0 0; }
+</style>
+<style>
   /* ---- part 1 (Miguel) scoped styles ---- */
   .p1-sub { font-size: 40px; color: var(--ink-2); font-weight: 500; letter-spacing: -.01em; }
   .p1-meta { font-size: 28px; color: var(--ink-2); }
@@ -844,31 +869,6 @@ body.printing .chrome-footer, body.printing .progress, body.printing .deck-tools
   #p1-pr-verbs .card p { font-size: 26px; line-height: 1.28; color: var(--ink-2); margin: 0; }
   #p1-pr-verbs svg { width: 100%; height: 150px; display: block; }
   #p1-pr-verbs .tags { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-</style>
-<style>
-  #h-roadmap table.t td.tm { font-family: var(--font-mono); color: var(--micai-blue); white-space: nowrap; }
-  #h-roadmap table.t td.blk { font-weight: 600; white-space: nowrap; }
-  #h-roadmap tr.now td { background: var(--resid-soft); }
-
-  .h-res .tag { position: absolute; right: 64px; top: 56px; }
-  .h-res .card p { font-size: 26px; line-height: 1.35; margin: 0; }
-  .h-res .card h3 { margin: 0; }
-  .h-res .grid-3 { gap: 26px; }
-
-  /* AUROC comparison table */
-  #h-nb5-result table.t { font-size: 26px; margin-top: 4px; }
-  #h-nb5-result table.t td { padding: 11px 16px; }
-  #h-nb5-result table.t td.sc { font-family: var(--font-mono); font-size: 36px; font-weight: 600; white-space: nowrap; }
-  #h-nb5-result tr.win td { background: var(--good-soft); }
-  #h-nb5-result tr.win td.sc { color: var(--good); }
-  #h-nb5-result tr.lose td.sc { color: var(--bad); }
-
-  /* shift: two numbers side by side */
-  #h-nb5-shift .pair { display: flex; gap: 48px; margin: 2px 0 0; }
-  #h-nb5-shift .pair > div { flex: 1; }
-  #h-nb5-shift .big { font-family: var(--font-display); font-size: 50px; font-weight: 700; line-height: 1; color: var(--micai-navy); margin: 0; }
-  #h-nb5-shift .big .was { color: var(--muted); font-size: 28px; font-weight: 600; }
-  #h-nb5-shift .lbl { font-size: 24px; color: var(--ink-2); line-height: 1.3; margin: 6px 0 0; }
 </style>
 <style>
 /* ---- part 2 (Salvador) scoped styles: everything prefixed .p2- or #p2- ---- */

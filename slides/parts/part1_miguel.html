@@ -62,36 +62,11 @@
 <!-- ======================================================= 1 · TITLE -->
 <section class="slide title-slide" id="p1-title">
   <style>
-    #p1-title { padding-right: 0; justify-content: flex-start; gap: 0; }
-    #p1-title .t-logo { height: 76px; width: auto; align-self: flex-start; margin-bottom: 72px; }
-    #p1-title .t-left { max-width: 780px; display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 2; }
-    #p1-title .t-left > * { margin: 0; }
-    #p1-title .t-kicker { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--micai-blue); }
-    #p1-title h1 { font-size: 88px; line-height: 1.0; color: var(--micai-navy); }
-    #p1-title .t-sub { font-size: 32px; line-height: 1.3; color: var(--ink-2); max-width: 780px; }
-    #p1-title .t-bar { width: 120px; height: 8px; border-radius: 4px; background: var(--micai-pink); margin: 6px 0 2px; }
-    #p1-title .t-meta { font-size: 24px; color: var(--ink-2); }
-    #p1-title .t-people { display: flex; gap: 22px; flex-wrap: nowrap; white-space: nowrap; font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--micai-navy); }
-    #p1-title .t-people span { display: inline-flex; align-items: center; gap: 10px; }
-    #p1-title .t-people span::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--c); }
-    #p1-title .t-org { font-size: 22px; color: var(--muted); }
-    #p1-title .t-photo { position: absolute; right: 110px; top: 50%; transform: translateY(-46%); height: 500px; width: auto; z-index: 1; }
+    #p1-title { padding: 0; }
+    #p1-title .t-banner { width: 100%; height: 100%; display: block; }
   </style>
-  <img class="t-logo" src="assets/micai2026_navy.png" alt="MICAI 2026">
-  <div class="t-left">
-    <p class="t-kicker">Tutorial · MICAI 2026</p>
-    <h1>Opening the Black&nbsp;Box</h1>
-    <p class="t-sub">A Hands-On Introduction to Mechanistic Interpretability of Large Language Models</p>
-    <div class="t-bar"></div>
-    <p class="t-meta">Tec de Monterrey, Campus Chihuahua · Friday 6 November 2026</p>
-    <div class="t-people">
-      <span style="--c: var(--miguel)">Miguel González</span>
-      <span style="--c: var(--salvador)">Salvador Hinojosa</span>
-      <span style="--c: var(--victor)">Víctor Terrón-Macías</span>
-    </div>
-    <p class="t-org">Tecnológico de Monterrey</p>
-  </div>
-  <img class="t-photo" src="assets/presenters.webp" alt="Salvador Hinojosa, Miguel González and Víctor Terrón-Macías">
+  <!-- Title banner supplied by the MICAI 2026 organizers. -->
+  <img class="t-banner" src="assets/micai2026_tutorial_banner.webp" alt="Tutorial · Opening the Black Box: A Hands-On Introduction to Mechanistic Interpretability of Large Language Models · given by Salvador Hinojosa, Miguel Gonzalez and Víctor Terrón · Tecnológico de Monterrey · MICAI 2026, 2–6 November 2026, ITESM Campus Chihuahua">
   <aside class="notes">
     <b>0:00 (1 min) · Miguel.</b> Welcome. Introduce the three of us in one sentence each: Miguel (first 30 min, then has to leave for another session), Salvador (methods, 0:30–2:10), Víctor (auditing LLM judges, 2:10–3:00). Mention the student assistant who will help with Colab. Ask people to open their laptops now — the next slides get NB0 running.
   </aside>

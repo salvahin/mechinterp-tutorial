@@ -78,7 +78,6 @@ PART_B = [
     ("part3_victor", "p3-transfer"),
     ("part3_victor", "p3-field"),
     ("part3_victor", "p3-res"),
-    ("part3_victor", "p3-exit"),
     ("part3_victor", "p3-thanks"),
 ]
 

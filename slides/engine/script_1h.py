@@ -661,21 +661,11 @@ SCRIPT = {
     looking for a research question.</p>
 """,
 
-"p3-exit": """
-    <b>49:00 &rarr; 49:35.</b>
-    <p>In the tutorial we end with an exit ticket: two questions, two minutes, anonymous. One
-    thing you will try in your own research, and one thing that confused you.</p>
-    <p>The second question is the one we learn the most from, and it is the reason the materials
-    have been rewritten twice already. So if something in this hour did not land, that is the
-    box I want it in.</p>
-    <i>[Insert the form link and QR code in the dashed box before the session.]</i>
-""",
-
 "p3-thanks": """
-    <b>49:35 &rarr; 50:15.</b>
+    <b>49:00 &rarr; 49:40.</b>
     <p>Thank you. The tutorial is joint work with Miguel Gonz&aacute;lez and Salvador Hinojosa at
     Tec de Monterrey, and the full four-hour version runs at MICAI in November.</p>
-    <p>Slides, all six notebooks and the printables are at the link on screen. The notebooks keep
+    <p>Slides, all six notebooks and the printables are at the link on screen, or scan the code. The notebooks keep
     working after today, and the fifth one is the one I would start with if you judge anything
     with a model.</p>
     <p>I have about five minutes, and I am most interested in the shift result &mdash; if you

@@ -135,17 +135,14 @@
   .p3-res a { font: 22px var(--font-mono); color: var(--feat-1); text-decoration: none; overflow-wrap: anywhere; }
   .p3-res .what { font-size: 22px; color: var(--ink-2); }
 
-  /* ---------- exit & thanks ---------- */
-  .p3-exit { display: grid; grid-template-columns: 1fr 1fr 300px; gap: 32px; align-items: stretch; }
-  .p3-exit .card .n { font-size: 72px; font-weight: 700; line-height: 1; color: var(--victor); }
-  .p3-exit .card p { font-size: 34px; font-family: var(--font-serif); line-height: 1.25; }
-  .p3-qr { border: 3px dashed var(--rule); border-radius: var(--radius); display: grid; place-items: center; text-align: center; color: var(--muted); font-size: 24px; padding: 20px; }
+  /* ---------- thanks ---------- */
   #p3-thanks .people { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 48px; margin-top: 18px; }
   #p3-thanks .people div { display: flex; flex-direction: column; gap: 4px; border-top: 6px solid var(--c); padding-top: 14px; }
   #p3-thanks .people b { font-size: 34px; }
   #p3-thanks .people span { font-size: 24px; color: var(--ink-2); }
-  #p3-thanks .mat { margin-top: 26px; font-size: 28px; color: var(--ink-2); display: flex; gap: 18px; align-items: center; }
-  #p3-thanks .mat .ph { border: 2px dashed var(--rule); border-radius: 10px; padding: 6px 18px; font-family: var(--font-mono); font-size: 24px; color: var(--muted); }
+  #p3-thanks .mat { margin-top: 26px; font-size: 28px; color: var(--ink-2); display: flex; gap: 28px; align-items: center; }
+  #p3-thanks .mat .url { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 34px; font-weight: 600; color: var(--victor); }
+  #p3-thanks .mat .qr { width: 170px; height: 170px; flex: none; }
 </style>
 
 <!-- ====================================================================== 1 -->
@@ -552,27 +549,11 @@
   <aside class="notes">
     <b>2:55:00 → 2:56:00.</b> Don't read the list. "Left column: the tools from the notebooks and where to learn more — ARENA chapter 1 is the best free follow-up course. Right column: the papers today's blocks were built on; the Open Problems review is the map of what nobody knows yet."
     Toy Models of Superposition: transformer-circuits.pub/2022/toy_model · Towards Monosemanticity: transformer-circuits.pub/2023/monosemantic-features · Circuit Tracing methods: transformer-circuits.pub/2025/attribution-graphs/methods.html.
-    All links are also in the materials folder (see last slide).
+    All links are also on the materials site (see the last slide).
   </aside>
 </section>
 
 <!-- ====================================================================== 20 -->
-<section class="slide" id="p3-exit" data-presenter="victor" data-block="Wrap">
-  <p class="kicker">Wrap · exit ticket</p>
-  <h2>Two answers before you leave, two minutes</h2>
-  <div class="p3-exit">
-    <div class="card"><span class="n">1</span><p>One thing you will try in your own research.</p></div>
-    <div class="card"><span class="n">2</span><p>One thing that confused you.</p></div>
-    <div class="p3-qr">Form link and QR code</div>
-  </div>
-  <p class="small">Anonymous. We read every answer and use them to fix the materials.</p>
-  <aside class="notes">
-    <b>2:56:00 → 2:58:00.</b> TODO: insert the exit-ticket form link and QR code in the dashed box before the session.
-    Give them the full two minutes in silence. Question 2 is the one we learn the most from.
-  </aside>
-</section>
-
-<!-- ====================================================================== 21 -->
 <section class="slide title-slide" id="p3-thanks" data-presenter="victor" data-block="Wrap">
   <p class="kicker">MICAI 2026 · Mechanistic Interpretability, Hands-on</p>
   <h1>Thank you</h1>
@@ -581,9 +562,9 @@
     <div style="--c:var(--salvador)"><b>Salvador Hinojosa</b><span>Tecnológico de Monterrey</span></div>
     <div style="--c:var(--victor)"><b>Víctor Terrón-Macías</b><span>Tecnológico de Monterrey</span></div>
   </div>
-  <div class="mat">Slides, notebooks and printables: <span class="ph">materials link</span></div>
+  <div class="mat"><svg viewBox="0 0 37 37" class="qr"><title>QR code: salvahin.github.io/mechinterp-tutorial</title><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#000" d="M2 2.5h7m2 0h2m1 0h2m2 0h2m1 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h1m1 0h7m3 0h1m4 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h4m2 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m3 0h3m2 0h2m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h1m2 0h1m4 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h3m1 0h2m3 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m-25 1h1m1 0h5m6 0h3m1 0h1m4 0h3m1 0h5m-31 1h3m1 0h2m1 0h2m7 0h1m1 0h3m2 0h1m2 0h2m1 0h4m-31 1h1m1 0h4m3 0h2m2 0h2m1 0h1m2 0h2m1 0h2m2 0h1m1 0h2m-32 1h1m7 0h1m1 0h1m1 0h1m1 0h3m3 0h2m1 0h1m4 0h3m1 0h1m-33 1h1m1 0h1m3 0h1m3 0h2m6 0h1m5 0h2m2 0h2m1 0h2m-33 1h1m6 0h3m1 0h1m1 0h4m3 0h1m2 0h1m1 0h2m2 0h4m-29 1h1m1 0h1m3 0h1m6 0h3m1 0h1m2 0h3m3 0h2m-31 1h2m2 0h1m2 0h2m1 0h4m1 0h1m1 0h9m1 0h3m-30 1h2m1 0h1m1 0h6m1 0h2m2 0h4m1 0h1m2 0h1m1 0h2m3 0h1m-31 1h1m1 0h1m3 0h1m4 0h2m1 0h5m2 0h1m1 0h3m1 0h2m1 0h1m-33 1h3m1 0h1m1 0h1m1 0h1m1 0h8m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m-31 1h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m2 0h3m2 0h2m2 0h1m1 0h5m-32 1h5m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m1 0h1m1 0h3m2 0h1m-33 1h2m3 0h1m3 0h1m1 0h2m2 0h1m1 0h2m4 0h1m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m2 0h3m2 0h1m1 0h1m4 0h1m1 0h3m-32 1h1m1 0h1m1 0h1m2 0h3m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m1 0h4m-33 1h1m1 0h5m2 0h2m1 0h4m1 0h1m5 0h7m1 0h2m-25 1h1m1 0h1m1 0h1m5 0h4m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m4 0h6m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h2m4 0h1m1 0h1m2 0h3m1 0h2m3 0h3m-31 1h1m1 0h3m1 0h1m1 0h4m6 0h1m2 0h1m2 0h6m2 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h3m2 0h1m2 0h3m2 0h1m1 0h1m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m4 0h1m3 0h2m2 0h1m1 0h1m1 0h2m-28 1h1m5 0h1m2 0h4m1 0h1m1 0h1m2 0h3m3 0h1m2 0h3m-31 1h7m1 0h3m1 0h2m3 0h1m1 0h1m2 0h3m2 0h1m1 0h1m1 0h1"/></svg><div>Slides, notebooks and printables:<span class="url">salvahin.github.io/mechinterp-tutorial</span></div></div>
   <aside class="notes">
-    <b>2:58:00 → 3:00:00.</b> TODO: replace the "materials link" placeholder with the repository / Drive URL (and a QR if possible).
+    <b>2:56:00 → 3:00:00.</b> Leave this slide up through the questions: the QR code and the URL open the materials site, with every notebook's Colab link, the slides and the printables.
     Thank the student assistant by name. Invite people to stay for questions; the notebooks keep working after today.
   </aside>
 </section>

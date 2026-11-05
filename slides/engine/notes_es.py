@@ -35,7 +35,7 @@ ES = {
 """,
 
 "p1-nb0": """
-    <b>0:03 (1 min, y se deja corriendo).</b> TODO antes del evento: sustituir <code>bit.ly/micai-mi-nb0</code> por el enlace corto real y probarlo. Recorre los 4 pasos despacio. Token: huggingface.co → Settings → Access tokens → token de tipo "Read"; en Colab, el icono de la llave en la barra lateral izquierda → añadir el secreto <code>HF_TOKEN</code> y habilitar el acceso desde el notebook. Licencia: abrir <code>huggingface.co/google/gemma-3-1b-it</code> y pulsar "Agree" (necesario para NB3). Opcional, en el mismo clic: <code>google/gemma-2-2b</code> (la vía opcional de NB4) y <code>google/gemma-3-4b-it</code> (solo para la vía en vivo de NB5; NB5 normalmente usa una caché) (puede tardar un minuto en concederse, y por eso lo hacemos ahora: necesitamos Gemma a la 1:10). NB0 solo comprueba el entorno. El asistente circula por la sala; sigue con el gancho mientras corre.
+    <b>0:03 (1 min, y se deja corriendo).</b> El sitio lista todos los notebooks con un botón Open in Colab; NB0 es el primero. Recorre los 4 pasos despacio. Token: huggingface.co → Settings → Access tokens → token de tipo "Read"; en Colab, el icono de la llave en la barra lateral izquierda → añadir el secreto <code>HF_TOKEN</code> y habilitar el acceso desde el notebook. Licencia: abrir <code>huggingface.co/google/gemma-3-1b-it</code> y pulsar "Agree" (necesario para NB3). Opcional, en el mismo clic: <code>google/gemma-2-2b</code> (la vía opcional de NB4) y <code>google/gemma-3-4b-it</code> (solo para la vía en vivo de NB5; NB5 normalmente usa una caché) (puede tardar un minuto en concederse, y por eso lo hacemos ahora: necesitamos Gemma a la 1:10). NB0 solo comprueba el entorno. El asistente circula por la sala; sigue con el gancho mientras corre.
 """,
 
 "p1-hook": """
@@ -375,16 +375,11 @@ ES = {
 "p3-res": """
     <b>2:55:00 → 2:56:00.</b> No leas la lista. "Columna izquierda: las herramientas de los notebooks y dónde aprender más; el capítulo 1 de ARENA es el mejor curso gratuito para continuar. Columna derecha: los artículos sobre los que se construyeron los bloques de hoy; la revisión de Open Problems es el mapa de lo que todavía nadie sabe."
     Toy Models of Superposition: transformer-circuits.pub/2022/toy_model · Towards Monosemanticity: transformer-circuits.pub/2023/monosemantic-features · Circuit Tracing (métodos): transformer-circuits.pub/2025/attribution-graphs/methods.html.
-    Todos los enlaces están también en la carpeta de materiales (ver la última slide).
-""",
-
-"p3-exit": """
-    <b>2:56:00 → 2:58:00.</b> TODO: insertar el enlace al formulario de salida y el código QR en el recuadro punteado antes de la sesión.
-    Dales los dos minutos completos en silencio. La pregunta 2 es de la que más aprendemos.
+    Todos los enlaces están también en el sitio de materiales (ver la última slide).
 """,
 
 "p3-thanks": """
-    <b>2:58:00 → 3:00:00.</b> TODO: sustituir el marcador "materials link" por la URL del repositorio o del Drive (y un QR si es posible).
+    <b>2:56:00 → 3:00:00.</b> Deja esta slide en pantalla durante las preguntas: el código QR y la URL abren el sitio de materiales, con el enlace a Colab de cada notebook, las slides y los impresos.
     Agradece al asistente por su nombre. Invita a quedarse a preguntas; los notebooks siguen funcionando después de hoy.
 """,
 

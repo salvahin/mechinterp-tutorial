@@ -33,7 +33,7 @@ Solutions are in [`notebooks/solutions/`](notebooks/solutions/).
 | Folder / file | What it is |
 |---|---|
 | `index.html` | Landing page served by GitHub Pages. |
-| `slides/deck.html` | The whole deck in one offline file (71 slides). Open in Chrome. |
+| `slides/deck.html` | The whole deck in one offline file (70 slides). Open in Chrome. |
 | `slides/deck.pdf` | Same deck as PDF, every animation at its final frame. |
 | `notebooks/student/` | NB0–NB5 as participants get them (exercises, outputs cleared). |
 | `notebooks/solutions/` | Same notebooks with complete code. |

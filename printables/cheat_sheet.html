@@ -241,9 +241,9 @@ print(<span class="s">f&quot;coverage {auto.mean():.2f}, error {esc:.2f}&quot;</
 <span class="k">from</span> circuit_tracer.utils <span class="k">import</span> create_graph_files
 <span class="c"># &quot;gemma&quot; = Gemma Scope transcoders for Gemma 2 2B (gated)</span>
 rm = ReplacementModel.from_pretrained(
-    <span class="s">&quot;google/gemma-2-2b&quot;</span>, <span class="s">&quot;gemma&quot;</span>, dtype=torch.bfloat16)
-<span class="c"># Gemma 3 (nnsight backend, experimental), e.g.</span>
-<span class="c"># ReplacementModel.from_pretrained(&quot;google/gemma-3-1b-it&quot;,</span>
+    <span class="s">&quot;google/gemma-2-2b&quot;</span>, <span class="s">&quot;gemma&quot;</span>, dtype=torch.bfloat16,
+    backend=<span class="s">&quot;nnsight&quot;</span>)  <span class="c"># TransformerLens exhausts Colab RAM</span>
+<span class="c"># Experimental: from_pretrained(&quot;google/gemma-3-1b-it&quot;,</span>
 <span class="c">#   &quot;mwhanna/gemma-scope-2-1b-it/transcoder_all/&quot;</span>
 <span class="c">#   &quot;width_16k_l0_small&quot;, backend=&quot;nnsight&quot;)</span>
 prompt = <span class="s">&quot;Fact: the capital of the state containing Dallas is&quot;</span>

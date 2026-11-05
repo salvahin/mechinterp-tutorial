@@ -381,7 +381,10 @@
       const b = e.target.closest('[data-open]');
       if (b) { e.stopPropagation(); openAux(b.dataset.open); }
     });
-    document.body.append(notesPanel, clockEl, helpEl, tools);
+    document.body.append(notesPanel, clockEl, helpEl);
+    // The published copy (GitHub Pages) is for participants: no Presenter / Notes buttons there.
+    // P and O still open the windows, so a presenter can run the deck from the site.
+    if (!/\.github\.io$/.test(location.hostname)) document.body.append(tools);
 
     window.addEventListener('resize', fit); fit();
 

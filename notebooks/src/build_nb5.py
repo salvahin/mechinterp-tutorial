@@ -687,7 +687,7 @@ ax.legend(); ax.set_title("Reliability diagram (test)"); plt.show()
 pd.DataFrame(rows).round(3)
 '''),
     md("""
-**Interpret.** Points *below* the diagonal = **overconfident** (the judge claims more than it delivers). Verbalized confidence is typically a handful of values (90, 95, …) regardless of whether the verdict is right: it cannot gate human review. Token probability ranks better than chance but is still poorly calibrated. Keep the AUROC numbers in mind: they are what the probe has to beat.
+**Interpret.** Points *below* the diagonal = **overconfident** (the judge claims more than it delivers). Verbalized confidence is typically a handful of values (90, 95, …) regardless of whether the verdict is right: it cannot gate human review. Token probability ranks better than chance; its calibration varies by judge, so read its ECE instead of assuming. Keep the AUROC numbers in mind: they are what the probe has to beat.
 """),
     md("""
 ## 5 · A probe on the judge's residual stream

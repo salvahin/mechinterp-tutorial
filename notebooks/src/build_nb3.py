@@ -637,7 +637,7 @@ display(IFrame(np_url(FEATURE) + "?embed=true&embedexplanation=true&embedplots=t
     md("""
 ## 5 · Steering: push the residual stream along the latent
 
-The SAE writes latent *i* into the residual stream along its decoder direction `W_dec[i]` (a unit vector here). **Steering** adds `α · ‖x‖ · W_dec[i]` at the same layer, on every position, during generation, where `‖x‖` is the typical norm of the residual stream at that layer. So α is "how big is the push, as a fraction of the activation itself": α = 0.25 is a quarter of a normal residual vector. (Measuring α this way makes the numbers comparable across models; GPT-2's residual norm is ≈ 100, Gemma's ≈ 15,000.)
+The SAE writes latent *i* into the residual stream along its decoder direction `W_dec[i]` (a unit vector here). **Steering** adds `α · ‖x‖ · W_dec[i]` at the same layer, on every position, during generation, where `‖x‖` is the typical norm of the residual stream at that layer. So α is "how big is the push, as a fraction of the activation itself": α = 0.25 is a quarter of a normal residual vector. (Measuring α this way makes the numbers comparable across models; GPT-2's residual norm is ≈ 100, Gemma's ≈ 9,000.)
 
 ### ✍️ Predict
 

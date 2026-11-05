@@ -239,7 +239,7 @@ On our 8 prompts the largest positive effects are **L5H5 (≈ +0.45), L8H6 (+0.4
 - **induction** (L5H5, L6H9) and **duplicate-token** (L3H0) heads matter too: they detect that the subject is repeated, which is the first step of the circuit;
 - **L10H7 (≈ −0.51) and L11H10 (≈ −0.22) are negative**: restoring them pushes *against* the answer. Wang et al. call them **negative name movers** (they hedge the prediction).
 
-Why is L9H6 small? Single-head patching measures what one head adds **given that all the others stay corrupted**. Heads with redundant jobs (and *backup name movers* that compensate) look weak one at a time. Patching finds important components; a small number does not prove a component is unimportant.
+Why is L9H6 small? Single-head patching measures what one head adds **given that all the others stay corrupted**. A head that only matters together with others looks weak alone. We have not tested why L9H6 is small. (Do not assume redundancy: under this clean-into-corrupted patching, a truly redundant head restored alone would look strong; see Heimersheim & Nanda, 2024.) Patching finds important components; a small number does not prove a component is unimportant.
 """),
     md("""
 ## 5 · Productive failure: attention is not causation

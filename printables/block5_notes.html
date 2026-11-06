@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Bloque 5 · notas del presentador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: Letter portrait; margin: 0.6in 0.7in 0.55in; }
+:root {
+  --ink: #0C198D; --ink-2: #333A5E; --muted: #6B7090; --rule: #C9C3B5; --victor: #C2187E;
+  --sans: "Inter", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+  --cond: "Sora", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #fff; }
+body { font-family: var(--sans); color: var(--ink-2); font-size: 9.6pt;
+       line-height: 1.33; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+header.doc { border-bottom: 2.4px solid var(--victor); padding-bottom: 6px; margin-bottom: 14px; }
+header.doc h1 { font-family: var(--cond); color: var(--ink); font-size: 17pt; margin: 0 0 3px;
+                letter-spacing: -.01em; }
+header.doc p { margin: 0; font-size: 8.4pt; color: var(--muted); }
+header.doc b { color: var(--ink); }
+
+.slide { break-inside: avoid; margin: 0 0 15px; padding-bottom: 11px;
+         border-bottom: 1px solid var(--rule); }
+.slide:last-child { border-bottom: 0; }
+.slide > h2 { font-family: var(--cond); color: var(--ink); font-size: 11.6pt; margin: 0 0 2px;
+              line-height: 1.2; }
+.slide > h2 .n { color: var(--victor); font-family: var(--mono); font-size: 9.4pt; margin-right: 6px; }
+.slide > .meta { font-size: 7.6pt; color: var(--muted); font-family: var(--mono);
+                 margin: 0 0 7px; letter-spacing: .02em; }
+
+.lang { margin: 0 0 8px; padding-left: 10px; border-left: 3px solid var(--rule); }
+.lang:last-child { margin-bottom: 0; }
+.lang.es { border-left-color: var(--victor); }
+.lang > .tag { display: inline-block; font-family: var(--cond); font-weight: 700; font-size: 7pt;
+               letter-spacing: .14em; color: #fff; background: var(--muted);
+               padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; }
+.lang.es > .tag { background: var(--victor); }
+.lang p { margin: 0 0 5px; }
+.lang p:last-child { margin-bottom: 0; }
+.lang b { color: var(--ink); }
+.lang i { color: var(--ink); }
+.lang i.stage { color: var(--muted); font-weight: 500; }
+.lang code, .lang .mono { font-family: var(--mono); font-size: .92em; }
+.lang a { color: var(--ink); text-decoration: none; }
+
+p.cue { padding-left: 9px; border-left: 2.5px solid #C9D2EA; }
+p.cue::before { content: attr(data-label) " · "; font-family: var(--cond); font-weight: 700;
+                font-size: 7pt; letter-spacing: .1em; color: var(--muted); }
+
+footer.doc { margin-top: 10px; font-size: 7.4pt; color: var(--muted); }
+</style></head><body>
+<header class="doc"><h1>Bloque 5 · notas del presentador</h1><p>Tutorial · <b>Opening the Black Box: Mechanistic Interpretability of LLMs</b> · MICAI 2026 · Bloque 5 &ldquo;Audit&rdquo; · Víctor Terrón-Macías · slides 51&ndash;70 · 2:10&ndash;3:00<br>Notas de dirección (lo que hay que hacer y decir, en taquigrafía): el mismo texto que muestra el panel <b>N</b> del deck. Español primero, inglés después.</p></header>
+<div class="slide"><h2><span class="n">51</span>Audit: can we trust the judge?</h2><p class="meta">slide 51 · p3-section · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:10:00 → 2:10:15.</b> No hace falta decir nada más allá del título. "Bloque 5. Una pregunta: cuando un LLM juzga, ¿en cuáles de sus veredictos confiamos?"</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:10:00 → 2:10:15.</b> No talking needed beyond the title. "Block 5. One question: when an LLM judges, which of its verdicts do we trust?"</p></div></div>
+<div class="slide"><h2><span class="n">52</span>Two tools you already have, one new subject: an LLM judge</h2><p class="meta">slide 52 · p3-open · Block 5 · Audit · 2 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:10:15 → 2:11:15.</b> Retoma la última frase de Salvador palabra por palabra (está en pantalla).</p>
+    <p>"Esas dos frases son todo el instrumental de los próximos 40 minutos. Las apuntamos a un tipo distinto de salida del modelo: un veredicto de un LLM actuando como juez."</p>
+    <p class="cue" data-label="PASO 1">el probe se convierte en una señal de confianza. "No la confianza que el juez dice, sino la que lleva su estado oculto." Es un correlato aprendido, no un detector de mentiras: puede equivocarse, y lo verán fallar bajo cambio de distribución.</p>
+    <p class="cue" data-label="PASO 2">la idea del Bloque 2 — intervenir y mirar la salida — se convierte en una comprobación de fundamento. "¿El veredicto se apoyó en la evidencia que importa?" Hoy intervenimos sobre el texto de entrada (quitar o sustituir evidencia), que es su forma más simple; hacer patching de los estados ocultos de esos tokens es el paso natural siguiente.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:10:15 → 2:11:15.</b> Pick up Salvador's last line word for word (it is on screen).</p>
+    <p>"Those two sentences are the whole toolkit for the next 40 minutes. We point them at a different kind of model output: a verdict from an LLM acting as a judge."</p>
+    <p class="cue" data-label="STEP 1">the probe becomes a confidence signal. "Not the confidence the judge says, the confidence its hidden state carries." It is a learned correlate, not a lie detector: it can be wrong, and you will see it fail under shift.</p>
+    <p class="cue" data-label="STEP 2">Block 2's idea — intervene and watch the output — becomes a grounding check. "Did the verdict rest on the evidence that matters?" Today we intervene on the input text (remove or replace evidence), the simplest form of it; patching the hidden states of those tokens is the natural next step.</p></div></div>
+<div class="slide"><h2><span class="n">53</span>An LLM-assisted audit is a grid: every rule against every piece of evidence</h2><p class="meta">slide 53 · p3-grid · Block 5 · Audit · 2 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:11:15 → 2:12:15.</b> Dos cuerpos de texto: un conjunto de reglas (filas) y un corpus auditable (columnas: planes, actas, bitácoras de cambios, commits).</p>
+    <p class="cue" data-label="PASO 1">el juez rellena cada celda con un veredicto. "Rápido, barato e incansable."</p>
+    <p class="cue" data-label="PASO 2">"Nadie revisa todos estos. Así que la pregunta real no es '¿es el juez preciso en promedio?', sino qué veredictos necesitan a una persona."</p>
+    <p>Pregunta: "¿Cómo decidirían qué celdas revisar?". Recoge una o dos respuestas (muestra aleatoria, las de baja confianza…).</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:11:15 → 2:12:15.</b> Two bodies of text: a rule set (rows) and an auditable corpus (columns: plans, minutes, change logs, commits).</p>
+    <p class="cue" data-label="STEP 1">the judge fills every cell with a verdict. "Fast, cheap, and tireless."</p>
+    <p class="cue" data-label="STEP 2">"Nobody reviews all of these. So the real question is not 'is the judge accurate on average' — it is <i>which verdicts need a human?</i>"</p>
+    <p>Ask: "How would you decide which cells to check?" Take one or two answers (random sample, low-confidence ones…).</p></div></div>
+<div class="slide"><h2><span class="n">54</span>Our motivating case: process audits of very small software teams</h2><p class="meta">slide 54 · p3-iso · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:12:15 → 2:13:00.</b> Sé breve; la norma es contexto, no contenido.</p>
+    <p>ISO/IEC 29110 está dirigida a organizaciones de hasta 25 personas; el informe técnico 29110-3-1 da las guías de evaluación de procesos.</p>
+    <p>Los equipos pequeños no pueden permitirse un auditor a tiempo completo, y eso es exactamente lo que hace atractiva la asistencia de un LLM, y también lo que hace que la confianza importe.</p>
+    <p>Dilo explícitamente: "No vamos a citar la norma; su texto tiene licencia. Nuestra regla es inventada, escrita en su estilo."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:12:15 → 2:13:00.</b> Keep it short; the standard is context, not content.</p>
+    <p>ISO/IEC 29110 targets organisations of up to 25 people; the technical report 29110-3-1 gives process assessment guidelines.</p>
+    <p>Small teams cannot afford a full-time auditor, which is exactly why LLM assistance is attractive — and why trust matters.</p>
+    <p>Say explicitly: "We will not quote the standard; its text is licensed. Our rule is invented, written in its style."</p></div></div>
+<div class="slide"><h2><span class="n">55</span>One rule, one piece of evidence: is the project compliant?</h2><p class="meta">slide 55 · p3-rule · Block 5 · Audit · 1 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:13:00 → 2:13:45.</b> Lee la regla y el acta en voz alta, despacio.</p>
+    <p>Pregunta a la sala: "Levanten la mano: ¿conforme? ¿no conforme?". Deja que se comprometan antes de revelar.</p>
+    <p class="cue" data-label="PASO 1">la regla tiene tres cláusulas: registrado; impacto en calendario y costo evaluado; aprobación del cliente antes de empezar. "Tengan presentes estas tres."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:13:00 → 2:13:45.</b> Read the rule and the minutes aloud, slowly.</p>
+    <p>Ask the room: "Hands up: compliant? Non-compliant?" Let them commit before the reveal.</p>
+    <p class="cue" data-label="STEP 1">the rule has three clauses — recorded; schedule <i>and</i> cost assessed; customer approval <i>before</i> work starts. "Keep these three in mind."</p></div></div>
+<div class="slide"><h2><span class="n">56</span>The judge is confident — and wrong</h2><p class="meta">slide 56 · p3-verdict · Block 5 · Audit · 2 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:13:45 → 2:14:45.</b> El razonamiento del juez suena correcto: verifica la cláusula 1 y la mitad de la 2.</p>
+    <p class="cue" data-label="PASO 1">la etiqueta de oro del auditor humano. El costo nunca se evaluó; el trabajo se programó sin aprobación del cliente.</p>
+    <p class="cue" data-label="PASO 2">"Este es el caso peligroso: un veredicto seguro de sí mismo, fluido y equivocado. Si enrutamos según el 90 % que declara el propio juez, este nunca se revisa."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:13:45 → 2:14:45.</b> The judge's reasoning sounds right: it checks clause 1 and half of clause 2.</p>
+    <p class="cue" data-label="STEP 1">the human auditor's gold label. Cost was never assessed; the work was scheduled with no customer approval.</p>
+    <p class="cue" data-label="STEP 2">"This is the dangerous case: a confident, fluent, wrong verdict. If we route by the judge's own 90%, this one is never reviewed."</p></div></div>
+<div class="slide"><h2><span class="n">57</span>A probe on the judge&#x27;s residual stream disagrees, so a human gets the case</h2><p class="meta">slide 57 · p3-probe · Block 5 · Audit · 2 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:14:45 → 2:15:30.</b> El probe es una lectura lineal sobre el residual stream del juez en la posición de la respuesta — el último token del prompt, donde el siguiente token será Yes o No (que es lo que cachea NB5) — entrenada para predecir "¿es correcto este veredicto?". La herramienta del Bloque 3, con un objetivo nuevo.</p>
+    <p class="cue" data-label="PASO 1">la aguja se queda en P(correcto) ≈ 0,4. El juez dijo 0,9. Umbral de aceptación automática: 0,7 (ilustrativo).</p>
+    <p class="cue" data-label="PASO 2">por debajo del umbral → se enruta a un auditor humano. "Las palabras del modelo decían 90 %; su estado oculto, no."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:14:45 → 2:15:30.</b> The probe is a linear read-out on the judge's residual stream at the answer position — the last prompt token, where the next token will be Yes or No (that is what NB5 caches) — trained to predict "is this verdict correct?" — Block 3's tool, new target.</p>
+    <p class="cue" data-label="STEP 1">needle settles at P(correct) ≈ 0.4. The judge said 0.9. Threshold for automatic acceptance: 0.7 (illustrative).</p>
+    <p class="cue" data-label="STEP 2">below threshold → routed to a human auditor. "The model's words said 90%; its hidden state did not."</p></div></div>
+<div class="slide"><h2><span class="n">58</span>Editing the evidence shows the verdict rests on one clue and ignores another</h2><p class="meta">slide 58 · p3-ground · Block 5 · Audit · 3 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:15:30 → 2:16:45.</b> La idea del Bloque 2 aplicada al texto de entrada: cambia una pieza de evidencia, deja todo lo demás igual y mira el veredicto. Es una intervención a nivel de texto, exactamente lo que hace NB5 (sustituir el extracto por texto genérico irrelevante, o quitar un segmento; está precalculado para que corra sin GPU). Hacer patching de los estados ocultos de esos tokens es el paso natural siguiente (la herramienta del Bloque 2) y localizaría dónde se lee la pista; hoy no lo hacemos.</p>
+    <p class="cue" data-label="PASO 1">quita "3 extra days" → el veredicto cambia a no conforme. Esa frase es la que carga la decisión.</p>
+    <p class="cue" data-label="PASO 2">restitúyela y añade "The customer rejected the change." → sigue siendo conforme. Un rechazo del cliente debería volverlo no conforme de inmediato.</p>
+    <p class="cue" data-label="PASO 3">"La estimación de calendario es evidencia relevante, para la cláusula 2. El problema es que el veredicto depende solo de ella e ignora la cláusula 3, la aprobación. Un auditor jamás aceptaría un veredicto fundamentado así."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:15:30 → 2:16:45.</b> Block 2's idea applied to the input text: change one piece of evidence, keep everything else, and watch the verdict. This is a text-level intervention — exactly what NB5 does (replace the excerpt with irrelevant boilerplate, or drop one segment; precomputed so it runs without a GPU). Patching the hidden states of those sentence tokens is the natural next step (Block 2's tool) and would localize where the clue is read; we do not do it today.</p>
+    <p class="cue" data-label="STEP 1">remove "3 extra days" → verdict flips to Non-compliant. So that sentence carries the decision.</p>
+    <p class="cue" data-label="STEP 2">restore it, and add "The customer rejected the change." → still Compliant. A rejection should make it non-compliant immediately.</p>
+    <p class="cue" data-label="STEP 3">"The schedule estimate is relevant evidence — for clause 2. The problem is that the verdict depends on it alone and ignores clause 3, the approval. An auditor would never accept a verdict grounded like this."</p></div></div>
+<div class="slide"><h2><span class="n">59</span>In one study, a judge&#x27;s hidden states predicted its errors better than its words</h2><p class="meta">slide 59 · p3-why · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:16:45 → 2:17:30.</b> La historia de R-PM-07 es inventada; este resultado no.</p>
+    <p>Radharapu et al. entrenan probes lineales sobre los estados ocultos de jueces con razonamiento, con una pérdida de Brier. Comparados con la confianza verbalizada y con métodos de múltiples generaciones: mejor calibración, ≈10× más baratos, y en sus experimentos generalizó a dominios de evaluación no vistos. No vendas la transferencia como un hecho general: en nuestra propia corrida de prueba (el juez de respaldo de NB5) el orden del probe casi se mantuvo en las aserciones reservadas (AUROC 0,71 → 0,69), pero quedó por detrás de la probabilidad del token (0,79) y su umbral falló; adelántalo: "van a comprobar si transfiere". Su matiz honesto: los probes son conservadores y rinden peor en conjuntos fáciles, lo que encaja con entornos críticos que priorizan pocos falsos positivos. Las auditorías son uno de esos entornos.</p>
+    <p>Probabilidad del token: para un juez de Yes/No, P(Yes) de los logits de salida es gratis y suele ordenar bien; en NB5 es la línea base a batir, junto con la confianza verbalizada. Un probe solo es interesante si lleva información más allá de la probabilidad de salida (mayor AUROC, ya que recalibrar arregla el ECE pero no el orden).</p>
+    <p>Semantic entropy probes (Kossen, Han et al.) hacen el mismo truco para alucinaciones: predecir la incertidumbre con una sola pasada en vez de muchas muestras.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:16:45 → 2:17:30.</b> The R-PM-07 story is invented; this result is not.</p>
+    <p>Radharapu et al. train linear probes on reasoning judges' hidden states with a Brier-score loss. Compared with verbalized confidence and multi-generation methods: better calibration, ≈10× cheaper, and in their experiments it generalized to unseen evaluation domains. Do not sell transfer as a general fact: in our own test run (NB5 fallback judge) the probe's ranking roughly held on held-out assertions (AUROC 0.71 → 0.69), but it fell behind token probability (0.79) and its threshold broke — foreshadow: "you will test whether it transfers". Their honest caveat: probes are conservative and underperform on easier datasets — which suits safety-critical settings that prioritise low false positives. Audits are such a setting.</p>
+    <p>Token probability: for a Yes/No judge, P(Yes) from the output logits is free and often well-ranked; in NB5 it is the baseline to beat, alongside verbalized confidence. A probe is only interesting if it carries information beyond the output probability (higher AUROC, since recalibration can fix ECE but not ranking).</p>
+    <p>Semantic entropy probes (Kossen, Han et al.) do the same trick for hallucination: predict uncertainty from one forward pass instead of many samples.</p></div></div>
+<div class="slide"><h2><span class="n">60</span>A calibrated score turns review into a dial</h2><p class="meta">slide 60 · p3-a10 · Block 5 · Audit · 4 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:17:30 → 2:19:30.</b> Pieza central. Datos sintéticos (dilo): 3.000 veredictos simulados, precisión del juez ≈ 74 %. Nada de esta slide está medido.</p>
+    <p>Izquierda = diagrama de fiabilidad: x = confianza declarada, y = con qué frecuencia el veredicto es realmente correcto; la diagonal es calibración perfecta.</p>
+    <p class="cue" data-label="AL ENTRAR">la confianza verbalizada se amontona entre 0,8 y 1,0 pero la precisión se queda cerca de 0,75 → barras muy por debajo de la diagonal = exceso de confianza.</p>
+    <p class="cue" data-label="PASO 1">las barras del probe se pegan a la diagonal.</p>
+    <p class="cue" data-label="PASO 2">derecha = riesgo-cobertura. Acepta automáticamente todo veredicto cuya puntuación del probe sea ≥ τ. Cobertura = proporción aceptada automáticamente; el eje y = tasa de error entre los aceptados. Con el umbral bajo: aceptas casi todo y se escapa cada error.</p>
+    <p class="cue" data-label="PASOS 3-4">sube τ. Menos aceptaciones automáticas, muchísimos menos errores escapados. Lee en voz alta la línea bajo la gráfica: 'errores escapados' = veredictos que son erróneos Y aceptados automáticamente, como proporción de todos los veredictos (la definición de NB5, y la tasa de escape de la siguiente slide). La línea discontinua es el objetivo de enrutamiento de NB5: como mucho 10 % de error entre los veredictos aceptados automáticamente. En los datos sintéticos la curva del probe alcanza el objetivo del 10 % hacia un 38–40 % de cobertura (paso 4, τ = 0,83: acepta automáticamente el 38 %, error entre aceptados ≈ 9,9 %, errores escapados 3,8 % del total). Enrutar por confianza verbalizada solo baja del 10 % con una cobertura mínima (por debajo del ~8 %), porque sus puntuaciones apenas separan lo correcto de lo incorrecto. El paso 3 (τ = 0,62): 74 % de cobertura pero ≈ 18 % de error entre los aceptados, por encima del objetivo.</p>
+    <p>Señala la curva gris: "Con la misma cobertura, enrutar por confianza verbalizada deja pasar más errores."</p>
+    <p>El deslizador se puede arrastrar con el ratón si alguien pregunta "¿y con el 90 %?"; hacer clic en la gráfica no avanza las slides.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:17:30 → 2:19:30.</b> Centrepiece. Synthetic data (say so): 3,000 simulated verdicts, judge accuracy ≈ 74%. Nothing on this slide is measured.</p>
+    <p>Left = reliability diagram: x = stated confidence, y = how often the verdict is actually correct; the diagonal is perfect calibration.</p>
+    <p class="cue" data-label="ON ARRIVAL">verbalized confidence piles up at 0.8–1.0 but accuracy stays near 0.75 → bars far below the diagonal = overconfident.</p>
+    <p class="cue" data-label="STEP 1">the probe's bars hug the diagonal.</p>
+    <p class="cue" data-label="STEP 2">right = risk–coverage. Auto-accept every verdict whose probe score ≥ τ. Coverage = share accepted automatically; y = error rate among accepted. Threshold low: accept nearly everything, every error escapes.</p>
+    <p class="cue" data-label="STEPS 3-4">raise τ. Fewer automatic acceptances, far fewer escaped errors. Read the line under the chart aloud: 'escaped errors' = verdicts that are wrong AND auto-accepted, as a share of all verdicts (NB5's definition, and the escape rate of the next slide). The dashed line is NB5's routing target: at most 10% error among auto-accepted verdicts. In the synthetic data the probe curve meets the 10% target at about 38–40% coverage (step 4, τ = 0.83: auto-accept 38%, error among accepted ≈ 9.9%, escaped errors 3.8% of all verdicts). Routing by verbalized confidence only gets under 10% at tiny coverage (below ~8%), because its scores barely separate right from wrong. Step 3 (τ = 0.62): 74% coverage but ≈ 18% error among accepted — above target.</p>
+    <p>Point at the grey curve: "Same coverage, routing by verbalized confidence lets more errors through."</p>
+    <p>The slider is draggable with the mouse if someone asks "what about 90%?" — clicks on the chart do not advance slides.</p></div></div>
+<div class="slide"><h2><span class="n">61</span>A conformal threshold could bound how many wrong verdicts escape review</h2><p class="meta">slide 61 · p3-conformal · Block 5 · Audit · 3 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:19:30 → 2:20:15.</b> Dilo con claridad: "Esto es una dirección de investigación — mi línea de tesis, auditorías asistidas por LLM de calidad y seguridad de proyectos de software — no un resultado publicado."</p>
+    <p class="cue" data-label="PASO 1">un conjunto de calibración con etiquetas de oro: n = 60 veredictos sintéticos, colocados por puntuación del probe. Gris = el juez acertó, rojo = se equivocó. Casi todos los rojos están en puntuaciones bajas, pero no todos.</p>
+    <p class="cue" data-label="PASO 2">un escape es un veredicto erróneo Y aceptado automáticamente (puntuación ≥ τ); la tasa de escape son los escapes sobre TODOS los veredictos (la definición de NB5, la misma que la lectura de A10). La regla, exactamente el crc_threshold de NB5: recorre los umbrales de menor a mayor y toma el primero (el más bajo) con (n/(n+1))·escape_cal(τ) + 1/(n+1) ≤ α. El término 1/(n+1) es el precio por muestra finita; con n = 60 ya consume 1,6 de los 10 puntos, así que el presupuesto empírico de escape queda en torno al 8,5 %. Lee la línea bajo el eje: cuántos puntos rojos quedan rodeados (escape), la cota, y cuántos veredictos se aceptan automáticamente. Esto es control conforme del riesgo con la puntuación del probe: si los veredictos nuevos son intercambiables con los de calibración, la tasa de escape ESPERADA en los nuevos es ≤ α (en esperanza sobre conjuntos de calibración, no para cada auditoría).  La misma receta que la ampliación opcional del final de NB5.</p>
+    <p>Nota para expertos: esto acota los escapes sobre todos los veredictos, no la proporción de errores que escapan (una tasa de omisión). Con un juez con ~74 % de precisión, un α = 10 % de todos los veredictos puede seguir siendo una fracción grande de los errores; elige α con el auditor.</p>
+    <p class="cue" data-label="PASO 3">la garantía necesita intercambiabilidad. Un proceso 29110 nuevo, o una aserción reservada en NB5, es justo donde puede fallar. Esa es la prueba de cambio de distribución que van a correr.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:19:30 → 2:20:15.</b> Say clearly: "This is a research direction — my thesis line, LLM-assisted quality and security audits of software projects — not a published result."</p>
+    <p class="cue" data-label="STEP 1">a calibration set with gold labels: n = 60 synthetic verdicts, placed by probe score. Grey = the judge was right, red = wrong. Most red dots sit at low scores, but not all.</p>
+    <p class="cue" data-label="STEP 2">an escape is a verdict that is wrong AND auto-accepted (score ≥ τ); the escape rate is escapes over ALL verdicts (NB5's definition, same as the A10 readout). Rule, exactly NB5's crc_threshold: scan thresholds from low to high and take the first (lowest) τ with (n/(n+1))·escape_cal(τ) + 1/(n+1) ≤ α. The 1/(n+1) term is the finite-sample price; with n = 60 it already uses 1.6 of the 10 points, so the empirical escape budget is about 8.5%. Read the line under the axis: how many red dots are ringed (escape), the bound, and how many verdicts are auto-accepted. This is conformal risk control with the probe score: if new verdicts are exchangeable with calibration verdicts, the EXPECTED escape rate on new verdicts is ≤ α (in expectation over calibration sets, not for every audit). Same recipe as the optional stretch at the end of NB5.</p>
+    <p>Note for experts: this bounds escapes over all verdicts, not the share of errors that escape (a miss rate). With a ~74%-accurate judge, α = 10% of all verdicts can still be a large share of the errors; choose α with the auditor.</p>
+    <p class="cue" data-label="STEP 3">the guarantee needs exchangeability. A new 29110 process, or a held-out assertion in NB5, is exactly where it can fail. That is the distribution-shift test you will run.</p></div></div>
+<div class="slide"><h2><span class="n">62</span>In the notebook, contracts stand in for project records</h2><p class="meta">slide 62 · p3-legal · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:20:15 → 2:21:00.</b> No podemos compartir registros de auditoría reales, así que usamos un análogo público con la misma forma.</p>
+    <p>LegalBench tiene 14 tareas contract_nli_* (CC BY 4.0), cada una una aserción de ContractNLI aplicada a cláusulas de acuerdos de confidencialidad, p. ej. "la Parte Receptora puede compartir cierta Información Confidencial con algunos terceros"; las etiquetas de oro vienen de las anotaciones de ContractNLI (binarizadas por LegalBench).</p>
+    <p>Prompt exacto: sistema "You are a compliance auditor."; usuario "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." El veredicto se lee de los logits del siguiente token Yes/No (lo que también da la línea base de probabilidad del token); la confianza verbalizada viene de una pregunta de seguimiento que pide un 0–100.</p>
+    <p>Particiones: 11 aserciones repartidas por documento en train / cal / test (ningún NDA de test se vio en entrenamiento). 3 aserciones se reservan por completo — aviso sobre divulgación obligada, devolución de información confidencial y supervivencia de obligaciones — como sustituto de un proceso 29110 nuevo.</p>
+    <p>El juez es Gemma 3 4B IT; sus veredictos y activaciones del residual stream (en el último token del prompt) están cacheados, así que NB5 corre en un runtime de CPU. COMPROBAR ANTES DE LA SESIÓN: si la caché de Gemma no está publicada, NB5 cae a Qwen2.5-0.5B; en ese caso dilo y cambia esta fila.</p>
+    <p>PUNTO DE CONTROL DE NB5, con esta slide en pantalla. Salvador ya les pidió abrirlo en el handoff (2:08), así que aquí se confirma, no se anuncia: "¿Todos con NB5 abierto? Corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU ni instalar nada." A quien no lo tenga: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>, dicho despacio, dos veces; el asistente va con esa persona; con una laptop por pareja alcanza. No sueltes esta slide hasta que la mayoría de las pantallas muestren Colab.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:20:15 → 2:21:00.</b> We cannot share real audit records, so we use a public analogue with the same shape.</p>
+    <p>LegalBench has 14 contract_nli_* tasks (CC BY 4.0), each one assertion from ContractNLI applied to NDA clauses, e.g. "the Receiving Party may share some Confidential Information with some third-parties"; gold labels come from ContractNLI's annotations (binarized by LegalBench).</p>
+    <p>Exact prompt: system "You are a compliance auditor."; user "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." The verdict is read from the Yes/No next-token logits (that also gives the token-probability baseline); verbalized confidence comes from a follow-up question asking for 0–100.</p>
+    <p>Splits: 11 assertions split by NDA document into train / cal / test (no test NDA seen in training). 3 assertions are held out entirely — notice on compelled disclosure, return of confidential information, survival of obligations — standing in for a new 29110 process.</p>
+    <p>The judge is Gemma 3 4B IT; its verdicts and residual-stream activations (at the last prompt token) are cached, so NB5 runs on a CPU runtime. CHECK BEFORE THE SESSION: if the Gemma cache is not published, NB5 falls back to Qwen2.5-0.5B — then say so and change this row.</p>
+    <p>NB5 CHECKPOINT, while this slide is up. Salvador asked them to open it at the handoff (2:08), so this is the confirmation, not the first mention: "Everyone with NB5 open? Run the first cell — Runtime &gt; CPU is fine, no GPU, nothing to install." For anyone who is not: NB5 on <code>salvahin.github.io/mechinterp-tutorial</code>, said slowly, twice; the assistant goes to them; one laptop per pair is enough. Do not leave this slide until most screens show Colab.</p></div></div>
+<div class="slide"><h2><span class="n">63</span>Commit to a prediction first</h2><p class="meta">slide 63 · p3-predict · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:21:00 → 2:21:30.</b> Que levanten la mano por A, B, C y D. Apunta los conteos en la pizarra; volvemos a ellos en el debrief.</p>
+    <p>A estas alturas todos deberían tener NB5 abierto (se los dijiste en la slide de LegalBench); si alguien no, dales 20 segundos y empareja: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>.</p>
+    <p>Pídeles que escriban su propia predicción en la celda Predict del notebook antes de correr nada.</p>
+    <p>Las opciones C y D importan: la probabilidad del token es gratis y a menudo fuerte; un probe que solo la empata añade costo, no información.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:21:00 → 2:21:30.</b> Hands up for A, B, C, D. Write the counts on the whiteboard; we return to them in the debrief.</p>
+    <p>Everyone should have NB5 open by now (you told them on the LegalBench slide); if some do not, give them 20 seconds and pair them up — NB5 on <code>salvahin.github.io/mechinterp-tutorial</code>.</p>
+    <p>Ask them to write their own prediction in the notebook's Predict cell before running anything.</p>
+    <p>Options C and D matter: token probability is free and often strong; a probe that only ties it adds cost, not information.</p></div></div>
+<div class="slide"><h2><span class="n">64</span>NB5: measure whether the judge&#x27;s hidden state knows when it is wrong</h2><p class="meta">slide 64 · p3-nb5 · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:21:30 → 2:43:30 (22 min).</b> Si la sala está en pleno flujo, toma 2 o 3 minutos más del debrief, no del cierre.</p>
+    <p>Repite el enlace y deja esta slide en pantalla: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>; es la única slide del Bloque 5 con el enlace proyectado (también <code>notebooks/student/NB5_judge_confidence.ipynb</code> en los materiales). Para este nadie necesita GPU ni haber hecho NB0.</p>
+    <p>En parejas: una persona conduce, la otra lee las celdas y predice. Los pasos 1–4 son el núcleo; el 5 es el resultado clave; el 6 es la comprobación de fundamento; el umbral conforme es una ampliación opcional.</p>
+    <p>Tres señales de confianza, comparadas en la partición de test: la verbalizada 0–100, la probabilidad del token Yes/No (confianza en la respuesta elegida) y el probe (ajustado en train, con la capa elegida y calibrado por Platt en cal). Insiste en que la probabilidad del token es la línea base fuerte y barata; recalibrar arregla el ECE pero no puede cambiar el AUROC, así que el AUROC es donde el probe tiene que ganar.</p>
+    <p>El objetivo de enrutamiento es 10 % de error entre los veredictos aceptados automáticamente (con el juez pequeño de prueba, un objetivo del 5 % ajustado con unos 100 veredictos no se cumple en test, donde el error entre los aceptados ronda el 13–14 %; con la caché de Gemma pueden intentar 0,05).</p>
+    <p>El paso 6 es a nivel de texto: la evidencia se sustituye por texto genérico irrelevante o se quita un segmento (precalculado). Hacer patching de estados ocultos sería el paso siguiente, no hoy.</p>
+    <p>Circula por la sala. Tropiezo común: el objetivo es "¿es erróneo el veredicto?", no "¿la respuesta es Yes?"; la confianza tiene que ser la de la respuesta elegida, max(P(Yes), P(No)).</p>
+    <p>Controles de tiempo a las 2:30 (deberían ir por el paso 3) y a las 2:37 (paso 5).</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:21:30 → 2:43:30</b> (22 min). If the room is mid-flow, take 2–3 more minutes from the debrief, not from the wrap.</p>
+    <p>Say the link again and leave this slide up: NB5 on <code>salvahin.github.io/mechinterp-tutorial</code> — it is the only Block 5 slide with the link on screen (also <code>notebooks/student/NB5_judge_confidence.ipynb</code> in the materials). Nobody needs a GPU or NB0 for this one.</p>
+    <p>Pairs: one drives, one reads the cells and predicts. Steps 1–4 are core; 5 is the key result; 6 is the grounding check; the conformal threshold is an optional stretch.</p>
+    <p>Three confidence signals, compared on the test split: verbalized 0–100, Yes/No token probability (confidence in the chosen answer), and the probe (fitted on train, layer chosen and Platt-calibrated on cal). Stress that token probability is the strong, cheap baseline; recalibration fixes ECE but cannot change AUROC, so AUROC is where the probe must win.</p>
+    <p>Routing target is 10% error among auto-accepted verdicts (with the small test judge, a 5% target fitted on about 100 verdicts is not met on test, where error among accepted comes out near 13–14%; with the Gemma cache they can try 0.05).</p>
+    <p>Step 6 is text-level: the evidence is replaced by irrelevant boilerplate or one segment is removed (precomputed). Hidden-state patching would be the next step, not done today.</p>
+    <p>Circulate. Common snag: the target is "is the verdict wrong", not "is the answer Yes" — confidence must be in the chosen answer, max(P(Yes), P(No)).</p>
+    <p>Time checks at 2:30 (should be at step 3) and 2:37 (step 5).</p></div></div>
+<div class="slide"><h2><span class="n">65</span>What would an auditor accept as evidence that a verdict is safe to skip?</h2><p class="meta">slide 65 · p3-debrief · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:43:30 → 2:48:00.</b> Vuelve a los conteos de A/B/C/D. Pide a dos parejas sus números de AUROC/ECE a partir de la caché (Gemma 3 4B si está publicada; si no, el respaldo de Qwen: di cuál); esos son los números reales de la sesión.</p>
+    <p>Lo que vimos en nuestras pruebas (juez de respaldo Qwen2.5-0.5B, NO el Gemma 3 4B de la sesión; di "en nuestra corrida de prueba", nunca lo presentes como un resultado): precisión del juez 75 % en test, 64 % en las aserciones reservadas. AUROC para detectar veredictos erróneos en test: verbalizada 0,43 (no mejor que el azar, intervalo del 95 % de aproximadamente 0,31–0,55: solo respondía 75, 80, 85 o 95), probabilidad del token 0,63, probe 0,71 (esos dos intervalos se solapan: solo hay 23 veredictos erróneos entre 93). En las aserciones reservadas el orden del probe casi se mantuvo (0,69), pero la probabilidad del token ordenó mejor (0,79) y el umbral del probe falló: se escapó el 17,5 % de los veredictos, frente al 3,3 % de la probabilidad del token (error entre los aceptados, 28 % frente a 8,2 %). Fundamento: de los 40 veredictos Yes más seguros, el 70 % siguió siendo Yes cuando la evidencia se sustituyó por texto genérico irrelevante, aunque esos veredictos eran correctos.</p>
+    <p>Lecciones que hay que sacar: (1) las palabras no sirven como filtro, la probabilidad del token sí es una línea base real; (2) un probe puede ganar dentro de distribución y quedarse atrás con una regla nueva: puede estar aprendiendo en parte "qué reglas son difíciles" en vez de la incertidumbre del juez; (3) un veredicto correcto puede estar igualmente infundado, y ni la precisión ni una puntuación de confianza lo revelan.</p>
+    <p>Cierra con la pregunta del auditor: una puntuación calibrada por sí sola no es evidencia; un umbral con una cota de escape declarada, más una comprobación de fundamento sobre una muestra de veredictos, empieza a parecerse a algo que un evaluador podría firmar.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:43:30 → 2:48:00.</b> Go back to the A/B/C/D counts. Ask two pairs for their AUROC/ECE numbers from the cache (Gemma 3 4B if published; otherwise the Qwen fallback — say which) — those are the session's real numbers.</p>
+    <p>What we saw in testing (fallback judge Qwen2.5-0.5B, NOT the session's Gemma 3 4B; say "in our test run", never present as a result): judge accuracy 75% on test, 64% on held-out assertions. AUROC for flagging wrong verdicts on test: verbalized 0.43 (no better than chance, 95% interval about 0.31–0.55 — it only ever answered 75, 80, 85 or 95), token probability 0.63, probe 0.71 (those two intervals overlap: only 23 wrong verdicts among 93). On the held-out assertions the probe's ranking roughly held (0.69), but token probability ranked better (0.79) and the probe's threshold broke: 17.5% of verdicts escaped vs 3.3% for token probability (error among accepted, 28% vs 8.2%). Grounding: of the 40 most confident Yes verdicts, 70% stayed Yes when the evidence was replaced by irrelevant boilerplate, even though these verdicts were correct.</p>
+    <p>Lessons to draw out: (1) words are useless as a gate, token probability is a real baseline; (2) a probe can win in-distribution and fall behind on a new rule — it may partly learn "which rule is hard" rather than the judge's uncertainty; (3) a correct verdict can still be ungrounded, and neither accuracy nor a confidence score reveals it.</p>
+    <p>Close with the auditor question: a calibrated score alone is not evidence; a threshold with a stated escape bound plus a grounding check on sampled verdicts starts to look like something an assessor could sign.</p></div></div>
+<div class="slide"><h2><span class="n">66</span>Pick the method from your question, and the validation from the method</h2><p class="meta">slide 66 · p3-map · Block 5 · Audit · 6 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:48:00 → 2:49:30.</b> Todo el tutorial en una tabla. Las filas aparecen una por cada →.</p>
+    <p>Fila 1, probe (Bloques 3 y 5): valida con particiones reservadas y fuera de distribución, como acaban de hacer. Fila 2, patching (Bloque 2): comprueba que el efecto sobrevive a otras corrupciones, y usa path patching para separar rutas directas de indirectas. Fila 3, SAEs (Bloque 3): si un probe simple lo iguala, el SAE no aportó nada (Kantamneni et al., ICML 2025). Fila 4, grafos de atribución (Bloque 4): un grafo es una hipótesis hasta que intervienes. Fila 5, steering: un artículo de workshop de 2026 (workshop de Representational Alignment de ICLR 2026, arXiv 2602.06801) reporta que las direcciones de steering no son identificables: perturbaciones ortogonales pueden alcanzar buena parte del efecto, así que pruébalas.</p>
+    <p class="cue" data-label="PASO 6">resalta. "El Bloque 5 usó solo las dos primeras filas, y la segunda solo en su forma más simple: intervenimos sobre el texto de entrada, no sobre estados ocultos. Las herramientas más sencillas hicieron el trabajo de auditoría; el patching de estados ocultos es el siguiente paso evidente."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:48:00 → 2:49:30.</b> The whole tutorial in one table. Rows appear one per →.</p>
+    <p>Row 1 probe (Blocks 3, 5) — validate on held-out and out-of-distribution splits, as you just did. Row 2 patching (Block 2) — check the effect survives other corruptions, and use path patching to separate direct from indirect routes. Row 3 SAEs (Block 3) — if a plain probe matches it, the SAE added nothing (Kantamneni et al., ICML 2025). Row 4 attribution graphs (Block 4) — a graph is a hypothesis until you intervene. Row 5 steering — a 2026 workshop paper (ICLR 2026 Representational Alignment workshop, arXiv 2602.06801) reports that steering directions are not identifiable: orthogonal perturbations can reach much of the effect, so test them.</p>
+    <p class="cue" data-label="STEP 6">highlight. "Block 5 used only the first two rows — and the second only in its simplest form: we intervened on the input text, not on hidden states. The simplest tools did the auditing work; hidden-state patching is the obvious next step."</p></div></div>
+<div class="slide"><h2><span class="n">67</span>Your turn: map one LLM-judged task from your own research</h2><p class="meta">slide 67 · p3-transfer · Block 5 · Audit · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:49:30 → 2:51:30.</b> Reparte el lienzo de transferencia impreso (printables/transfer_canvas.pdf).</p>
+    <p>Dos minutos, en parejas: cada persona rellena las casillas 1–3 para su propio trabajo; si da tiempo, de la 4 a la 6. Ejemplos para desatascar: bots de revisión de código, rúbricas de calificación, triaje de notas clínicas, jueces de relevancia en recuperación.</p>
+    <p>Recoge un ejemplo de la sala antes de seguir.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:49:30 → 2:51:30.</b> Hand out the printed transfer canvas (printables/transfer_canvas.pdf).</p>
+    <p>Two minutes, pairs: each person fills boxes 1–3 for their own work; if time, 4–6. Examples to unblock: code-review bots, grading rubrics, clinical note triage, retrieval relevance judges.</p>
+    <p>Take one example from the room before moving on.</p></div></div>
+<div class="slide"><h2><span class="n">68</span>From observing models to auditing them — with tools that are still young</h2><p class="meta">slide 68 · p3-field · Wrap · 7 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:51:30 → 2:55:00.</b> Los pasos 1 a 5 recorren el arco de la tarde: Miguel observó, Salvador intervino, descompuso y trazó, nosotros auditamos.</p>
+    <p class="cue" data-label="PASO 6">problemas abiertos (Sharkey et al., "Open Problems in Mechanistic Interpretability", TMLR 2025): la mayoría de los resultados de circuitos explican un prompt, no un mecanismo global; los grafos de atribución explican un modelo de reemplazo, y cuán fiel es al modelo real es una pregunta abierta; automatizar la interpretabilidad con agentes; no hay estándares de evaluación acordados.</p>
+    <p class="cue" data-label="PASO 7 · IMPLICACIONES">aseguramiento y auditorías (el bloque de hoy), evidencia que los reguladores podrían exigir, y usar los modelos como objetos de estudio científico.</p>
+    <p>Frase de honestidad: "Estas herramientas son jóvenes. La mayoría de los resultados son sobre modelos pequeños o prompts sueltos. Traten cada interpretación como una hipótesis con una prueba asociada."</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:51:30 → 2:55:00.</b> Steps 1–5 walk the arc of the afternoon: Miguel observed, Salvador intervened, decomposed and traced, we audited.</p>
+    <p class="cue" data-label="STEP 6">open problems (Sharkey et al., "Open Problems in Mechanistic Interpretability", TMLR 2025): most circuit results explain one prompt, not a global mechanism; attribution graphs explain a replacement model, and how faithful that is to the real model is open; automating interpretability with agents; no agreed evaluation standards.</p>
+    <p class="cue" data-label="STEP 7 · IMPLICATIONS">assurance and audits (today's block), evidence regulators could ask for, and using models as objects of science.</p>
+    <p>Honesty line: "These tools are young. Most results are on small models or single prompts. Treat every interpretation as a hypothesis with a test attached."</p></div></div>
+<div class="slide"><h2><span class="n">69</span>Everything we used today is open</h2><p class="meta">slide 69 · p3-res · Wrap · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:55:00 → 2:56:00.</b> No leas la lista. "Columna izquierda: las herramientas de los notebooks y dónde aprender más; el capítulo 1 de ARENA es el mejor curso gratuito para continuar. Columna derecha: los artículos sobre los que se construyeron los bloques de hoy; la revisión de Open Problems es el mapa de lo que todavía nadie sabe."</p>
+    <p>Toy Models of Superposition: transformer-circuits.pub/2022/toy_model · Towards Monosemanticity: transformer-circuits.pub/2023/monosemantic-features · Circuit Tracing (métodos): transformer-circuits.pub/2025/attribution-graphs/methods.html.</p>
+    <p>Todos los enlaces están también en el sitio de materiales (ver la última slide).</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:55:00 → 2:56:00.</b> Don't read the list. "Left column: the tools from the notebooks and where to learn more — ARENA chapter 1 is the best free follow-up course. Right column: the papers today's blocks were built on; the Open Problems review is the map of what nobody knows yet."</p>
+    <p>Toy Models of Superposition: transformer-circuits.pub/2022/toy_model · Towards Monosemanticity: transformer-circuits.pub/2023/monosemantic-features · Circuit Tracing methods: transformer-circuits.pub/2025/attribution-graphs/methods.html.</p>
+    <p>All links are also on the materials site (see the last slide).</p></div></div>
+<div class="slide"><h2><span class="n">70</span>Thank you</h2><p class="meta">slide 70 · p3-thanks · Wrap · 0 step(s)</p>
+<div class="lang es"><span class="tag">Español</span>
+<p><b>2:56:00 → 3:00:00.</b> Deja esta slide en pantalla durante las preguntas: el código QR y la URL abren el sitio de materiales, con el enlace a Colab de cada notebook, las slides y los impresos.</p>
+    <p>Agradece al asistente por su nombre. Invita a quedarse a preguntas; los notebooks siguen funcionando después de hoy.</p></div>
+<div class="lang en"><span class="tag">English</span>
+<p><b>2:56:00 → 3:00:00.</b> Leave this slide up through the questions: the QR code and the URL open the materials site, with every notebook's Colab link, the slides and the printables.</p>
+    <p>Thank the student assistant by name. Invite people to stay for questions; the notebooks keep working after today.</p></div></div>
+<footer class="doc">Generado desde slides/deck.html · rehacer con <code>python3 slides/engine/handout.py</code> después de reconstruir el deck.</footer>
+</body></html>

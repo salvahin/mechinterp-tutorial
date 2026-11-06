@@ -218,7 +218,7 @@ table.t td { padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-
 .notes-panel .next::before { color: #F2B33D; }
 .notes-panel h4 b { color: #F2B33D; font-weight: 700; }
 .notes-panel h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #9AA0AA; }
-.slide aside.notes { display: none; }
+.slide aside.notes, .slide aside.speech { display: none; }
 
 .clock { position: fixed; top: 12px; right: 16px; z-index: 21; font: 600 18px var(--font-mono); color: #fff; background: rgba(16,17,20,.85); padding: 6px 12px; border-radius: 8px; display: none; }
 .clock.open { display: block; }

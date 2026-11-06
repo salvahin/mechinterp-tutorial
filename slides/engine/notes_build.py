@@ -87,3 +87,33 @@ def wrap(part_html, es=None):
         return block[:am.start()] + new + block[am.end():]
 
     return SECTION.sub(one_section, part_html), stats[0], stats[1]
+
+
+def speech(part_html, en=None, es=None):
+    """Add the word-for-word script as a second <aside class="speech"> per slide.
+
+    The notes aside stays exactly as it is: deck.js reads one or the other
+    depending on the mode the presenter window is in, and falls back to the notes
+    for every slide with no script here. The script text already writes its own
+    <p> and <p class="cue"> markup (it is prose, not the notes' line-per-cue
+    shorthand), so it is inserted verbatim rather than passed through cues().
+
+    Returns (html, n_slides_given_a_script).
+    """
+    en, es = en or {}, es or {}
+    count = [0]
+
+    def one_section(sm):
+        sid, block = sm.group(1), sm.group(0)
+        if sid not in en and sid not in es:
+            return block
+        count[0] += 1
+        parts = []
+        for tag, src in (('en', en), ('es', es)):
+            if sid in src:
+                parts.append(f'<div data-lang="{tag}">\n    {src[sid].strip()}\n  </div>')
+        aside = '<aside class="speech">\n  ' + '\n  '.join(parts) + '\n  </aside>\n'
+        cut = block.rindex('</section>')
+        return block[:cut] + aside + block[cut:]
+
+    return SECTION.sub(one_section, part_html), count[0]

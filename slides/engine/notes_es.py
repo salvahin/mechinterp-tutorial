@@ -242,6 +242,7 @@ ES = {
 
 "p2-handoff": """
     <b>2:08–2:10.</b> Lee la frase literalmente y luego presenta a Víctor: va a usar exactamente estas dos herramientas, un probe y el patching, para preguntarse si podemos confiar en un juez LLM.
+    Lo último antes de sentarte, para que Colab esté listo cuando el Bloque 5 lo necesite: "Abran ya el último notebook y déjenlo cargando: NB5, al final de <code>salvahin.github.io/mechinterp-tutorial</code>. Con runtime de CPU basta, no hace falta GPU ni instalar nada." Víctor lo repite en su slide de LegalBench, así que no te detengas en ello.
 """,
 
 # ========================================================= PART 3 · Víctor
@@ -328,16 +329,19 @@ ES = {
     Prompt exacto: sistema "You are a compliance auditor."; usuario "Contract clause: {excerpt} — Does this clause state that {assertion}? Answer Yes or No." El veredicto se lee de los logits del siguiente token Yes/No (lo que también da la línea base de probabilidad del token); la confianza verbalizada viene de una pregunta de seguimiento que pide un 0–100.
     Particiones: 11 aserciones repartidas por documento en train / cal / test (ningún NDA de test se vio en entrenamiento). 3 aserciones se reservan por completo — aviso sobre divulgación obligada, devolución de información confidencial y supervivencia de obligaciones — como sustituto de un proceso 29110 nuevo.
     El juez es Gemma 3 4B IT; sus veredictos y activaciones del residual stream (en el último token del prompt) están cacheados, así que NB5 corre en un runtime de CPU. COMPROBAR ANTES DE LA SESIÓN: si la caché de Gemma no está publicada, NB5 cae a Qwen2.5-0.5B; en ese caso dilo y cambia esta fila.
+    PUNTO DE CONTROL DE NB5, con esta slide en pantalla. Salvador ya les pidió abrirlo en el handoff (2:08), así que aquí se confirma, no se anuncia: "¿Todos con NB5 abierto? Corran la primera celda; Entorno de ejecución &gt; CPU basta, no hace falta GPU ni instalar nada." A quien no lo tenga: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>, dicho despacio, dos veces; el asistente va con esa persona; con una laptop por pareja alcanza. No sueltes esta slide hasta que la mayoría de las pantallas muestren Colab.
 """,
 
 "p3-predict": """
     <b>2:21:00 → 2:21:30.</b> Que levanten la mano por A, B, C y D. Apunta los conteos en la pizarra; volvemos a ellos en el debrief.
+    A estas alturas todos deberían tener NB5 abierto (se los dijiste en la slide de LegalBench); si alguien no, dales 20 segundos y empareja: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>.
     Pídeles que escriban su propia predicción en la celda Predict del notebook antes de correr nada.
     Las opciones C y D importan: la probabilidad del token es gratis y a menudo fuerte; un probe que solo la empata añade costo, no información.
 """,
 
 "p3-nb5": """
     <b>2:21:30 → 2:43:30 (22 min).</b> Si la sala está en pleno flujo, toma 2 o 3 minutos más del debrief, no del cierre.
+    Repite el enlace y deja esta slide en pantalla: NB5 en <code>salvahin.github.io/mechinterp-tutorial</code>; es la única slide del Bloque 5 con el enlace proyectado (también <code>notebooks/student/NB5_judge_confidence.ipynb</code> en los materiales). Para este nadie necesita GPU ni haber hecho NB0.
     En parejas: una persona conduce, la otra lee las celdas y predice. Los pasos 1–4 son el núcleo; el 5 es el resultado clave; el 6 es la comprobación de fundamento; el umbral conforme es una ampliación opcional.
     Tres señales de confianza, comparadas en la partición de test: la verbalizada 0–100, la probabilidad del token Yes/No (confianza en la respuesta elegida) y el probe (ajustado en train, con la capa elegida y calibrado por Platt en cal). Insiste en que la probabilidad del token es la línea base fuerte y barata; recalibrar arregla el ECE pero no puede cambiar el AUROC, así que el AUROC es donde el probe tiene que ganar.
     El objetivo de enrutamiento es 10 % de error entre los veredictos aceptados automáticamente (con el juez pequeño de prueba, un objetivo del 5 % ajustado con unos 100 veredictos no se cumple en test, donde el error entre los aceptados ronda el 13–14 %; con la caché de Gemma pueden intentar 0,05).

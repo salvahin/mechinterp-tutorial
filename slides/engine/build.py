@@ -13,6 +13,7 @@ back to system fonts when offline).
 import sys, pathlib, re, html
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import notes_build, notes_es          # step-labelled, bilingual speaker notes
+import speech_victor                  # word-for-word script for Block 5 (S in the deck)
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]          # slides/
 ENGINE = ROOT / "engine"
@@ -68,10 +69,11 @@ def build(part_names=None, out=None, title="Opening the Black Box — Mechanisti
     if not files:
         sys.exit("no parts found")
     body = []
-    n_en = n_es = 0
+    n_en = n_es = n_sp = 0
     for f in files:
         part, a, b = notes_build.wrap(f.read_text(encoding="utf-8"), notes_es.ES)
-        n_en += a; n_es += b
+        part, c = notes_build.speech(part, speech_victor.EN, speech_victor.ES)
+        n_en += a; n_es += b; n_sp += c
         body.append(f"\n<!-- ===== {f.name} ===== -->\n")
         body.append(part)
     doc = HEAD.format(title=html.escape(title), css=css, js=js) + "".join(body) + TAIL
@@ -81,6 +83,7 @@ def build(part_names=None, out=None, title="Opening the Black Box — Mechanisti
     n = len(re.findall(r'<section\s+class="[^"]*\bslide\b', "".join(body)))
     print(f"wrote {out}  ({n} slides, {len(doc)//1024} KB)")
     print(f"  notes: {n_en} EN · {n_es} ES · {n_en - n_es} still English-only")
+    print(f"  speech: {n_sp} slides with a word-for-word script (press S)")
     return out
 
 

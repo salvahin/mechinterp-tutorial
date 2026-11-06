@@ -40,17 +40,20 @@ Solutions are in [`notebooks/solutions/`](notebooks/solutions/).
 | `notebooks/instructor/NB5_prepare_cache.ipynb` | Builds NB5's judge cache (Gemma 3 4B on a T4). |
 | `data/nb5/` | Small fallback cache built with Qwen2.5-0.5B (lets NB5 run if the Gemma cache is missing). |
 | `printables/` | Cheat sheet, transfer canvas, Colab troubleshooting (PDF + HTML source). |
+| `printables/block5_notes.pdf`, `printables/block5_speech.pdf` | Block 5 (slides 51–70), bilingual: the presenter notes, and the word-for-word script. |
 | `slides/parts/`, `slides/engine/`, `notebooks/src/` | Sources. Edit these, then rebuild (below). |
 
 ## Presenting
 
-Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, **←** back, **N** speaker notes (with cumulative clock), **T** elapsed timer, type a number + **Enter** to jump. The deck works offline; with internet it loads its web fonts.
+Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, **←** back, **N** speaker notes (with cumulative clock), **T** elapsed timer, type a number + **Enter** to jump. **P** / **O** open the presenter and notes windows, **L** switches the notes between English and Spanish, and **S** switches between the director's notes and the word-for-word script. The deck works offline; with internet it loads its web fonts.
+
+Every slide has bilingual notes (`slides/engine/notes_es.py` holds the Spanish). Block 5 also has a full read-aloud script in both languages (`slides/engine/speech_victor.py`); on slides with no script, **S** leaves the notes on screen and the window's mode button reads *no script*.
 
 | Time | Presenter | Slides | Notebook |
 |---|---|---|---|
 | 0:00–0:30 | Miguel González | 1–20 (hook, primer, Block 1 Observe) | NB0, NB1 |
 | 0:30–2:10 (break 1:00–1:10) | Salvador Hinojosa | 21–50 (Blocks 2–4: cause → units → circuits) | NB2, NB3, NB4 |
-| 2:10–3:00 | Víctor Terrón-Macías | 51–71 (Block 5 Audit, wrap) | NB5 |
+| 2:10–3:00 | Víctor Terrón-Macías | 51–70 (Block 5 Audit, wrap) | NB5 |
 
 ## Rebuilding
 
@@ -58,6 +61,7 @@ Open `slides/deck.html`, press **F** for fullscreen. **→ / Space** next step, 
 python3 slides/engine/build.py                         # -> slides/deck.html
 python3 slides/engine/make_pdf.py slides/deck.html slides/deck.pdf
 python3 slides/engine/overflow.py slides/deck.html     # layout check
+python3 slides/engine/handout.py                       # -> printables/block5_{notes,speech}.pdf
 cd notebooks/src && for n in 0 1 2 3 4 5; do python3 build_nb$n.py; done
 ```
 
